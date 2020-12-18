@@ -41,6 +41,12 @@ class ConfigTest < Minitest::Test
     refute @config.sandbox?
   end
 
+  def test_shop_acronym_configurable
+    assert_nil @config.shop_acronym
+    @config.shop_acronym = 'test'
+    assert @config.shop_acronym = 'test'
+  end
+
   def test_config_has_default_values
     assert_equal '2', @config.version
     assert @config.sandbox?

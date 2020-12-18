@@ -24,7 +24,9 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
+  spec.add_development_dependency 'debase', '~>0.2'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'rake', '~> 12.0'
+  spec.add_development_dependency 'ruby-debug-ide', '~>0.7'
   spec.add_runtime_dependency 'rest-client', '~>2.1'
 end

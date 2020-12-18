@@ -6,12 +6,15 @@ require 'barion/config'
 # Barion solution top level module
 module Barion
   class << self
-    def config
-      @config ||= Barion::Config.new
-    end
+    attr_accessor :configuration
 
     def configure
-      yield(config)
+      @configuration ||= Barion::Config.new
+      yield(@configuration) if block_given?
+    end
+
+    def reset
+      @configuration = Barion::Config.new
     end
   end
 

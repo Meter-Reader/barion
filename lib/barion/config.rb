@@ -6,13 +6,14 @@ module Barion
   # Holds configuration elements for Barion integration
   class Config
     attr_reader :version
-    attr_accessor :poskey, :publickey, :sandbox
+    attr_accessor :poskey, :publickey, :sandbox, :shop_acronym
 
     def initialize
       @version = '2'
       @sandbox = true
       @poskey = nil
       @publickey = nil
+      @shop_acronym = nil
     end
 
     def version=(value)
