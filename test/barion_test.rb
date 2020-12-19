@@ -5,8 +5,9 @@ require 'test_helper'
 # Barion module expectations
 class BarionTest < Minitest::Test
   def setup
-    Barion.configuration
+    Barion.configure
   end
+
   def test_that_it_has_a_version_number
     refute_nil ::Barion::VERSION
   end

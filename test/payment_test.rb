@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-
 require 'barion/payment'
 
 # Barion payment expected behaviour
@@ -143,9 +142,9 @@ class PaymentTest < Minitest::Test
 
   def test_recurrence_id_max_100chars
     assert_raises 'ArgumentError' do
-      @payment.recurrence_id = "#{rnd_str(10,10)}a"
+      @payment.recurrence_id = "#{rnd_str(10, 10)}a"
     end
-    @payment.recurrence_id = rnd_str(10,10)
+    @payment.recurrence_id = rnd_str(10, 10)
     assert_equal 100, @payment.recurrence_id.length, msg: @payment.recurrence_id
   end
 
@@ -261,8 +260,13 @@ class PaymentTest < Minitest::Test
     assert_equal 100, @payment.order_number.length, msg: @payment.order_number
   end
 
-  def test_shipping_address
-    skip
+  def test_shipping_address_is_address_or_nil
+    assert_nil @payment.shipping_address
+    assert_raises 'ArgumentError' do
+      @payment.shipping_address = []
+    end
+    @payment.shipping_address = Barion::Address.new
+    assert_instance_of Barion::Address, @payment.shipping_address
   end
 
   def test_locale_has_default_value
@@ -344,8 +348,13 @@ class PaymentTest < Minitest::Test
     end
   end
 
-  def test_billing_address
-    skip
+  def test_billing_address_is_address_or_nil
+    assert_nil @payment.billing_address
+    assert_raises 'ArgumentError' do
+      @payment.billing_address = []
+    end
+    @payment.billing_address = Barion::Address.new
+    assert_instance_of Barion::Address, @payment.billing_address
   end
 
   def test_payer_account
@@ -358,15 +367,5 @@ class PaymentTest < Minitest::Test
 
   def test_challenge_preference
     skip
-  end
-
-  protected
-
-  def rnd_str(length, multiple)
-    str = ''
-    multiple.times do
-      str += ('A'..'Z').to_a.sample(length).join
-    end
-    str
   end
 end

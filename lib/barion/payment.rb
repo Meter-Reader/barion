@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-require 'barion/version'
 require 'barion/config'
-require 'securerandom'
+require 'barion/validations'
 
 module Barion
   # Represents a payment in Barion
   class Payment
+    include Barion::Validations
+
     @@payment_counter = 0
     CURRENCIES = %i[EUR USD HUF CZK].freeze
     PAYMENT_TYPES = %i[immediate reservation delayed_capture].freeze
@@ -33,12 +34,12 @@ module Barion
                 :currency,
                 :payer_phone_number,
                 :payer_work_phone_number,
-                :payer_home_number
+                :payer_home_number,
+                :shipping_address,
+                :billing_address
 
     attr_accessor :payment_request_id,
                   :transactions,
-                  :shipping_address,
-                  :billing_address,
                   :payer_account,
                   :purchase_information,
                   :challenge_preference
@@ -53,7 +54,6 @@ module Barion
       @funding_sources = :all
       @locale = 'hu-HU'
       @currency = :HUF
-
       generate_payment_request_id
     end
 
@@ -79,30 +79,20 @@ module Barion
       unless @payment_type == :reservation
         raise ArgumentError, "reservation period should only be set if payment type is 'Reservation'"
       end
-      if (seconds < 60) || (seconds > 31_536_000)
-        raise ArgumentError, 'reservation period should be between 1 minute and 1 year'
-      end
 
-      @reservation_period = seconds
+      @reservation_period = validate_size('reservation_period', seconds, min: 60, max: 31_536_000)
     end
 
     def delayed_capture_period=(seconds)
       unless @payment_type == :delayed_capture
         raise ArgumentError, "delayed capture period should only be set if payment type is 'DelayedCapture'"
       end
-      if (seconds < 60) || (seconds > 604_800)
-        raise ArgumentError, 'delayed capture period should be between 1 minute and 1 year'
-      end
 
-      @reservation_period = seconds
+      @delayed_capture_period = validate_size('delayed capture period', seconds, min: 60, max: 604_800)
     end
 
     def payment_window=(seconds)
-      if (seconds < 1_800) || (seconds > 604_800)
-        raise ArgumentError, 'payment window should be between 1 minute and 1 year'
-      end
-
-      @payment_window = seconds
+      @payment_window = validate_size('payment window', seconds, min: 1_800, max: 604_800)
     end
 
     def guest_checkout=(value)
@@ -114,9 +104,7 @@ module Barion
     end
 
     def recurrence_id=(value)
-      raise ArgumentError, "#{value} is too long for recurrence id" if value.length > 100
-
-      @recurrence_id = value
+      @recurrence_id = validate_length('recurrence id', value, max: 100)
     end
 
     def recurrence_type=(value)
@@ -132,47 +120,39 @@ module Barion
     end
 
     def payer_hint=(value)
-      @payer_hint = truncate(value, 256)
+      @payer_hint = validate_length('payer hint', value, max: 256, truncate: true)
     end
 
     def card_holder_name_hint=(value)
-      if value.to_s.length < 2
-        raise ArgumentError, "#{value} is too short, card holder name hint must be between 2 and 45 characters"
-      end
-
-      @card_holder_name_hint = truncate(value, 45)
+      @card_holder_name_hint = validate_length('card holder name', value, min: 2, max: 45, truncate: true)
     end
 
     def trace_id=(value)
-      if value.to_s.length > 100
-        raise ArgumentError, "#{value} is too long, trace id can be 100 characters long only"
-      end
-
-      @trace_id = value
+      @trace_id = validate_length('trace id', value, max: 100)
     end
 
     def redirect_url=(value)
-      if value.to_s.length > 2_000
-        raise ArgumentError, "#{value} is too long, redirect url can be 2 000 characters long only"
-      end
-
-      @redirect_url = value
+      @redirect_url = validate_length('redirect url', value, max: 2_000)
     end
 
     def callback_url=(value)
-      if value.to_s.length > 2_000
-        raise ArgumentError, "#{value} is too long, callback url can be 2 000 characters long only"
-      end
-
-      @callback_url = value
+      @callback_url = validate_length('callback url', value, max: 2_000)
     end
 
     def order_number=(value)
-      if value.to_s.length > 100
-        raise ArgumentError, "#{value} is too long, order number can be 100 characters long only"
-      end
+      @order_number = validate_length('order number', value, max: 100)
+    end
 
-      @order_number = value
+    def shipping_address=(address)
+      raise ArgumentError, 'shipping address must be an instance of Barion::Address' unless address.instance_of?(Barion::Address)
+
+      @shipping_address = address
+    end
+
+    def billing_address=(address)
+      raise ArgumentError, 'billing address must be an instance of Barion::Address' unless address.instance_of?(Barion::Address)
+
+      @billing_address = address
     end
 
     def locale=(value)
@@ -200,17 +180,6 @@ module Barion
     end
 
     private
-
-    def format_phone_number(number)
-      number = number.sub(/^\+/, '').sub(/^00/, '')
-      raise ArgumentError, "#{number} is too long for phone number" if number.length > 30
-
-      number
-    end
-
-    def truncate(str, limit)
-      str.to_s[0..limit - 1]
-    end
 
     def generate_payment_request_id
       limit = 100 - @@payment_counter.to_s.length

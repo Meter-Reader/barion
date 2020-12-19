@@ -52,6 +52,7 @@ class ConfigTest < Minitest::Test
     assert @config.sandbox?
     assert_nil @config.poskey
     assert_nil @config.publickey
+    assert_equal 'zz', @config.default_country
   end
 
   def test_it_can_be_configured
@@ -63,5 +64,10 @@ class ConfigTest < Minitest::Test
     assert_raises NoMethodError do
       @config.test = 1
     end
+  end
+
+  def test_country_configurable
+    @config.default_country = 'HU'
+    assert_equal 'HU', @config.default_country
   end
 end
