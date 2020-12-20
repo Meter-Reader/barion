@@ -4,18 +4,24 @@ module Barion
   # Barion specific validations
   module Validations
     def truncate(str, limit)
-      str.to_s[0..limit - 1]
+      return str.to_s[0..limit - 1] unless limit < 2
+
+      str
     end
 
     def validate_size(name, value, min: nil, max: nil)
+      raise ArgumentError, "#{value} is not numeric" unless value.is_a?(Numeric)
+
       raise ArgumentError, "#{value} is too small for #{name}" if !min.nil? && value < min
 
-      raise ArgumentError, "#{value} is too long for #{name}" if !max.nil? && value > max
+      raise ArgumentError, "#{value} is too big for #{name}" if !max.nil? && value > max
 
       value
     end
 
     def validate_length(name, value, min: nil, max: nil, truncate: false)
+      raise ArgumentError, "#{value} is not string" unless value.is_a?(String)
+
       raise ArgumentError, "#{value} is too short for #{name}" if !min.nil? && value.to_s.length < min
 
       unless max.nil?
