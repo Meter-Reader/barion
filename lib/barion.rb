@@ -1,22 +1,10 @@
 # frozen_string_literal: true
 
-require 'barion/version'
-require 'barion/config'
+require 'barion/engine'
 
-# Barion solution top level module
 module Barion
-  class << self
-    attr_accessor :configuration
-
-    def configure
-      @configuration ||= Barion::Config.new
-      yield(@configuration) if block_given?
-    end
-
-    def reset
-      @configuration = Barion::Config.new
-    end
-  end
-
-  class BarionError < StandardError; end
+  BASE_URL = {
+    test: 'https://api.test.barion.com',
+    prod: 'https://api.barion.com'
+  }.freeze
 end

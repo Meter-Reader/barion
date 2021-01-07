@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  delivery_timeframe: 1
+  delivery_email_address: MyString
+  pre_order_date: 2020-12-23 01:32:20
+  availability_indicator: 1
+  re_order_indicator: 1
+  shipping_address_indicator: 1
+  recurring_expiry: 2020-12-23 01:32:20
+  recurring_frequency: 1
+  purchase_type: 1
+  gift_card_purchase: 
+  purchase_date: 2020-12-23 01:32:20
+
+two:
+  delivery_timeframe: 1
+  delivery_email_address: MyString
+  pre_order_date: 2020-12-23 01:32:20
+  availability_indicator: 1
+  re_order_indicator: 1
+  shipping_address_indicator: 1
+  recurring_expiry: 2020-12-23 01:32:20
+  recurring_frequency: 1
+  purchase_type: 1
+  gift_card_purchase: 
+  purchase_date: 2020-12-23 01:32:20

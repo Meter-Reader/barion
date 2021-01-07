@@ -2,35 +2,40 @@
 
 require 'test_helper'
 
-# Barion module expectations
-class BarionTest < Minitest::Test
-  def setup
-    Barion.configure
-  end
-
-  def test_that_it_has_a_version_number
-    refute_nil ::Barion::VERSION
-  end
-
-  def test_module_cannot_be_instantiated
-    assert_raises NoMethodError do
-      Barion.new
+module Barion
+  class Test < ActiveSupport::TestCase
+    setup do
+      Barion.configure
     end
-  end
 
-  def test_has_configuration
-    assert_instance_of Barion::Config, Barion.configuration
-    assert_equal '2', Barion.configuration.version
-  end
-
-  def test_cofigurable_with_proc
-    Barion.configure do |conf|
-      conf.version = '1'
+    test 'Barion is a module' do
+      assert_kind_of Module, Barion
     end
-    assert_equal '1', Barion.configuration.version
-  end
 
-  def teardown
-    Barion.reset
+    test 'that it has a version number' do
+      refute_nil ::Barion::VERSION
+    end
+
+    test 'module cannot be instantiated' do
+      assert_raises NoMethodError do
+        Barion.new
+      end
+    end
+
+    test 'has configuration' do
+      assert_instance_of Barion::Config, Barion.configuration
+      assert_equal '2', Barion.configuration.version
+    end
+
+    test 'cofigurable with proc' do
+      Barion.configure do |conf|
+        conf.version = '1'
+      end
+      assert_equal '1', Barion.configuration.version
+    end
+
+    teardown do
+      Barion.reset
+    end
   end
 end

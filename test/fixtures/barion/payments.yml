@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  type: 
+  reservation_period: 1
+  delayed_capture_period: 1
+  payment_window{6}: MyString
+  guest_checkout: false
+  initiate_recurrence: false
+  recurrence_id: MyString
+  recurrence_type: MyString
+  funding_sources: MyString
+  payer_hint: MyString
+
+two:
+  type: 
+  reservation_period: 1
+  delayed_capture_period: 1
+  payment_window{6}: MyString
+  guest_checkout: false
+  initiate_recurrence: false
+  recurrence_id: MyString
+  recurrence_type: MyString
+  funding_sources: MyString
+  payer_hint: MyString
