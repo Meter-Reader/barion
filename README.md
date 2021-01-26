@@ -1,5 +1,6 @@
 # Barion
-Short description and motivation.
+![Barion](https://github.com/Meter-reader/Barion/workflows/Ruby/badge.svg)
+This is a Ruby-on-Rails engine to use the Barion Payment Gateway in any RoR application.
 
 ## Usage
 How to use my plugin.
