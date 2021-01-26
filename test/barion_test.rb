@@ -4,10 +4,6 @@ require 'test_helper'
 
 module Barion
   class Test < ActiveSupport::TestCase
-    setup do
-      Barion.configure
-    end
-
     test 'Barion is a module' do
       assert_kind_of Module, Barion
     end
@@ -22,20 +18,9 @@ module Barion
       end
     end
 
-    test 'has configuration' do
-      assert_instance_of Barion::Config, Barion.configuration
-      assert_equal '2', Barion.configuration.version
-    end
-
-    test 'cofigurable with proc' do
-      Barion.configure do |conf|
-        conf.version = '1'
-      end
-      assert_equal '1', Barion.configuration.version
-    end
-
-    teardown do
-      Barion.reset
+    test 'module can be configured' do
+      Barion.poskey = 1
+      assert_equal 1, Barion.poskey
     end
   end
 end

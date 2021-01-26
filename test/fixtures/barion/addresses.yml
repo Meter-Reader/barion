@@ -1,4 +1,23 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# == Schema Information
+#
+# Table name: barion_addresses
+#
+#  id         :integer          not null, primary key
+#  city       :string(50)
+#  country    :string(2)        default("zz")
+#  full_name  :string(45)
+#  region     :string(2)
+#  street     :string(50)
+#  street2    :string(50)
+#  street3    :string(50)
+#  zip        :string(16)
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_barion_addresses_on_full_name  (full_name)
+#
 
 one:
   country: MyString

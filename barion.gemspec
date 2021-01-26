@@ -18,11 +18,12 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
-  spec.add_dependency 'rails', '~> 6.0.3', '>= 6.0.3.4'
-  spec.add_runtime_dependency 'public_uid', '~>2.1'
+  spec.add_dependency 'rails', '~> 6.1'
   spec.add_runtime_dependency 'rest-client', '~>2.1'
 
+  spec.add_development_dependency 'annotate'
   spec.add_development_dependency 'debase', '~>0.2'
+  spec.add_development_dependency 'faker', '~>2.15'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'rake', '~> 12.0'
   spec.add_development_dependency 'ruby-debug-ide', '~>0.7'

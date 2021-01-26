@@ -20,3 +20,4 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
 end
 
 require 'minitest/autorun'
+require 'faker'

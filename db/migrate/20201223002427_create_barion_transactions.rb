@@ -6,6 +6,7 @@ class CreateBarionTransactions < ActiveRecord::Migration[6.0]
       t.integer :status
       t.string :currency, limit: 3
       t.timestamp :transaction_time
+      t.references :payment, references: :barion_payments, foreign_key: { to_table: :barion_payments }
 
       t.timestamps
     end

@@ -1,32 +1,99 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: barion_payments
+#
+#  id                      :integer          not null, primary key
+#  callback_url            :string(2000)
+#  card_holder_name_hint   :string(45)
+#  challenge_preference    :string
+#  checksum                :string
+#  currency                :string(3)        not null
+#  delayed_capture_period  :integer
+#  funding_sources         :integer          default("all")
+#  gateway_url             :string(2000)
+#  guest_checkout          :boolean
+#  initiate_recurrence     :boolean
+#  locale                  :string(10)       not null
+#  order_number            :string(100)
+#  payer_hint              :string(256)
+#  payer_home_number       :string(30)
+#  payer_phone_number      :string(30)
+#  payer_work_phone_number :string(30)
+#  payment_type            :integer          default("immediate"), not null
+#  payment_window          :string(6)
+#  poskey                  :string           not null
+#  qr_url                  :string(2000)
+#  recurrence_result       :integer
+#  recurrence_type         :integer          default(NULL)
+#  redirect_url            :string(2000)
+#  reservation_period      :integer
+#  status                  :integer          not null
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  billing_address_id      :bigint
+#  payer_account_id        :bigint
+#  payment_id              :string
+#  payment_request_id      :string(100)
+#  purchase_information_id :bigint
+#  recurrence_id           :string(100)
+#  shipping_address_id     :bigint
+#  trace_id                :string(100)
+#
+# Indexes
+#
+#  index_barion_payments_on_billing_address_id       (billing_address_id)
+#  index_barion_payments_on_order_number             (order_number)
+#  index_barion_payments_on_payer_account_id         (payer_account_id)
+#  index_barion_payments_on_payment_id               (payment_id)
+#  index_barion_payments_on_payment_request_id       (payment_request_id)
+#  index_barion_payments_on_payment_type             (payment_type)
+#  index_barion_payments_on_poskey                   (poskey)
+#  index_barion_payments_on_purchase_information_id  (purchase_information_id)
+#  index_barion_payments_on_recurrence_id            (recurrence_id)
+#  index_barion_payments_on_shipping_address_id      (shipping_address_id)
+#  index_barion_payments_on_status                   (status)
+#
+# Foreign Keys
+#
+#  billing_address_id       (billing_address_id => barion_addresses.id)
+#  payer_account_id         (payer_account_id => barion_payer_accounts.id)
+#  purchase_information_id  (purchase_information_id => barion_purchases.id)
+#  shipping_address_id      (shipping_address_id => barion_addresses.id)
+#
 require 'test_helper'
 
 module Barion
   class PaymentTest < ActiveSupport::TestCase
     setup do
       @poskey = 'test_poskey'
-      Barion.configure do |conf|
-        conf.poskey = @poskey
-      end
+      Barion.poskey = @poskey
       @payment = Barion::Payment.new
+      @payment.transactions.build
+      @payment.payer_account = barion_payer_accounts(:one)
     end
 
     test 'poskey comes from configuration' do
       assert_equal @poskey, @payment.poskey
     end
 
+    test 'poskey can be set on instance' do
+      @payment.poskey = 'test2'
+      assert_equal 'test2', @payment.poskey
+    end
+
     test 'payment type has default value' do
-      assert_equal :immediate, @payment.payment_type
+      assert_equal 'immediate', @payment.payment_type
     end
 
     test 'payment type can be set' do
       @payment.payment_type = :reservation
-      assert_equal :reservation, @payment.payment_type
+      assert_equal 'reservation', @payment.payment_type
     end
 
     test 'payment type allows only valid values' do
-      assert_raises 'ArgumentError' do
+      assert_raises ArgumentError do
         @payment.payment_type = 'Test'
       end
     end
@@ -37,12 +104,12 @@ module Barion
 
     test 'reservation period required only if payment type is reservation' do
       assert_nil @payment.reservation_period
-      assert_raises 'ArgumentError' do
-        @payment.reservation_period = 1
-      end
-
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
       @payment.payment_type = :reservation
-      @payment.reservation_period = 60
+      assert @payment.reservation?
+      @payment.reservation_period = 1
+      assert_equal 1, @payment.reservation_period
+      refute @payment.valid?
     end
 
     test 'reservation period default value is 30min if payment type is reservation' do
@@ -52,26 +119,26 @@ module Barion
 
     test 'reservation period min value is 1min' do
       @payment.payment_type = :reservation
-      assert_raises 'ArgumentError' do
-        @payment.reservation_period = 59
-      end
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.reservation_period = 59
+      refute @payment.valid?
     end
 
     test 'reservation period max value is 1year' do
       @payment.payment_type = :reservation
-      assert_raises 'ArgumentError' do
-        @payment.reservation_period = 31_536_001
-      end
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.reservation_period = 31_556_953
+      refute @payment.valid?
     end
 
     test 'delayed capture period required only if payment type is delayed capture' do
       assert_nil @payment.delayed_capture_period
-      assert_raises 'ArgumentError' do
-        @payment.delayed_capture_period = 60
-      end
-
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.delayed_capture_period = 60
+      refute @payment.valid?
       @payment.payment_type = :delayed_capture
       @payment.delayed_capture_period = 60
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
     end
 
     test 'delayed capture period default value is 7days if payment type is delayed capture' do
@@ -81,16 +148,16 @@ module Barion
 
     test 'delayed capture period min value is 1min' do
       @payment.payment_type = :delayed_capture
-      assert_raises 'ArgumentError' do
-        @payment.delayed_capture_period = 59
-      end
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.delayed_capture_period = 59
+      refute @payment.valid?
     end
 
     test 'delayed capture period max value is 7days' do
       @payment.payment_type = :delayed_capture
-      assert_raises 'ArgumentError' do
-        @payment.delayed_capture_period = 604_801
-      end
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.delayed_capture_period = 604_801
+      refute @payment.valid?
     end
 
     test 'payment window default value is 30mins' do
@@ -98,26 +165,26 @@ module Barion
     end
 
     test 'payment window min value is 1min' do
-      assert_raises 'ArgumentError' do
-        @payment.payment_window = 59
-      end
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payment_window = 59
+      refute @payment.valid?
     end
 
     test 'payment window max value is 7days' do
-      assert_raises 'ArgumentError' do
-        @payment.delayed_capture_period = 604_801
-      end
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payment_window = 604_801
+      refute @payment.valid?
     end
 
     test 'guest checkout is bool' do
-      @payment.guest_checkout = 'test'
-      assert_equal true, @payment.guest_checkout
-      @payment.guest_checkout = nil
-      assert_equal false, @payment.guest_checkout
       @payment.guest_checkout = true
-      assert_equal true, @payment.guest_checkout
+      assert @payment.guest_checkout
       @payment.guest_checkout = false
-      assert_equal false, @payment.guest_checkout
+      refute @payment.guest_checkout
+      @payment.guest_checkout = 'test'
+      assert @payment.guest_checkout
+      @payment.guest_checkout = nil
+      refute @payment.guest_checkout
     end
 
     test 'guest checkout default true' do
@@ -126,38 +193,39 @@ module Barion
 
     test 'initiate recurrence is bool' do
       @payment.initiate_recurrence = 'test'
-      assert_equal true, @payment.initiate_recurrence
+      assert @payment.initiate_recurrence
       @payment.initiate_recurrence = nil
-      assert_equal false, @payment.initiate_recurrence
+      refute @payment.initiate_recurrence
       @payment.initiate_recurrence = true
-      assert_equal true, @payment.initiate_recurrence
+      assert @payment.initiate_recurrence
       @payment.initiate_recurrence = false
-      assert_equal false, @payment.initiate_recurrence
+      refute @payment.initiate_recurrence
     end
 
     test 'initiate recurrence default false' do
-      assert_equal false, @payment.initiate_recurrence
+      refute @payment.initiate_recurrence
     end
 
     test 'recurrence id max 100chars' do
-      assert_raises 'ArgumentError' do
-        @payment.recurrence_id = "#{rnd_str(10, 10)}a"
-      end
-      @payment.recurrence_id = rnd_str(10, 10)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.recurrence_id = Faker::String.random(length: 101)
+      refute @payment.valid?
+      @payment.recurrence_id = Faker::String.random(length: 100)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
       assert_equal 100, @payment.recurrence_id.length, msg: @payment.recurrence_id
     end
 
     test 'funding sources default value is all' do
-      assert_equal :all, @payment.funding_sources
+      assert_equal 'all', @payment.funding_sources
     end
 
     test 'funding sources can be set' do
       @payment.funding_sources = :balance
-      assert_equal :balance, @payment.funding_sources
+      assert_equal 'balance', @payment.funding_sources
     end
 
     test 'funding sources allows only valid values' do
-      assert_raises 'ArgumentError' do
+      assert_raises ArgumentError do
         @payment.funding_sources = :none
       end
     end
@@ -166,41 +234,28 @@ module Barion
       ids = []
       1000.times do
         obj = Barion::Payment.new
+        obj.valid?
         refute ids.include?(obj.payment_request_id), msg: obj.payment_request_id
         ids << obj.payment_request_id
       end
     end
 
     test 'payment request id contains shop acronym' do
+      @payment.valid?
       assert_match(/\d+/, @payment.payment_request_id)
-      Barion.configure do |conf|
-        conf.shop_acronym = 'SHOP'
-      end
+      Barion.acronym = 'SHOP'
       @payment = Barion::Payment.new
+      @payment.valid?
       assert_match(/^SHOP\d+/, @payment.payment_request_id)
     end
 
-    test 'payment request id max lenght 100chars' do
-      Barion.configure do |conf|
-        conf.shop_acronym = rnd_str(10, 10)
-      end
-      @payment = Barion::Payment.new
-      assert_equal 100, @payment.payment_request_id.length, msg: @payment.payment_request_id
-    end
-
-    test 'payer hint max length 256chars' do
-      assert_nil @payment.payer_hint
-      @payment.payer_hint = rnd_str(8, 33)
-      assert_equal 256, @payment.payer_hint.length, msg: @payment.payer_hint
-    end
-
-    test 'card holder name hint between 2 to 45chars' do
+    test 'card holder name hint between 2 and 45chars' do
       assert_nil @payment.card_holder_name_hint
-      assert_raises 'ArgumentError' do
-        @payment.card_holder_name_hint = 'a'
-      end
-      @payment.card_holder_name_hint = "#{rnd_str(9, 5)}a"
-      assert_equal 45, @payment.card_holder_name_hint.length, msg: @payment.card_holder_name_hint
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.card_holder_name_hint = 'a'
+      refute @payment.valid?
+      @payment.card_holder_name_hint = Faker::String.random(length: 46)
+      refute @payment.valid?
     end
 
     test 'recurrence type default nil' do
@@ -208,9 +263,9 @@ module Barion
     end
 
     test 'recurrence type can be set' do
-      assert_nil @payment.recurrence_type
+      assert_nil @payment.recurrence_type, @payment.recurrence_type
       @payment.recurrence_type = :recurring
-      assert_equal :recurring, @payment.recurrence_type
+      assert_equal 'recurring', @payment.recurrence_type
     end
 
     test 'recurrence type allows only valid values' do
@@ -221,28 +276,28 @@ module Barion
 
     test 'trace id max length 100chars' do
       assert_nil @payment.trace_id
-      assert_raises 'ArgumentError' do
-        @payment.trace_id = "#{rnd_str(10, 10)}a"
-      end
-      @payment.trace_id = rnd_str(10, 10)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.trace_id = Faker::String.random(length: 101)
+      refute @payment.valid?
+      @payment.trace_id = Faker::String.random(length: 100)
       assert_equal 100, @payment.trace_id.length, msg: @payment.trace_id
     end
 
     test 'redirect url max length 2000chars' do
       assert_nil @payment.redirect_url
-      assert_raises 'ArgumentError' do
-        @payment.redirect_url = "#{rnd_str(10, 200)}a"
-      end
-      @payment.redirect_url = rnd_str(10, 200)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.redirect_url = Faker::String.random(length: 2001)
+      refute @payment.valid?
+      @payment.redirect_url = Faker::String.random(length: 2000)
       assert_equal 2_000, @payment.redirect_url.length, msg: @payment.redirect_url
     end
 
     test 'callback url max length 2000chars' do
       assert_nil @payment.callback_url
-      assert_raises 'ArgumentError' do
-        @payment.callback_url = "#{rnd_str(10, 200)}a"
-      end
-      @payment.callback_url = rnd_str(10, 200)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.callback_url = Faker::String.random(length: 2001)
+      refute @payment.valid?
+      @payment.callback_url = Faker::String.random(length: 2000)
       assert_equal 2_000, @payment.callback_url.length, msg: @payment.callback_url
     end
 
@@ -253,16 +308,16 @@ module Barion
 
     test 'order number max length 100chars' do
       assert_nil @payment.order_number
-      assert_raises 'ArgumentError' do
-        @payment.order_number = "#{rnd_str(10, 10)}a"
-      end
-      @payment.order_number = rnd_str(10, 10)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.order_number = Faker::String.random(length: 101)
+      refute @payment.valid?
+      @payment.order_number = Faker::String.random(length: 100)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
       assert_equal 100, @payment.order_number.length, msg: @payment.order_number
     end
 
     test 'shipping address is address or nil' do
-      assert_nil @payment.shipping_address
-      assert_raises 'ArgumentError' do
+      assert_raise ActiveRecord::AssociationTypeMismatch do
         @payment.shipping_address = []
       end
       @payment.shipping_address = Barion::Address.new
@@ -285,12 +340,12 @@ module Barion
     end
 
     test 'currency has default value' do
-      assert_equal :HUF, @payment.currency
+      assert_equal 'HUF', @payment.currency
     end
 
     test 'currency can be set' do
       @payment.currency = :CZK
-      assert_equal :CZK, @payment.currency
+      assert_equal 'CZK', @payment.currency
     end
 
     test 'currency allows only valid values' do
@@ -313,46 +368,48 @@ module Barion
     end
 
     test 'payer phone number max 30chars' do
-      assert_raises 'ArgumentError' do
-        @payment.payer_phone_number = '+3620123456789123456789123456789'
-      end
+      assert_nil @payment.payer_phone_number
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payer_phone_number = '+3620123456789123456789123456789'
+      assert @payment.valid?
+      assert_equal '362012345678912345678912345678', @payment.payer_phone_number
     end
 
     test 'payer work phone number formats number' do
       @payment.payer_work_phone_number = '+36201234567'
-      assert_equal '36201234567', @payment.payer_phone_number
+      assert_equal '36201234567', @payment.payer_work_phone_number
       @payment.payer_work_phone_number = '0036201234567'
-      assert_equal '36201234567', @payment.payer_phone_number
+      assert_equal '36201234567', @payment.payer_work_phone_number
       @payment.payer_work_phone_number = '06201234567'
-      assert_equal '06201234567', @payment.payer_phone_number
+      assert_equal '06201234567', @payment.payer_work_phone_number
     end
 
     test 'payer work phone number max 30chars' do
-      assert_raises 'ArgumentError' do
-        @payment.payer_work_phone_number = '+3620123456789123456789123456789'
-      end
+      assert_nil @payment.payer_work_phone_number
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payer_work_phone_number = '+3620123456789123456789123456789'
+      assert_equal '362012345678912345678912345678', @payment.payer_work_phone_number
     end
 
-    test 'payer home phone number formats number' do
-      @payment.payer_home_phone_number = '+36201234567'
-      assert_equal '36201234567', @payment.payer_phone_number
-      @payment.payer_home_phone_number = '0036201234567'
-      assert_equal '36201234567', @payment.payer_phone_number
-      @payment.payer_home_phone_number = '06201234567'
-      assert_equal '06201234567', @payment.payer_phone_number
+    test 'payer home number formats number' do
+      @payment.payer_home_number = '+36201234567'
+      assert_equal '36201234567', @payment.payer_home_number
+      @payment.payer_home_number = '0036201234567'
+      assert_equal '36201234567', @payment.payer_home_number
+      @payment.payer_home_number = '06201234567'
+      assert_equal '06201234567', @payment.payer_home_number
     end
 
     test 'payer home phone number max 30chars' do
-      assert_raises 'ArgumentError' do
-        @payment.payer_home_phone_number = '+3620123456789123456789123456789'
-      end
+      assert_nil @payment.payer_home_number
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payer_home_number = '+3620123456789123456789123456789'
+      assert_equal '362012345678912345678912345678', @payment.payer_home_number
     end
 
     test 'billing address is address or nil' do
       assert_nil @payment.billing_address
-      assert_raises 'ArgumentError' do
-        @payment.billing_address = []
-      end
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
       @payment.billing_address = Barion::Address.new
       assert_instance_of Barion::Address, @payment.billing_address
     end
