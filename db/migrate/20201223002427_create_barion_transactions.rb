@@ -1,17 +1,22 @@
+# frozen_string_literal: true
+
 class CreateBarionTransactions < ActiveRecord::Migration[6.0]
   def change
     create_table :barion_transactions do |t|
-      t.string :pos_transaction_id
-      t.string :transaction_id
-      t.integer :status
+      t.string :pos_transaction_id, null: false, index: true
+      t.string :payee, null: false, index: true
+      t.decimal :total, null: false
+      t.string :comment
+
+      t.references :payee_transactions, references: :barion_transactions, foreign_key: { to_table: :barion_transactions }
+
+      t.references :payment, references: :barion_payments, foreign_key: { to_table: :barion_payments }
+      t.integer :status, default: 0, null: false, index: true
+      t.string :transaction_id, index: true
       t.string :currency, limit: 3
       t.timestamp :transaction_time
-      t.references :payment, references: :barion_payments, foreign_key: { to_table: :barion_payments }
 
       t.timestamps
     end
-    add_index :barion_transactions, :pos_transaction_id
-    add_index :barion_transactions, :transaction_id
-    add_index :barion_transactions, :status
   end
 end

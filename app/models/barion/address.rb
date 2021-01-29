@@ -6,7 +6,7 @@
 #
 #  id         :integer          not null, primary key
 #  city       :string(50)
-#  country    :string(2)        default("zz")
+#  country    :string(2)        default("zz"), not null
 #  full_name  :string(45)
 #  region     :string(2)
 #  street     :string(50)
@@ -18,7 +18,10 @@
 #
 # Indexes
 #
+#  index_barion_addresses_on_city       (city)
+#  index_barion_addresses_on_country    (country)
 #  index_barion_addresses_on_full_name  (full_name)
+#  index_barion_addresses_on_zip        (zip)
 #
 module Barion
   class Address < ApplicationRecord

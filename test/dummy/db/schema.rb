@@ -10,10 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_11_051233) do
+ActiveRecord::Schema.define(version: 2021_01_28_220347) do
 
   create_table "barion_addresses", force: :cascade do |t|
-    t.string "country", limit: 2, default: "zz"
+    t.string "country", limit: 2, default: "zz", null: false
     t.string "zip", limit: 16
     t.string "city", limit: 50
     t.string "region", limit: 2
@@ -23,7 +23,23 @@ ActiveRecord::Schema.define(version: 2021_01_11_051233) do
     t.string "full_name", limit: 45
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["city"], name: "index_barion_addresses_on_city"
+    t.index ["country"], name: "index_barion_addresses_on_country"
     t.index ["full_name"], name: "index_barion_addresses_on_full_name"
+    t.index ["zip"], name: "index_barion_addresses_on_zip"
+  end
+
+  create_table "barion_items", force: :cascade do |t|
+    t.string "name", limit: 250, null: false
+    t.string "description", limit: 500, null: false
+    t.string "image_url"
+    t.decimal "quantity", null: false
+    t.string "unit", limit: 50, null: false
+    t.decimal "unit_price", null: false
+    t.decimal "item_total", null: false
+    t.string "sku", limit: 100
+    t.integer "transaction_id"
+    t.index ["transaction_id"], name: "index_barion_items_on_transaction_id"
   end
 
   create_table "barion_payer_accounts", force: :cascade do |t|
@@ -119,20 +135,27 @@ ActiveRecord::Schema.define(version: 2021_01_11_051233) do
   end
 
   create_table "barion_transactions", force: :cascade do |t|
-    t.string "pos_transaction_id"
+    t.string "pos_transaction_id", null: false
+    t.string "payee", null: false
+    t.decimal "total", null: false
+    t.string "comment"
+    t.bigint "payee_transactions_id"
+    t.bigint "payment_id"
+    t.integer "status", default: 0, null: false
     t.string "transaction_id"
-    t.integer "status"
     t.string "currency", limit: 3
     t.datetime "transaction_time"
-    t.bigint "payment_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["payee"], name: "index_barion_transactions_on_payee"
+    t.index ["payee_transactions_id"], name: "index_barion_transactions_on_payee_transactions_id"
     t.index ["payment_id"], name: "index_barion_transactions_on_payment_id"
     t.index ["pos_transaction_id"], name: "index_barion_transactions_on_pos_transaction_id"
     t.index ["status"], name: "index_barion_transactions_on_status"
     t.index ["transaction_id"], name: "index_barion_transactions_on_transaction_id"
   end
 
+  add_foreign_key "barion_items", "barion_transactions", column: "transaction_id"
   add_foreign_key "barion_payer_accounts", "barion_addresses", column: "billing_address_id"
   add_foreign_key "barion_payer_accounts", "barion_addresses", column: "shipping_address_id"
   add_foreign_key "barion_payments", "barion_addresses", column: "billing_address_id"
@@ -140,4 +163,5 @@ ActiveRecord::Schema.define(version: 2021_01_11_051233) do
   add_foreign_key "barion_payments", "barion_payer_accounts", column: "payer_account_id"
   add_foreign_key "barion_payments", "barion_purchases", column: "purchase_information_id"
   add_foreign_key "barion_transactions", "barion_payments", column: "payment_id"
+  add_foreign_key "barion_transactions", "barion_transactions", column: "payee_transactions_id"
 end

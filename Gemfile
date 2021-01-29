@@ -15,3 +15,14 @@ gemspec
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
+gem 'annotate'
+gem 'codecov', require: false
+gem 'debase'
+gem 'minitest-reporters', require: false
+gem 'overcommit'
+gem 'rubocop'
+gem 'ruby-debug-ide'
+gem 'simplecov'
+gem 'simplecov-cobertura', require: false
+gem 'solargraph'
+

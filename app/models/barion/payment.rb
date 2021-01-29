@@ -201,7 +201,7 @@ module Barion
     private
 
     def set_defaults
-      self.poskey = Barion.poskey
+      @poskey = Barion.poskey
     end
 
     def create_payment_request_id

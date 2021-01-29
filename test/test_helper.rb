@@ -2,7 +2,19 @@
 
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
+ENV['COVERAGE_REPORTS'] = 'test-reports'
+ENV['TESTRESULTS_REPORTS'] = 'test-results'
 
+if ENV['CODECOV']
+  require 'simplecov'
+  require 'minitest/reporters'
+
+  Minitest::Reporters.use! [
+    Minitest::Reporters::DefaultReporter.new,
+    Minitest::Reporters::MeanTimeReporter.new,
+    Minitest::Reporters::JUnitReporter.new(ENV['TESTRESULTS_REPORTS'])
+  ]
+end
 require_relative '../test/dummy/config/environment'
 ActiveRecord::Migrator.migrations_paths = [File.expand_path('../test/dummy/db/migrate', __dir__)]
 ActiveRecord::Migrator.migrations_paths << File.expand_path('../db/migrate', __dir__)
