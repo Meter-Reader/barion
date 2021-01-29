@@ -116,7 +116,7 @@ module Barion
                optional: true,
                inverse_of: :payments
 
-    belongs_to :payer_account, inverse_of: :payments
+    belongs_to :payer_account, inverse_of: :payments, optional: true
 
     validates :payment_type, presence: true
     validates :reservation_period,
@@ -144,7 +144,10 @@ module Barion
     validates :trace_id, length: { maximum: 100 }
     validates :redirect_url, length: { maximum: 2000 }
     validates :callback_url, length: { maximum: 2000 }
+    validates :gateway_url, length: { maximum: 2000 }
+    validates :qr_url, length: { maximum: 2000 }
     validates :order_number, length: { maximum: 100 }
+    validates :payer_hint, length: { maximum: 256 }
     validates :transactions, presence: true
     validates_associated :transactions
     validates_associated :payer_account
@@ -182,16 +185,6 @@ module Barion
 
     def payer_home_number=(number)
       @payer_home_number = Barion::DataFormats.phone_number(number)
-    end
-
-    def payer_hint
-      @payer.email if @payer.present?
-    end
-
-    def payer_hint=(hint)
-      raise ArgumentError unless @payer.present?
-
-      @payer.email = hint
     end
 
     def readonly?

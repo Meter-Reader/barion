@@ -73,7 +73,6 @@ module Barion
       @payment = Barion::Payment.new
       @payment.transactions.build
       @payment.transactions.first.payee = 'a@b.c'
-      @payment.payer_account = barion_payer_accounts(:one)
     end
 
     test 'poskey comes from configuration' do
@@ -98,6 +97,17 @@ module Barion
       assert_raises ArgumentError do
         @payment.payment_type = 'Test'
       end
+    end
+
+    test 'payment type sets reservation period' do
+      assert_nil @payment.reservation_period
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payment_type = :reservation
+      assert_equal 1_800, @payment.reservation_period
+      assert @payment.reservation?
+      @payment.payment_type = :immediate
+      assert_nil @payment.reservation_period
+      refute @payment.reservation?
     end
 
     test 'reservation period nil by default' do
@@ -303,6 +313,23 @@ module Barion
       assert_equal 2_000, @payment.callback_url.length, msg: @payment.callback_url
     end
 
+    test 'gateway url max length 2000chars' do
+      assert_nil @payment.gateway_url
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.gateway_url = Faker::String.random(length: 2001)
+      refute @payment.valid?
+      @payment.gateway_url = Faker::String.random(length: 2000)
+      assert_equal 2_000, @payment.gateway_url.length, msg: @payment.gateway_url
+    end
+
+    test 'qr url max length 2000chars' do
+      assert_nil @payment.qr_url
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.qr_url = Faker::String.random(length: 2001)
+      refute @payment.valid?
+      @payment.qr_url = Faker::String.random(length: 2000)
+      assert_equal 2_000, @payment.qr_url.length, msg: @payment.qr_url
+    end
     test 'transactions has at least one element' do
       assert_equal 1, @payment.transactions.size
       assert_instance_of Barion::Transaction, @payment.transactions[0]
@@ -316,6 +343,28 @@ module Barion
       @payment.order_number = Faker::String.random(length: 100)
       assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
       assert_equal 100, @payment.order_number.length, msg: @payment.order_number
+    end
+
+    test 'payer hint has no default value' do
+      assert_nil @payment.payer_hint
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+    end
+
+    test 'payer hint can be set' do
+      assert_nil @payment.payer_hint
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payer_hint = 'test'
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+    end
+
+    test 'payer hint max length 256chars' do
+      assert_nil @payment.payer_hint
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payer_hint = Faker::String.random(length: 257)
+      refute @payment.valid?
+      @payment.payer_hint = Faker::String.random(length: 256)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      assert_equal 256, @payment.payer_hint.length, msg: @payment.payer_hint
     end
 
     test 'shipping address is address or nil' do
@@ -434,8 +483,11 @@ module Barion
       end
     end
 
-    test 'payer account' do
-      skip
+    test 'payer account can be set' do
+      assert_nil @payment.payer_account
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.payer_account = barion_payer_accounts(:one)
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
     end
 
     test 'purchase information' do
@@ -443,6 +495,14 @@ module Barion
     end
 
     test 'challenge preference' do
+      skip
+    end
+
+    test 'checksum' do
+      skip
+    end
+
+    test 'recurrence_result' do
       skip
     end
   end
