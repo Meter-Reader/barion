@@ -65,12 +65,14 @@
 require 'test_helper'
 
 module Barion
+  # Test cases for Barion::Payment model
   class PaymentTest < ActiveSupport::TestCase
     setup do
       @poskey = 'test_poskey'
       Barion.poskey = @poskey
       @payment = Barion::Payment.new
       @payment.transactions.build
+      @payment.transactions.first.payee = 'a@b.c'
       @payment.payer_account = barion_payer_accounts(:one)
     end
 
@@ -412,6 +414,24 @@ module Barion
       assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
       @payment.billing_address = Barion::Address.new
       assert_instance_of Barion::Address, @payment.billing_address
+    end
+
+    test 'status has a default value' do
+      assert_equal 'Initial', @payment.status
+    end
+
+    test 'status can be set' do
+      assert_equal 'Initial', @payment.status
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+      @payment.status = 'Prepared'
+      assert_equal 'Prepared', @payment.status
+      assert @payment.valid?, @payment.errors.objects.first.try(:full_message)
+    end
+
+    test 'status allows only valid values' do
+      assert_raises ArgumentError do
+        @payment.status = 'Test'
+      end
     end
 
     test 'payer account' do

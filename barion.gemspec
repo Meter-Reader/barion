@@ -19,15 +19,11 @@ Gem::Specification.new do |spec|
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
   spec.add_dependency 'rails', '~> 6.1'
-  spec.add_runtime_dependency 'rest-client', '~>2.1'
+  spec.add_runtime_dependency 'rest-client', '~> 2.1'
 
-  spec.add_development_dependency 'annotate'
-  spec.add_development_dependency 'debase', '~>0.2'
-  spec.add_development_dependency 'faker', '~>2.15'
+  spec.add_development_dependency 'faker', '~> 2.15'
   spec.add_development_dependency 'minitest', '~> 5.0'
-  spec.add_development_dependency 'rake', '~> 12.0'
-  spec.add_development_dependency 'ruby-debug-ide', '~>0.7'
-  spec.add_development_dependency 'solargraph', '~>0.40'
-  spec.add_development_dependency 'sqlite3', '~>1.4'
-  spec.add_development_dependency 'yard', '~>0.9'
+  spec.add_development_dependency 'rake', '~> 13.0'
+  spec.add_development_dependency 'sqlite3', '~> 1.4'
+  spec.add_development_dependency 'yard', '~> 0.9'
 end
