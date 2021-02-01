@@ -16,7 +16,7 @@
 #  purchases_in_the_last_6_months   :integer
 #  shipping_address_added           :datetime
 #  shipping_address_usage_indicator :integer
-#  suspicious_activity_indicator    :integer          default(0)
+#  suspicious_activity_indicator    :integer          default("NoSuspiciousActivityObserved")
 #  transactional_activity_per_day   :integer
 #  transactional_activity_per_year  :integer
 #  created_at                       :datetime         not null
