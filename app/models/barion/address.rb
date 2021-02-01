@@ -15,18 +15,20 @@
 #  zip        :string(16)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  payment_id :bigint
 #
 # Indexes
 #
-#  index_barion_addresses_on_city       (city)
-#  index_barion_addresses_on_country    (country)
-#  index_barion_addresses_on_full_name  (full_name)
-#  index_barion_addresses_on_zip        (zip)
+#  index_barion_addresses_on_city        (city)
+#  index_barion_addresses_on_country     (country)
+#  index_barion_addresses_on_full_name   (full_name)
+#  index_barion_addresses_on_payment_id  (payment_id)
+#  index_barion_addresses_on_zip         (zip)
 #
 module Barion
   class Address < ApplicationRecord
-    has_many :payments, inverse_of: :shipping_address
-    has_many :payments, inverse_of: :billing_address
+    belongs_to :payment, inverse_of: :shipping_address
+    belongs_to :payment, inverse_of: :billing_address
 
     validates :country, presence: true, length: { is: 2 }
     validates :zip, length: { maximum: 16 }, allow_nil: true

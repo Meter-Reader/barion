@@ -21,11 +21,13 @@ ActiveRecord::Schema.define(version: 2021_01_28_220347) do
     t.string "street2", limit: 50
     t.string "street3", limit: 50
     t.string "full_name", limit: 45
+    t.bigint "payment_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["city"], name: "index_barion_addresses_on_city"
     t.index ["country"], name: "index_barion_addresses_on_country"
     t.index ["full_name"], name: "index_barion_addresses_on_full_name"
+    t.index ["payment_id"], name: "index_barion_addresses_on_payment_id"
     t.index ["zip"], name: "index_barion_addresses_on_zip"
   end
 

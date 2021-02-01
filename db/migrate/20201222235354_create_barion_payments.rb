@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+# Creats Barion::Payments record storage
 class CreateBarionPayments < ActiveRecord::Migration[6.0]
   def change
+    # rubocop:disable Metrics/BlockLength
     create_table :barion_payments do |t|
       t.string :poskey, index: true, null: false
       t.integer :payment_type, index: true, default: 0, null: false
@@ -21,13 +23,11 @@ class CreateBarionPayments < ActiveRecord::Migration[6.0]
       t.string :callback_url, limit: 2000
 
       t.string :order_number, limit: 100, index: true
-      t.references :shipping_address, references: :barion_addresses, foreign_key: { to_table: :barion_addresses }
       t.string :locale, limit: 10, null: false
       t.string :currency, limit: 3, null: false
       t.string :payer_phone_number, limit: 30
       t.string :payer_work_phone_number, limit: 30
       t.string :payer_home_number, limit: 30
-      t.references :billing_address, references: :barion_addresses, foreign_key: { to_table: :barion_addresses }
       t.string :challenge_preference
       t.string :checksum
 
@@ -39,5 +39,6 @@ class CreateBarionPayments < ActiveRecord::Migration[6.0]
 
       t.timestamps
     end
+    # rubocop:enable Metrics/BlockLength
   end
 end

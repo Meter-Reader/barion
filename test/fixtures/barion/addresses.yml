@@ -13,13 +13,15 @@
 #  zip        :string(16)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  payment_id :bigint
 #
 # Indexes
 #
-#  index_barion_addresses_on_city       (city)
-#  index_barion_addresses_on_country    (country)
-#  index_barion_addresses_on_full_name  (full_name)
-#  index_barion_addresses_on_zip        (zip)
+#  index_barion_addresses_on_city        (city)
+#  index_barion_addresses_on_country     (country)
+#  index_barion_addresses_on_full_name   (full_name)
+#  index_barion_addresses_on_payment_id  (payment_id)
+#  index_barion_addresses_on_zip         (zip)
 #
 
 one:

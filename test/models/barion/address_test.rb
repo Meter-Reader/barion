@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: barion_addresses
@@ -13,13 +15,15 @@
 #  zip        :string(16)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  payment_id :bigint
 #
 # Indexes
 #
-#  index_barion_addresses_on_city       (city)
-#  index_barion_addresses_on_country    (country)
-#  index_barion_addresses_on_full_name  (full_name)
-#  index_barion_addresses_on_zip        (zip)
+#  index_barion_addresses_on_city        (city)
+#  index_barion_addresses_on_country     (country)
+#  index_barion_addresses_on_full_name   (full_name)
+#  index_barion_addresses_on_payment_id  (payment_id)
+#  index_barion_addresses_on_zip         (zip)
 #
 
 require 'test_helper'
@@ -28,6 +32,7 @@ module Barion
   class AddressTest < ActiveSupport::TestCase
     setup do
       @address = Barion::Address.new
+      @address.payment = Barion::Payment.new
     end
 
     test 'country has default value' do
@@ -91,7 +96,7 @@ module Barion
 
     test 'region length 2chars' do
       assert_valid @address
-      @address.region = Faker::String.random(length:3)
+      @address.region = Faker::String.random(length: 3)
       refute_valid @address
       @address.region = Faker::String.random(length: 2)
       assert_equal 2, @address.region.length, msg: @address.region

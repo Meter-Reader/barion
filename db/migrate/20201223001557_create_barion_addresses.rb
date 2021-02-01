@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Creats Barion::Address record storage
 class CreateBarionAddresses < ActiveRecord::Migration[6.0]
   def change
     create_table :barion_addresses do |t|
@@ -11,6 +12,7 @@ class CreateBarionAddresses < ActiveRecord::Migration[6.0]
       t.string :street2, limit: 50
       t.string :street3, limit: 50
       t.string :full_name, limit: 45
+      t.belongs_to :payment
 
       t.timestamps
     end
