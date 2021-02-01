@@ -163,7 +163,6 @@ ActiveRecord::Schema.define(version: 2021_01_28_220347) do
   add_foreign_key "barion_payments", "barion_addresses", column: "shipping_address_id"
   add_foreign_key "barion_payments", "barion_payer_accounts", column: "payer_account_id"
   add_foreign_key "barion_payments", "barion_purchases", column: "purchase_information_id"
-  add_foreign_key "barion_purchases", "barion_payments", column: "payment_id"
   add_foreign_key "barion_transactions", "barion_payments", column: "payment_id"
   add_foreign_key "barion_transactions", "barion_transactions", column: "payee_transactions_id"
 end

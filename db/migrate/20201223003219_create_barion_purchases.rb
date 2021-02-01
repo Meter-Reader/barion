@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Creates Barion:Purchase record persistency layer
 class CreateBarionPurchases < ActiveRecord::Migration[6.0]
   def change
     create_table :barion_purchases do |t|
@@ -14,6 +15,7 @@ class CreateBarionPurchases < ActiveRecord::Migration[6.0]
       t.integer :purchase_type
       t.references :gift_card_purchase
       t.datetime :purchase_date
+      t.belongs_to :payment
 
       t.timestamps
     end
