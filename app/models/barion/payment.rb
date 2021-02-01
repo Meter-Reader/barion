@@ -116,7 +116,11 @@ module Barion
                optional: true,
                inverse_of: :payments
 
-    belongs_to :payer_account, inverse_of: :payments, optional: true
+    has_one :payer_account, inverse_of: :payment
+
+    has_one :purchase_information,
+            class_name: 'Barion::Purchase',
+            inverse_of: :payment
 
     validates :payment_type, presence: true
     validates :reservation_period,

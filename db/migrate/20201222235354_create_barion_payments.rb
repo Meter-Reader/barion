@@ -28,8 +28,6 @@ class CreateBarionPayments < ActiveRecord::Migration[6.0]
       t.string :payer_work_phone_number, limit: 30
       t.string :payer_home_number, limit: 30
       t.references :billing_address, references: :barion_addresses, foreign_key: { to_table: :barion_addresses }
-      t.references :payer_account, references: :barion_payer_accounts, foreign_key: { to_table: :barion_payer_accounts }
-      t.references :purchase_information, references: :barion_purchases, foreign_key: { to_table: :barion_purchases }
       t.string :challenge_preference
       t.string :checksum
 

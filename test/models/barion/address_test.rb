@@ -41,12 +41,12 @@ module Barion
     end
 
     test 'country length 2chars' do
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
       @address.country = Faker::String.random(length: 3)
-      refute @address.valid?
+      refute_valid @address
       @address.country = 'hu'
       assert_equal 2, @address.country.length, msg: @address.country
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
     end
 
     test 'city can be set' do
@@ -56,12 +56,12 @@ module Barion
     end
 
     test 'city max length 50chars' do
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
       @address.city = Faker::String.random(length: 51)
-      refute @address.valid?
+      refute_valid @address
       @address.city = Faker::String.random(length: 50)
       assert_equal 50, @address.city.length, msg: @address.city
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
     end
 
     test 'zip can be set' do
@@ -71,12 +71,12 @@ module Barion
     end
 
     test 'zip max length 16chars' do
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
       @address.zip = Faker::String.random(length: 17)
-      refute @address.valid?
+      refute_valid @address
       @address.zip = Faker::String.random(length: 16)
       assert_equal 16, @address.zip.length, msg: @address.zip
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
     end
 
     test 'region has default nil' do
@@ -90,12 +90,12 @@ module Barion
     end
 
     test 'region length 2chars' do
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
       @address.region = Faker::String.random(length:3)
-      refute @address.valid?
+      refute_valid @address
       @address.region = Faker::String.random(length: 2)
       assert_equal 2, @address.region.length, msg: @address.region
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
     end
 
     test 'street can be set' do
@@ -105,12 +105,12 @@ module Barion
     end
 
     test 'street max length 50chars' do
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
       @address.street = Faker::String.random(length: 51)
-      refute @address.valid?
+      refute_valid @address
       @address.street = Faker::String.random(length: 50)
       assert_equal 50, @address.street.length, msg: @address.street
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
     end
 
     test 'street2 can be set' do
@@ -120,12 +120,12 @@ module Barion
     end
 
     test 'street2 max length 50chars' do
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
       @address.street2 = Faker::String.random(length: 51)
-      refute @address.valid?
+      refute_valid @address
       @address.street2 = Faker::String.random(length: 50)
       assert_equal 50, @address.street2.length, msg: @address.street2
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
     end
 
     test 'street3 can be set' do
@@ -135,12 +135,12 @@ module Barion
     end
 
     test 'street3 max length 50chars' do
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
       @address.street3 = Faker::String.random(length: 51)
-      refute @address.valid?
+      refute_valid @address
       @address.street3 = Faker::String.random(length: 50)
       assert_equal 50, @address.street3.length, msg: @address.street3
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
     end
 
     test 'full name can be set' do
@@ -150,12 +150,12 @@ module Barion
     end
 
     test 'full_name max length 45chars' do
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
       @address.full_name = Faker::String.random(length: 46)
-      refute @address.valid?
+      refute_valid @address
       @address.full_name = Faker::String.random(length: 45)
       assert_equal 45, @address.full_name.length, msg: @address.full_name
-      assert @address.valid?, @address.errors.objects.first.try(:full_message)
+      assert_valid @address
     end
   end
 end

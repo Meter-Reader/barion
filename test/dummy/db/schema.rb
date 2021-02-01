@@ -43,27 +43,26 @@ ActiveRecord::Schema.define(version: 2021_01_28_220347) do
   end
 
   create_table "barion_payer_accounts", force: :cascade do |t|
-    t.string "email", limit: 256
-    t.string "name", limit: 45
-    t.string "locale", limit: 5
-    t.string "phone_number", limit: 30
-    t.string "work_phone_number", limit: 30
-    t.string "home_number", limit: 30
-    t.integer "creation_indicator", limit: 3
-    t.integer "change_indicator", limit: 3
+    t.string "account_id", limit: 64
+    t.datetime "account_created"
+    t.integer "account_creation_indicator", limit: 3
+    t.datetime "account_last_changed"
+    t.integer "account_change_indicator", limit: 3
     t.datetime "password_last_changed"
     t.integer "password_change_indicator", limit: 3
-    t.integer "suspicious", limit: 1, default: 0
-    t.datetime "payment_method_added"
+    t.integer "purchases_in_the_last_6_months"
+    t.datetime "shipping_address_added"
     t.integer "shipping_address_usage_indicator", limit: 3
-    t.bigint "shipping_address_id"
-    t.bigint "billing_address_id"
+    t.integer "provision_attempts"
+    t.integer "transactional_activity_per_day"
+    t.integer "transactional_activity_per_year"
+    t.datetime "payment_method_added"
+    t.integer "suspicious_activity_indicator", limit: 1, default: 0
+    t.bigint "payment_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["billing_address_id"], name: "index_barion_payer_accounts_on_billing_address_id"
-    t.index ["email"], name: "index_barion_payer_accounts_on_email"
-    t.index ["name"], name: "index_barion_payer_accounts_on_name"
-    t.index ["shipping_address_id"], name: "index_barion_payer_accounts_on_shipping_address_id"
+    t.index ["account_id"], name: "index_barion_payer_accounts_on_account_id"
+    t.index ["payment_id"], name: "index_barion_payer_accounts_on_payment_id"
   end
 
   create_table "barion_payments", force: :cascade do |t|
@@ -84,15 +83,15 @@ ActiveRecord::Schema.define(version: 2021_01_28_220347) do
     t.string "redirect_url", limit: 2000
     t.string "callback_url", limit: 2000
     t.string "order_number", limit: 100
-    t.bigint "shipping_address_id"
+    t.integer "shipping_address_id"
     t.string "locale", limit: 10, null: false
     t.string "currency", limit: 3, null: false
     t.string "payer_phone_number", limit: 30
     t.string "payer_work_phone_number", limit: 30
     t.string "payer_home_number", limit: 30
-    t.bigint "billing_address_id"
-    t.bigint "payer_account_id"
-    t.bigint "purchase_information_id"
+    t.integer "billing_address_id"
+    t.integer "payer_account_id"
+    t.integer "purchase_information_id"
     t.string "challenge_preference"
     t.string "checksum"
     t.string "payment_id"
@@ -127,11 +126,13 @@ ActiveRecord::Schema.define(version: 2021_01_28_220347) do
     t.integer "purchase_type"
     t.bigint "gift_card_purchase_id"
     t.datetime "purchase_date"
+    t.bigint "payment_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["delivery_email_address"], name: "index_barion_purchases_on_delivery_email_address"
     t.index ["delivery_timeframe"], name: "index_barion_purchases_on_delivery_timeframe"
     t.index ["gift_card_purchase_id"], name: "index_barion_purchases_on_gift_card_purchase_id"
+    t.index ["payment_id"], name: "index_barion_purchases_on_payment_id"
   end
 
   create_table "barion_transactions", force: :cascade do |t|
@@ -156,12 +157,11 @@ ActiveRecord::Schema.define(version: 2021_01_28_220347) do
   end
 
   add_foreign_key "barion_items", "barion_transactions", column: "transaction_id"
-  add_foreign_key "barion_payer_accounts", "barion_addresses", column: "billing_address_id"
-  add_foreign_key "barion_payer_accounts", "barion_addresses", column: "shipping_address_id"
   add_foreign_key "barion_payments", "barion_addresses", column: "billing_address_id"
   add_foreign_key "barion_payments", "barion_addresses", column: "shipping_address_id"
   add_foreign_key "barion_payments", "barion_payer_accounts", column: "payer_account_id"
   add_foreign_key "barion_payments", "barion_purchases", column: "purchase_information_id"
+  add_foreign_key "barion_purchases", "barion_payments", column: "payment_id"
   add_foreign_key "barion_transactions", "barion_payments", column: "payment_id"
   add_foreign_key "barion_transactions", "barion_transactions", column: "payee_transactions_id"
 end

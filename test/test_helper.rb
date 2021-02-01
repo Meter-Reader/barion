@@ -31,5 +31,17 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActiveSupport::TestCase.fixtures :all
 end
 
+module ActiveSupport
+  class TestCase
+    def assert_valid(model)
+      assert model.valid?, model.errors.objects.first.try(:full_message)
+    end
+
+    def refute_valid(model)
+      refute model.valid?
+    end
+  end
+end
+
 require 'minitest/autorun'
 require 'faker'
