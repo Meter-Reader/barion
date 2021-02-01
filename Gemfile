@@ -25,4 +25,3 @@ gem 'ruby-debug-ide'
 gem 'simplecov'
 gem 'simplecov-cobertura', require: false
 gem 'solargraph'
-

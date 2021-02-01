@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Barion::PayerAccount migration
+# Creates Barion::PayerAccount record persistency
 class CreateBarionPayerAccounts < ActiveRecord::Migration[6.0]
   def change
     create_table :barion_payer_accounts do |t|

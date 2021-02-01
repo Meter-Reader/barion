@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Barion
+  # Common data formats in Barion
   module DataFormats
     extend ActiveSupport::Concern
 

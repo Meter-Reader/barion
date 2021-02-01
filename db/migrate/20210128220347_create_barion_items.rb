@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Creates Barion::Item record persistency
 class CreateBarionItems < ActiveRecord::Migration[6.1]
   def change
     create_table :barion_items do |t|

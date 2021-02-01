@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Creats Barion::Payments record storage
+# Creates Barion::Payment record persistency
 class CreateBarionPayments < ActiveRecord::Migration[6.0]
   def change
     # rubocop:disable Metrics/BlockLength

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Creates Barion::Transaction record persistency
 class CreateBarionTransactions < ActiveRecord::Migration[6.0]
   def change
     create_table :barion_transactions do |t|
@@ -7,10 +8,12 @@ class CreateBarionTransactions < ActiveRecord::Migration[6.0]
       t.string :payee, null: false, index: true
       t.decimal :total, null: false
       t.string :comment
-
-      t.references :payee_transactions, references: :barion_transactions, foreign_key: { to_table: :barion_transactions }
-
-      t.references :payment, references: :barion_payments, foreign_key: { to_table: :barion_payments }
+      t.references :payee_transactions,
+                   references: :barion_transactions,
+                   foreign_key: { to_table: :barion_transactions }
+      t.references :payment,
+                   references: :barion_payments,
+                   foreign_key: { to_table: :barion_payments }
       t.integer :status, default: 0, null: false, index: true
       t.string :transaction_id, index: true
       t.string :currency, limit: 3

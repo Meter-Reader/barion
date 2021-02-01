@@ -2,6 +2,7 @@
 
 require 'barion/engine'
 
+# Main module of Barion engine
 module Barion
   BASE_URL = {
     test: 'https://api.test.barion.com',

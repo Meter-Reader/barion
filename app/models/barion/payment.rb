@@ -63,6 +63,7 @@
 #  shipping_address_id      (shipping_address_id => barion_addresses.id)
 #
 module Barion
+  # Represents a payment in Barion engine
   class Payment < ApplicationRecord
     include Barion::DataFormats
 
@@ -79,21 +80,20 @@ module Barion
     enum payment_type: %i[immediate reservation delayed_capture], _default: :immediate
     enum funding_sources: { all: 0, balance: 1 }, _suffix: true, _default: :all
     enum recurrence_type: { one_click: 1, merchant_initiated: 2, recurring: 3 }
-    enum status: { 'Initial': 0,             # The payment has not yet been sent.
-                   'Prepared': 10,           # The payment is prepared. This means it can be completed unless the payment time window expires.
-                   'Started': 20,            # The payment process has been started. This means the payer started the execution of the payment with a funding source.
-                   'InProgress': 21,         # The payment process is currently in progress. This means that the communication between Barion and the bank card processing system is currently taking place. No alterations can be made to the payment in this status.
-                   'Waiting': 22,            # The payment was paid with bank transfer and the result of the bank transfer is not known yet. Used in Payment_Buttons scenarios.
-                   'Reserved': 25,           # The payment was completed by the payer, but the amount is still reserved. This means that the payment should be finished (finalized) unless the reservation period expires.
-                   'Authorized': 26,         # The payment was completed by the payer, but the amount is not charged yet on the bankcard. The payment must be finished before the authorization period expires.
-                   'Canceled': 30,           # The payment has been explicitly cancelled (rejected) by the payer. This is a final status, the payment can no longer be completed.
-                   'Succeeded':	40,          # The payment has been fully completed. This is a final status, the payment can no longer be altered.
-                   'Failed': 50,             # The payment has failed because of unknown reasons. Used in payment scenarios that were paid with bank transfer.
-                   'PartiallySucceeded': 60, # This can occur if a complex reservation payment contains multiple transactions, and only some of them are finished. If all transactions are finished, the payment status will change to Succeeded.
-                   'Expired':	70 },          # The payment was expired. This can occur due to numerous reasons:
-                 _default: 'Initial'         # - The payment time window has passed and the payer did not complete the payment.
-                                             # - A reserved payment was not finished during the reservation period. In this case, the money is refunded to the payer.
-                                             # This is a final status, the payment can no longer be completed.
+    enum status: {
+      Initial: 0,
+      Prepared: 10,
+      Started: 20,
+      InProgress: 21,
+      Waiting: 22,
+      Reserved: 25,
+      Authorized: 26,
+      Canceled: 30,
+      Succeeded: 40,
+      Failed: 50,
+      PartiallySucceeded: 60,
+      Expired: 70
+    }, _default: :Initial
     attribute :payment_window, :integer, default: 30.minutes.to_i
     attribute :guest_checkout, :boolean, default: true
     attribute :initiate_recurrence, :boolean, default: false

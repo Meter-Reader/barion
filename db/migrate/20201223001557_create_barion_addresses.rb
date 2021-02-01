@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Creats Barion::Address record storage
+# Creates Barion::Address record persistency
 class CreateBarionAddresses < ActiveRecord::Migration[6.0]
   def change
     create_table :barion_addresses do |t|

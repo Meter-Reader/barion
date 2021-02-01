@@ -30,31 +30,32 @@
 #  index_barion_payer_accounts_on_payment_id  (payment_id)
 #
 module Barion
+  # Represents a PayerAccount in Barion engine
   class PayerAccount < ApplicationRecord
     include Barion::DataFormats
 
     attribute :account_is, :string
     enum account_change_indicator: {
-      'ChangedDuringThisTransaction': 0,
-      'LessThan30Days': 10,
-      'Between30And60Days': 20,
-      'MoreThan60Days': 30
+      ChangedDuringThisTransaction: 0,
+      LessThan30Days: 10,
+      Between30And60Days: 20,
+      MoreThan60Days: 30
     }, _default: 0, _prefix: true
     attribute :account_created, :datetime
     enum account_creation_indicator: {
-      'NoAccount': 0,
-      'CreatedDuringThisTransaction': 10,
-      'LessThan30Days': 20,
-      'Between30And60Days': 30,
-      'MoreThan60Days': 40
+      NoAccount: 0,
+      CreatedDuringThisTransaction: 10,
+      LessThan30Days: 20,
+      Between30And60Days: 30,
+      MoreThan60Days: 40
     }, _default: 0, _prefix: true
     attribute :account_last_changed, :datetime
     enum password_change_indicator: {
-      'NoChange': 0,
-      'ChangedDuringThisTransaction': 10,
-      'LessThan30Days': 20,
-      'Between30And60Days': 30,
-      'MoreThan60Days': 40
+      NoChange: 0,
+      ChangedDuringThisTransaction: 10,
+      LessThan30Days: 20,
+      Between30And60Days: 30,
+      MoreThan60Days: 40
     }, _default: 0, _prefix: true
     attribute :password_last_changed, :datetime
     attribute :payment_method_added, :boolean
@@ -62,14 +63,14 @@ module Barion
     attribute :purchases_in_the_last_6_months, :integer
     attribute :shipping_address_added, :datetime
     enum shipping_address_usage_indicator: {
-      'ThisTransaction': 0,
-      'LessThan30Days': 10,
-      'Between30And60Days': 20,
-      'MoreThan60Days': 30
+      ThisTransaction: 0,
+      LessThan30Days: 10,
+      Between30And60Days: 20,
+      MoreThan60Days: 30
     }, _default: 0
     enum suspicious_activity_indicator: {
-      'NoSuspiciousActivityObserved': 0,
-      'SuspiciousActivityObserved': 10
+      NoSuspiciousActivityObserved: 0,
+      SuspiciousActivityObserved: 10
     }, _default: 0
     attribute :transactional_activity_per_day, :integer
     attribute :transactional_activity_per_year, :integer
