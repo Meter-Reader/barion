@@ -1,0 +1,24 @@
+# == Schema Information
+#
+# Table name: barion_gift_card_purchases
+#
+#  id          :integer          not null, primary key
+#  amount      :decimal(, )      not null
+#  count       :integer          not null
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
+#  purchase_id :integer
+#
+# Indexes
+#
+#  index_barion_gift_card_purchases_on_purchase_id  (purchase_id)
+#
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  amount: 9.99
+  count: 1
+
+two:
+  amount: 9.99
+  count: 1

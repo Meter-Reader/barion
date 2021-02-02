@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_28_220347) do
+ActiveRecord::Schema.define(version: 2021_02_01_120609) do
 
   create_table "barion_addresses", force: :cascade do |t|
     t.string "country", limit: 2, default: "zz", null: false
@@ -29,6 +29,15 @@ ActiveRecord::Schema.define(version: 2021_01_28_220347) do
     t.index ["full_name"], name: "index_barion_addresses_on_full_name"
     t.index ["payment_id"], name: "index_barion_addresses_on_payment_id"
     t.index ["zip"], name: "index_barion_addresses_on_zip"
+  end
+
+  create_table "barion_gift_card_purchases", force: :cascade do |t|
+    t.decimal "amount", null: false
+    t.integer "count", null: false
+    t.integer "purchase_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["purchase_id"], name: "index_barion_gift_card_purchases_on_purchase_id"
   end
 
   create_table "barion_items", force: :cascade do |t|
@@ -142,8 +151,8 @@ ActiveRecord::Schema.define(version: 2021_01_28_220347) do
     t.string "payee", null: false
     t.decimal "total", null: false
     t.string "comment"
-    t.bigint "payee_transactions_id"
-    t.bigint "payment_id"
+    t.integer "payee_transactions_id"
+    t.integer "payment_id"
     t.integer "status", default: 0, null: false
     t.string "transaction_id"
     t.string "currency", limit: 3
