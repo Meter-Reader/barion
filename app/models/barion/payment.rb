@@ -106,15 +106,13 @@ module Barion
              inverse_of: :payment,
              dependent: :destroy
 
-    belongs_to :shipping_address,
-               class_name: 'Barion::Address',
-               optional: true,
-               inverse_of: :payment
+    has_one :shipping_address,
+            class_name: 'Barion::Address',
+            inverse_of: :payment
 
-    belongs_to :billing_address,
-               class_name: 'Barion::Address',
-               optional: true,
-               inverse_of: :payment
+    has_one :billing_address,
+            class_name: 'Barion::Address',
+            inverse_of: :payment
 
     has_one :payer_account, inverse_of: :payment
 
