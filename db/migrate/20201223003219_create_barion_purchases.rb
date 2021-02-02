@@ -13,7 +13,6 @@ class CreateBarionPurchases < ActiveRecord::Migration[6.0]
       t.datetime :recurring_expiry
       t.integer :recurring_frequency, limit: 4
       t.integer :purchase_type
-      t.references :gift_card_purchase
       t.datetime :purchase_date
       t.belongs_to :payment
 
