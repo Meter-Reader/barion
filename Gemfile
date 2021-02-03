@@ -22,6 +22,6 @@ gem 'minitest-reporters', require: false
 gem 'overcommit'
 gem 'rubocop'
 gem 'ruby-debug-ide'
-gem 'simplecov'
+gem 'simplecov', require: false
 gem 'simplecov-cobertura', require: false
 gem 'solargraph'

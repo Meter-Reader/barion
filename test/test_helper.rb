@@ -32,6 +32,7 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
 end
 
 module ActiveSupport
+  # Extends ActiveSupport:TestCase
   class TestCase
     def assert_valid(model)
       assert model.valid?, model.errors.objects.first.try(:full_message)
