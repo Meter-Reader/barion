@@ -13,7 +13,9 @@ class CreateBarionItems < ActiveRecord::Migration[6.1]
       t.decimal :item_total, null: false
       t.string :sku, limit: 100
 
-      t.references :transaction, references: :barion_transactions, foreign_key: { to_table: :barion_transactions }
+      t.references :payment_transaction,
+                   references: :barion_transactions,
+                   foreign_key: { to_table: :barion_transactions }
     end
   end
 end

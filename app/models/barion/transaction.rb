@@ -57,5 +57,7 @@ module Barion
     }, _default: 'Prepared'
 
     belongs_to :payment, inverse_of: :transactions
+
+    has_many :items, inverse_of: :payment_transactions
   end
 end

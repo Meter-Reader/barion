@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.decimal "unit_price", null: false
     t.decimal "item_total", null: false
     t.string "sku", limit: 100
-    t.integer "transaction_id"
-    t.index ["transaction_id"], name: "index_barion_items_on_transaction_id"
+    t.integer "payment_transaction_id"
+    t.index ["payment_transaction_id"], name: "index_barion_items_on_payment_transaction_id"
   end
 
   create_table "barion_payer_accounts", force: :cascade do |t|
@@ -94,15 +94,15 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "redirect_url", limit: 2000
     t.string "callback_url", limit: 2000
     t.string "order_number", limit: 100
-    t.integer "shipping_address_id"
+    t.bigint "shipping_address_id"
     t.string "locale", limit: 10, null: false
     t.string "currency", limit: 3, null: false
     t.string "payer_phone_number", limit: 30
     t.string "payer_work_phone_number", limit: 30
     t.string "payer_home_number", limit: 30
-    t.integer "billing_address_id"
-    t.integer "payer_account_id"
-    t.integer "purchase_information_id"
+    t.bigint "billing_address_id"
+    t.bigint "payer_account_id"
+    t.bigint "purchase_information_id"
     t.string "challenge_preference"
     t.string "checksum"
     t.string "payment_id"
@@ -151,8 +151,8 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "payee", null: false
     t.decimal "total", null: false
     t.string "comment"
-    t.integer "payee_transactions_id"
-    t.integer "payment_id"
+    t.bigint "payee_transactions_id"
+    t.bigint "payment_id"
     t.integer "status", default: 0, null: false
     t.string "transaction_id"
     t.string "currency", limit: 3
@@ -167,7 +167,7 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.index ["transaction_id"], name: "index_barion_transactions_on_transaction_id"
   end
 
-  add_foreign_key "barion_items", "barion_transactions", column: "transaction_id"
+  add_foreign_key "barion_items", "barion_transactions", column: "payment_transaction_id"
   add_foreign_key "barion_payments", "barion_addresses", column: "billing_address_id"
   add_foreign_key "barion_payments", "barion_addresses", column: "shipping_address_id"
   add_foreign_key "barion_payments", "barion_payer_accounts", column: "payer_account_id"
