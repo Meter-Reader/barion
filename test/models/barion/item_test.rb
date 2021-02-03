@@ -112,7 +112,13 @@ module Barion
       assert_valid @item
     end
 
-    test 'unit max length is 50 chars'
+    test 'unit max length is 50 chars' do
+      assert_valid @item
+      @item.unit = Faker::String.random(length: 51)
+      refute_valid @item
+      @item.unit = Faker::String.random(length: 50)
+      assert_valid @item
+    end
 
     test 'unit_price mandatory, default 0 but can be set' do
       assert_valid @item
