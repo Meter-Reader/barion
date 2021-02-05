@@ -13,8 +13,8 @@
 #  transaction_time      :datetime
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  payee_transactions_id :bigint
-#  payment_id            :bigint
+#  payee_transactions_id :integer
+#  payment_id            :integer
 #  pos_transaction_id    :string           not null
 #  transaction_id        :string
 #

@@ -32,13 +32,13 @@
 #  status                  :integer          not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  billing_address_id      :bigint
-#  payer_account_id        :bigint
+#  billing_address_id      :integer
+#  payer_account_id        :integer
 #  payment_id              :string
 #  payment_request_id      :string(100)
-#  purchase_information_id :bigint
+#  purchase_information_id :integer
 #  recurrence_id           :string(100)
-#  shipping_address_id     :bigint
+#  shipping_address_id     :integer
 #  trace_id                :string(100)
 #
 # Indexes
@@ -212,7 +212,7 @@ module Barion
     end
 
     def set_defaults
-      self.poskey = Barion.poskey if @poskey.nil?
+      self.poskey = Barion.poskey if poskey.nil?
     end
 
     def create_payment_request_id
