@@ -13,6 +13,7 @@
 #
 #  index_barion_gift_card_purchases_on_purchase_id  (purchase_id)
 #
+
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:

@@ -17,14 +17,12 @@
 #  shipping_address_indicator :integer
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
-#  gift_card_purchase_id      :bigint
 #  payment_id                 :bigint
 #
 # Indexes
 #
 #  index_barion_purchases_on_delivery_email_address  (delivery_email_address)
 #  index_barion_purchases_on_delivery_timeframe      (delivery_timeframe)
-#  index_barion_purchases_on_gift_card_purchase_id   (gift_card_purchase_id)
 #  index_barion_purchases_on_payment_id              (payment_id)
 #
 module Barion

@@ -135,14 +135,12 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.datetime "recurring_expiry"
     t.integer "recurring_frequency", limit: 4
     t.integer "purchase_type"
-    t.bigint "gift_card_purchase_id"
     t.datetime "purchase_date"
     t.bigint "payment_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["delivery_email_address"], name: "index_barion_purchases_on_delivery_email_address"
     t.index ["delivery_timeframe"], name: "index_barion_purchases_on_delivery_timeframe"
-    t.index ["gift_card_purchase_id"], name: "index_barion_purchases_on_gift_card_purchase_id"
     t.index ["payment_id"], name: "index_barion_purchases_on_payment_id"
   end
 
