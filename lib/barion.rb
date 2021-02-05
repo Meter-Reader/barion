@@ -39,4 +39,7 @@ module Barion
 
     @user_class_name.constantize
   end
+
+  class TamperedData < RuntimeError
+  end
 end

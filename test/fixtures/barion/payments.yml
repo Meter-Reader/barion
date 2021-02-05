@@ -64,9 +64,9 @@
 one:
   poskey: test_poskey
   payment_type: immediate
-  reservation_period: 1
-  delayed_capture_period: 1
-  payment_window: MyString
+  reservation_period: 60
+  delayed_capture_period: nil
+  payment_window: 1700
   guest_checkout: false
   initiate_recurrence: false
   recurrence_id: MyString
@@ -74,14 +74,14 @@ one:
   funding_sources: 1
   locale: hu-HU
   currency: HUF
-  status: 1
+  status: 0
 
 two:
   poskey: test_poskey
-  payment_type: 2
-  reservation_period: 1
-  delayed_capture_period: 1
-  payment_window: MyString
+  payment_type: immediate
+  reservation_period: 60
+  delayed_capture_period: nil
+  payment_window: 60
   guest_checkout: false
   initiate_recurrence: false
   recurrence_id: MyString
@@ -89,4 +89,4 @@ two:
   funding_sources: 2
   locale: hu-HU
   currency: HUF
-  status: 1
+  status: 0

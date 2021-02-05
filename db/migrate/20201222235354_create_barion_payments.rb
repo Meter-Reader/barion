@@ -28,8 +28,8 @@ class CreateBarionPayments < ActiveRecord::Migration[6.0]
       t.string :payer_phone_number, limit: 30
       t.string :payer_work_phone_number, limit: 30
       t.string :payer_home_number, limit: 30
-      t.string :challenge_preference
-      t.string :checksum
+      t.integer :challenge_preference, default: 0
+      t.string :checksum, null: false
 
       t.string :payment_id, index: true
       t.integer :status, index: true, null: false

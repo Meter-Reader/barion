@@ -277,11 +277,16 @@ module Barion
     test 'recurrence type can be set' do
       assert_nil @payment.recurrence_type, @payment.recurrence_type
       @payment.recurrence_type = :recurring
+      assert_valid @payment
       assert_equal 'recurring', @payment.recurrence_type
+      @payment.recurrence_type = :one_click
+      assert_valid @payment
+      @payment.recurrence_type = :merchant_initiated
+      assert_valid @payment
     end
 
     test 'recurrence type allows only valid values' do
-      assert_raises 'ArgumentError' do
+      assert_raises ArgumentError do
         @payment.recurrence_type = :none
       end
     end
@@ -466,14 +471,14 @@ module Barion
     end
 
     test 'status has a default value' do
-      assert_equal 'Initial', @payment.status
+      assert_equal 'initial', @payment.status
     end
 
     test 'status can be set' do
-      assert_equal 'Initial', @payment.status
+      assert_equal 'initial', @payment.status
       assert_valid @payment
-      @payment.status = 'Prepared'
-      assert_equal 'Prepared', @payment.status
+      @payment.status = :prepared
+      assert_equal 'prepared', @payment.status
       assert_valid @payment
     end
 
@@ -495,7 +500,7 @@ module Barion
       assert_valid @payment
     end
 
-    test 'purchase information deafult nil' do
+    test 'purchase information default nil' do
       assert_nil @payment.purchase_information
       assert_valid @payment
     end
@@ -507,16 +512,105 @@ module Barion
       assert_valid @payment
     end
 
-    test 'challenge preference' do
-      skip
+    test 'challenge preference default NoPreference' do
+      assert_equal 'no_preference', @payment.challenge_preference
+      assert_valid @payment
     end
 
-    test 'checksum' do
-      skip
+    test 'challenge preference can be set' do
+      assert_valid @payment
+      @payment.challenge_preference = :challenge_required
+      assert_valid @payment
+      assert_equal 'challenge_required', @payment.challenge_preference
     end
 
-    test 'recurrence_result' do
-      skip
+    test 'challenge preference only allows valid values' do
+      assert_valid @payment
+      assert_raises ArgumentError do
+        @payment.challenge_preference = 'Test'
+      end
+    end
+
+    test 'recurrence_result has no default' do
+      assert_nil @payment.recurrence_result
+      assert_valid @payment
+    end
+
+    test 'recurrence_result can be set' do
+      assert_valid @payment
+      @payment.recurrence_result = :none
+      assert_valid @payment
+      assert_equal 'none', @payment.recurrence_result
+      @payment.recurrence_result = :successful
+      assert_valid @payment
+      assert_equal 'successful', @payment.recurrence_result
+      @payment.recurrence_result = :failed
+      assert_valid @payment
+      assert_equal 'failed', @payment.recurrence_result
+      @payment.recurrence_result = :not_found
+      assert_valid @payment
+      assert_equal 'not_found', @payment.recurrence_result
+    end
+
+    test 'recurrence_result only allows valid values' do
+      assert_valid @payment
+      assert_raises ArgumentError do
+        @payment.recurrence_result = 'Test'
+      end
+    end
+
+    test 'payment is readonly if not in initalization status' do
+      assert_valid @payment
+      assert @payment.initial?
+      refute @payment.readonly?
+      @payment.status = :prepared
+      refute @payment.initial?
+      assert @payment.readonly?
+      assert_raises ActiveRecord::ReadOnlyRecord do
+        @payment.save
+      end
+    end
+
+    test 'checksum relates to the current state of the payment' do
+      sum = @payment.checksum
+      @payment.status = :prepared
+      @payment.valid?
+      refute_equal sum, @payment.checksum
+    end
+
+    test 'checksum is readonly' do
+      assert_raises NoMethodError do
+        @payment.checksum = 'test'
+      end
+      refute_equal 'test', @payment.checksum
+    end
+
+    test 'checksum is persisted on save' do
+      @payment = barion_payments(:two)
+      assert_valid @payment
+      sum = @payment.checksum
+      @payment.save
+      table = Arel::Table.new(:barion_payments)
+      sql = table.project('checksum').where(table[:id].eq(@payment.id)).take(1).to_sql
+      result = ActiveRecord::Base.connection.execute sql
+      assert_equal sum, result.first['checksum']
+    end
+
+    test 'checksum is checked when loading from db' do
+      @payment = barion_payments(:two)
+      assert_valid @payment
+      assert @payment.save
+      sum = @payment.checksum
+      id = @payment.id
+      Payment.find(id) # should be valid, no exception
+
+      # simulate external data tampering by skipping callback
+      @payment.update_column(:status, Payment.statuses[:succeeded])
+
+      assert_raises Barion::TamperedData do
+        payment = Payment.find(id) # data change detected, raise exception
+        refute_equal sum, payment.checksum
+      end
     end
   end
 end

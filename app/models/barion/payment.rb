@@ -76,31 +76,35 @@ module Barion
                    'hu-HU': 'hu-HU',
                    'sk-SK': 'sk-SK',
                    'sl-SI': 'sl-SI' }, _default: 'hu-HU'
-    CHALLENGES = %i[no_preference challenge_required no_challenge_needed].freeze
+    enum challenge_preference: {
+      no_preference: 0,
+      challenge_required: 10,
+      no_challenge_needed: 20
+    }, _default: :no_preference
+    enum recurrence_result: %i[none successful failed not_found], _prefix: true
     enum payment_type: %i[immediate reservation delayed_capture], _default: :immediate
     enum funding_sources: { all: 0, balance: 1 }, _suffix: true, _default: :all
     enum recurrence_type: { one_click: 1, merchant_initiated: 2, recurring: 3 }
     enum status: {
-      Initial: 0,
-      Prepared: 10,
-      Started: 20,
-      InProgress: 21,
-      Waiting: 22,
-      Reserved: 25,
-      Authorized: 26,
-      Canceled: 30,
-      Succeeded: 40,
-      Failed: 50,
-      PartiallySucceeded: 60,
-      Expired: 70
-    }, _default: :Initial
+      initial: 0,
+      prepared: 10,
+      started: 20,
+      in_progress: 21,
+      waiting: 22,
+      reserved: 25,
+      authorized: 26,
+      canceled: 30,
+      succeeded: 40,
+      failed: 50,
+      partially_succeeded: 60,
+      expired: 70
+    }, _default: :initial
     attribute :payment_window, :integer, default: 30.minutes.to_i
     attribute :guest_checkout, :boolean, default: true
     attribute :initiate_recurrence, :boolean, default: false
     attribute :phone_number, :string
     attribute :home_number, :string
-
-    before_validation :create_payment_request_id
+    attribute :checksum, :string
 
     has_many :transactions,
              inverse_of: :payment,
@@ -151,15 +155,19 @@ module Barion
     validates :order_number, length: { maximum: 100 }
     validates :payer_hint, length: { maximum: 256 }
     validates :transactions, presence: true
+    validates :checksum, presence: true
     validates_associated :transactions
     validates_associated :payer_account
 
     after_initialize :set_defaults
+    after_initialize :validate_checksum
 
-    attr_reader :poskey, :payer_phone_number, :payer_home_number, :payer_work_phone_number
+    before_validation :create_payment_request_id
+    before_validation :refresh_checksum
 
-    def poskey=(poskey = nil)
-      @poskey = poskey || Barion.poskey
+    def poskey=(value = nil)
+      value = Barion.poskey if value.nil?
+      super(value)
     end
 
     def payment_type=(value)
@@ -178,29 +186,47 @@ module Barion
     end
 
     def payer_work_phone_number=(number)
-      @payer_work_phone_number = Barion::DataFormats.phone_number(number)
+      super(Barion::DataFormats.phone_number(number))
     end
 
     def payer_phone_number=(number)
-      @payer_phone_number = Barion::DataFormats.phone_number(number)
+      super(Barion::DataFormats.phone_number(number))
     end
 
     def payer_home_number=(number)
-      @payer_home_number = Barion::DataFormats.phone_number(number)
+      super(Barion::DataFormats.phone_number(number))
     end
 
     def readonly?
       !initial?
     end
 
-    private
+    def refresh_checksum
+      self.checksum = gen_checksum
+    end
+
+    protected
+
+    def checksum=(value)
+      super(value)
+    end
 
     def set_defaults
-      @poskey = Barion.poskey
+      self.poskey = Barion.poskey if @poskey.nil?
     end
 
     def create_payment_request_id
       self.payment_request_id = "#{Barion.acronym}#{Time.now.to_f.to_s.gsub('.', '')}" if payment_request_id.nil?
+    end
+
+    def gen_checksum
+      Digest::SHA512.hexdigest(
+        as_json(except: %i[checksum created_at updated_at]).to_json
+      )
+    end
+
+    def validate_checksum
+      raise Barion::TamperedData if checksum.present? && checksum != gen_checksum
     end
   end
 end
