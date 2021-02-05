@@ -15,17 +15,18 @@ module Barion
   mattr_accessor :sandbox, default: true
   mattr_accessor :default_country, default: 'zz'
   mattr_accessor :user_class
+  mattr_accessor :item_class
 
-  def sandbox?
-    !!@sandbox
+  def self.sandbox?
+    !!sandbox
   end
 
   def sandbox=(val)
-    @sandbox = !!val
+    super(!!val)
   end
 
   # @param user_class_name [String]
-  def user_class=(user_class_name)
+  def self.user_class=(user_class_name)
     unless user_class_name.is_a?(String)
       raise "Barion.user_class must be set to a String, got #{user_class_name.inspect}"
     end
@@ -33,11 +34,26 @@ module Barion
     @user_class_name = user_class_name
   end
 
-  def user_class
+  def self.user_class
     # This is nil before the initializer is installed.
     return nil if @user_class_name.nil?
 
     @user_class_name.constantize
+  end
+
+  def self.item_class=(item_class_name)
+    unless item_class_name.is_a?(String)
+      raise "Barion.item_class must be set to a String, got #{item_class_name.inspect}"
+    end
+
+    @item_class_name = item_class_name
+  end
+
+  def self.item_class
+    # This is nil before the initializer is installed.
+    return nil if @item_class_name.nil?
+
+    @item_class_name.constantize
   end
 
   class TamperedData < RuntimeError
