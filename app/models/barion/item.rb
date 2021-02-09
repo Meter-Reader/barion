@@ -55,16 +55,16 @@ module Barion
       @quantity = value.to_d
     end
 
+    def item_total=(_value)
+      raises NoMethodError('item_total is a calculated readonly field')
+    end
+
     private
 
     def set_defaults
       @quantity = 0
       @unit_price = 0.0
       calculate_total
-    end
-
-    def item_total=(_value)
-      raises NoMethodError('item_total is a calculated readonly field')
     end
 
     def calculate_total
