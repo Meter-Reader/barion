@@ -220,11 +220,13 @@ module Barion
       super(defaults.merge(options))
     end
 
-    def checksum=(_value)
-      raise NoMethodError
-    end
-
     protected
+
+    # rubocop:disable Lint/UselessMethodDefinition
+    def checksum=(value)
+      super(value)
+    end
+    # rubocop:enable Lint/UselessMethodDefinition
 
     def process_response(response)
       ::JSON.parse(response.body)
