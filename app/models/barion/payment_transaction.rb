@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: barion_transactions
+# Table name: barion_payment_transactions
 #
 #  id                    :integer          not null, primary key
 #  comment               :string
@@ -20,20 +20,20 @@
 #
 # Indexes
 #
-#  index_barion_transactions_on_payee                  (payee)
-#  index_barion_transactions_on_payee_transactions_id  (payee_transactions_id)
-#  index_barion_transactions_on_payment_id             (payment_id)
-#  index_barion_transactions_on_pos_transaction_id     (pos_transaction_id)
-#  index_barion_transactions_on_status                 (status)
-#  index_barion_transactions_on_transaction_id         (transaction_id)
+#  index_barion_payment_transactions_on_payee                  (payee)
+#  index_barion_payment_transactions_on_payee_transactions_id  (payee_transactions_id)
+#  index_barion_payment_transactions_on_payment_id             (payment_id)
+#  index_barion_payment_transactions_on_pos_transaction_id     (pos_transaction_id)
+#  index_barion_payment_transactions_on_status                 (status)
+#  index_barion_payment_transactions_on_transaction_id         (transaction_id)
 #
 # Foreign Keys
 #
-#  payee_transactions_id  (payee_transactions_id => barion_transactions.id)
+#  payee_transactions_id  (payee_transactions_id => barion_payment_transactions.id)
 #  payment_id             (payment_id => barion_payments.id)
 #
 module Barion
-  class Transaction < ApplicationRecord
+  class PaymentTransaction < ApplicationRecord
     enum status: {
       Prepared: 0,                            # The transaction is prepared, and is ready to be completed.
       Started: 1,                             # The transaction has been started. This is used at reservation payments.
@@ -56,8 +56,8 @@ module Barion
       Unknown: 255                            # The transaction is in an unknown state.
     }, _default: 'Prepared'
 
-    belongs_to :payment, inverse_of: :transactions
+    belongs_to :payment, inverse_of: :payment_transactions
 
-    has_many :items, inverse_of: :payment_transactions
+    has_many :items, inverse_of: :payment_transaction
   end
 end

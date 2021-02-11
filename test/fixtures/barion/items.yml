@@ -19,7 +19,7 @@
 #
 # Foreign Keys
 #
-#  payment_transaction_id  (payment_transaction_id => barion_transactions.id)
+#  payment_transaction_id  (payment_transaction_id => barion_payment_transactions.id)
 #
 one:
   name: MyString

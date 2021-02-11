@@ -21,7 +21,7 @@
 #
 # Foreign Keys
 #
-#  payment_transaction_id  (payment_transaction_id => barion_transactions.id)
+#  payment_transaction_id  (payment_transaction_id => barion_payment_transactions.id)
 #
 require 'test_helper'
 
@@ -33,12 +33,12 @@ module Barion
       @item.name = Faker::String.random(length: 30)
       @item.description = Faker::String.random(length: 300)
       @item.unit = 'test'
-      @item.payment_transaction = barion_transactions(:one)
+      @item.payment_transaction = barion_payment_transactions(:one)
     end
 
     test 'name is mandatory' do
       @item = barion_items(:one)
-      @item.payment_transaction = barion_transactions(:one)
+      @item.payment_transaction = barion_payment_transactions(:one)
       assert_valid @item
       @item.name = nil
       refute_valid @item
@@ -46,7 +46,7 @@ module Barion
 
     test 'name max length 256 chars' do
       @item = barion_items(:one)
-      @item.payment_transaction = barion_transactions(:one)
+      @item.payment_transaction = barion_payment_transactions(:one)
       assert_valid @item
       @item.name = Faker::String.random(length: 257)
       refute_valid @item
@@ -56,7 +56,7 @@ module Barion
 
     test 'description is mandatory' do
       @item = barion_items(:one)
-      @item.payment_transaction = barion_transactions(:one)
+      @item.payment_transaction = barion_payment_transactions(:one)
       assert_valid @item
       @item.description = nil
       refute_valid @item
@@ -64,7 +64,7 @@ module Barion
 
     test 'description max length 500 chars' do
       @item = barion_items(:one)
-      @item.payment_transaction = barion_transactions(:one)
+      @item.payment_transaction = barion_payment_transactions(:one)
       assert_valid @item
       @item.description = Faker::String.random(length: 501)
       refute_valid @item
@@ -79,7 +79,7 @@ module Barion
 
     test 'image_url can be set' do
       @item = barion_items(:one)
-      @item.payment_transaction = barion_transactions(:one)
+      @item.payment_transaction = barion_payment_transactions(:one)
       @item.image_url = 'Test'
       assert_valid @item
       assert_equal 'Test', @item.image_url

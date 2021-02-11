@@ -2,7 +2,7 @@
 
 # == Schema Information
 #
-# Table name: barion_transactions
+# Table name: barion_payment_transactions
 #
 #  id                    :integer          not null, primary key
 #  comment               :string
@@ -20,22 +20,22 @@
 #
 # Indexes
 #
-#  index_barion_transactions_on_payee                  (payee)
-#  index_barion_transactions_on_payee_transactions_id  (payee_transactions_id)
-#  index_barion_transactions_on_payment_id             (payment_id)
-#  index_barion_transactions_on_pos_transaction_id     (pos_transaction_id)
-#  index_barion_transactions_on_status                 (status)
-#  index_barion_transactions_on_transaction_id         (transaction_id)
+#  index_barion_payment_transactions_on_payee                  (payee)
+#  index_barion_payment_transactions_on_payee_transactions_id  (payee_transactions_id)
+#  index_barion_payment_transactions_on_payment_id             (payment_id)
+#  index_barion_payment_transactions_on_pos_transaction_id     (pos_transaction_id)
+#  index_barion_payment_transactions_on_status                 (status)
+#  index_barion_payment_transactions_on_transaction_id         (transaction_id)
 #
 # Foreign Keys
 #
-#  payee_transactions_id  (payee_transactions_id => barion_transactions.id)
+#  payee_transactions_id  (payee_transactions_id => barion_payment_transactions.id)
 #  payment_id             (payment_id => barion_payments.id)
 #
 require 'test_helper'
 
 module Barion
-  class TransactionTest < ActiveSupport::TestCase
+  class PaymentTransactionTest < ActiveSupport::TestCase
     # test "the truth" do
     #   assert true
     # end

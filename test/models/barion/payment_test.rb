@@ -7,8 +7,8 @@
 #  id                      :integer          not null, primary key
 #  callback_url            :string(2000)
 #  card_holder_name_hint   :string(45)
-#  challenge_preference    :string
-#  checksum                :string
+#  challenge_preference    :integer          default("no_preference")
+#  checksum                :string           not null
 #  currency                :string(3)        not null
 #  delayed_capture_period  :integer
 #  funding_sources         :integer          default("all")
@@ -32,35 +32,20 @@
 #  status                  :integer          not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  billing_address_id      :integer
-#  payer_account_id        :integer
 #  payment_id              :string
 #  payment_request_id      :string(100)
-#  purchase_information_id :integer
 #  recurrence_id           :string(100)
-#  shipping_address_id     :integer
 #  trace_id                :string(100)
 #
 # Indexes
 #
-#  index_barion_payments_on_billing_address_id       (billing_address_id)
-#  index_barion_payments_on_order_number             (order_number)
-#  index_barion_payments_on_payer_account_id         (payer_account_id)
-#  index_barion_payments_on_payment_id               (payment_id)
-#  index_barion_payments_on_payment_request_id       (payment_request_id)
-#  index_barion_payments_on_payment_type             (payment_type)
-#  index_barion_payments_on_poskey                   (poskey)
-#  index_barion_payments_on_purchase_information_id  (purchase_information_id)
-#  index_barion_payments_on_recurrence_id            (recurrence_id)
-#  index_barion_payments_on_shipping_address_id      (shipping_address_id)
-#  index_barion_payments_on_status                   (status)
-#
-# Foreign Keys
-#
-#  billing_address_id       (billing_address_id => barion_addresses.id)
-#  payer_account_id         (payer_account_id => barion_payer_accounts.id)
-#  purchase_information_id  (purchase_information_id => barion_purchases.id)
-#  shipping_address_id      (shipping_address_id => barion_addresses.id)
+#  index_barion_payments_on_order_number        (order_number)
+#  index_barion_payments_on_payment_id          (payment_id)
+#  index_barion_payments_on_payment_request_id  (payment_request_id)
+#  index_barion_payments_on_payment_type        (payment_type)
+#  index_barion_payments_on_poskey              (poskey)
+#  index_barion_payments_on_recurrence_id       (recurrence_id)
+#  index_barion_payments_on_status              (status)
 #
 require 'test_helper'
 
@@ -71,8 +56,8 @@ module Barion
       @poskey = 'test_poskey'
       Barion.poskey = @poskey
       @payment = Barion::Payment.new
-      @payment.transactions.build
-      @payment.transactions.first.payee = 'a@b.c'
+      @payment.payment_transactions.build
+      @payment.payment_transactions.first.payee = 'a@b.c'
     end
 
     test 'poskey comes from configuration' do
@@ -336,16 +321,16 @@ module Barion
       assert_equal 2_000, @payment.qr_url.length, msg: @payment.qr_url
     end
     test 'transactions has at least one element' do
-      assert_equal 1, @payment.transactions.size
-      assert_instance_of Barion::Transaction, @payment.transactions[0]
+      assert_equal 1, @payment.payment_transactions.size
+      assert_instance_of ::Barion::PaymentTransaction, @payment.payment_transactions[0]
     end
 
     test 'order number max length 100chars' do
       assert_nil @payment.order_number
       assert_valid @payment
-      @payment.order_number = Faker::String.random(length: 101)
+      @payment.order_number = ::Faker::String.random(length: 101)
       refute_valid @payment
-      @payment.order_number = Faker::String.random(length: 100)
+      @payment.order_number = ::Faker::String.random(length: 100)
       assert_valid @payment
       assert_equal 100, @payment.order_number.length, msg: @payment.order_number
     end
@@ -365,19 +350,19 @@ module Barion
     test 'payer hint max length 256chars' do
       assert_nil @payment.payer_hint
       assert_valid @payment
-      @payment.payer_hint = Faker::String.random(length: 257)
+      @payment.payer_hint = ::Faker::String.random(length: 257)
       refute_valid @payment
-      @payment.payer_hint = Faker::String.random(length: 256)
+      @payment.payer_hint = ::Faker::String.random(length: 256)
       assert_valid @payment
       assert_equal 256, @payment.payer_hint.length, msg: @payment.payer_hint
     end
 
     test 'shipping address is address or nil' do
-      assert_raise ActiveRecord::AssociationTypeMismatch do
+      assert_raise ::ActiveRecord::AssociationTypeMismatch do
         @payment.shipping_address = []
       end
-      @payment.shipping_address = Barion::Address.new
-      assert_instance_of Barion::Address, @payment.shipping_address
+      @payment.shipping_address = ::Barion::Address.new
+      assert_instance_of ::Barion::Address, @payment.shipping_address
     end
 
     test 'locale has default value' do
@@ -390,7 +375,7 @@ module Barion
     end
 
     test 'locale allows only valid values' do
-      assert_raises 'ArgumentError' do
+      assert_raises ArgumentError do
         @payment.locale = 'Test'
       end
     end
@@ -405,7 +390,7 @@ module Barion
     end
 
     test 'currency allows only valid values' do
-      assert_raises 'ArgumentError' do
+      assert_raises ArgumentError do
         @payment.currency = 'Test'
       end
     end
@@ -467,7 +452,7 @@ module Barion
       assert_nil @payment.billing_address
       assert_valid @payment
       @payment.billing_address = Barion::Address.new
-      assert_instance_of Barion::Address, @payment.billing_address
+      assert_instance_of ::Barion::Address, @payment.billing_address
     end
 
     test 'status has a default value' do
@@ -566,7 +551,7 @@ module Barion
       @payment.status = :prepared
       refute @payment.initial?
       assert @payment.readonly?
-      assert_raises ActiveRecord::ReadOnlyRecord do
+      assert_raises ::ActiveRecord::ReadOnlyRecord do
         @payment.save
       end
     end
@@ -590,9 +575,9 @@ module Barion
       assert_valid @payment
       sum = @payment.checksum
       @payment.save
-      table = Arel::Table.new(:barion_payments)
+      table = ::Arel::Table.new(:barion_payments)
       sql = table.project('checksum').where(table[:id].eq(@payment.id)).take(1).to_sql
-      result = ActiveRecord::Base.connection.execute sql
+      result = ::ActiveRecord::Base.connection.execute sql
       assert_equal sum, result.first['checksum']
     end
 
@@ -602,13 +587,15 @@ module Barion
       assert @payment.save
       sum = @payment.checksum
       id = @payment.id
-      Payment.find(id) # should be valid, no exception
+      json = @payment.as_json
+      ::Barion::Payment.find(id) # should be valid, no exception
 
       # simulate external data tampering by skipping callback
-      @payment.update_column(:status, Payment.statuses[:succeeded])
+      @payment.update_column(:status, ::Barion::Payment.statuses[:succeeded])
 
-      assert_raises Barion::TamperedData do
-        payment = Payment.find(id) # data change detected, raise exception
+      assert_raises ::Barion::TamperedData do
+        payment = ::Barion::Payment.find(id) # data change detected, raise exception
+        refute_equal json, payment.as_json
         refute_equal sum, payment.checksum
       end
     end

@@ -21,13 +21,12 @@
 #
 # Foreign Keys
 #
-#  payment_transaction_id  (payment_transaction_id => barion_transactions.id)
+#  payment_transaction_id  (payment_transaction_id => barion_payment_transactions.id)
 #
 module Barion
   # Represents an item in a transaction for Barion engine
   class Item < ApplicationRecord
     belongs_to :payment_transaction,
-               class_name: 'Barion::Transaction',
                inverse_of: :items
 
     validates :name, presence: true, length: { maximum: 256 }
@@ -56,7 +55,7 @@ module Barion
     end
 
     def item_total=(_value)
-      raises NoMethodError('item_total is a calculated readonly field')
+      raise ::NoMethodError, 'item_total is a calculated readonly field'
     end
 
     private

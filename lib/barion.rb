@@ -25,10 +25,15 @@ module Barion
     super(!!val)
   end
 
+  def self.endpoint
+    env = sandbox? ? :prod : :test
+    RestClient::Resource.new BASE_URL[env]
+  end
+
   # @param user_class_name [String]
   def self.user_class=(user_class_name)
     unless user_class_name.is_a?(String)
-      raise "Barion.user_class must be set to a String, got #{user_class_name.inspect}"
+      raise ArgumentError, "Barion.user_class must be set to a String, got #{user_class_name.inspect}"
     end
 
     @user_class_name = user_class_name
@@ -43,7 +48,7 @@ module Barion
 
   def self.item_class=(item_class_name)
     unless item_class_name.is_a?(String)
-      raise "Barion.item_class must be set to a String, got #{item_class_name.inspect}"
+      raise ArgumentError, "Barion.item_class must be set to a String, got #{item_class_name.inspect}"
     end
 
     @item_class_name = item_class_name

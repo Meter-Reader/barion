@@ -5,8 +5,8 @@
 #  id                      :integer          not null, primary key
 #  callback_url            :string(2000)
 #  card_holder_name_hint   :string(45)
-#  challenge_preference    :string
-#  checksum                :string
+#  challenge_preference    :integer          default("no_preference")
+#  checksum                :string           not null
 #  currency                :string(3)        not null
 #  delayed_capture_period  :integer
 #  funding_sources         :integer          default("all")
@@ -30,35 +30,20 @@
 #  status                  :integer          not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  billing_address_id      :integer
-#  payer_account_id        :integer
 #  payment_id              :string
 #  payment_request_id      :string(100)
-#  purchase_information_id :integer
 #  recurrence_id           :string(100)
-#  shipping_address_id     :integer
 #  trace_id                :string(100)
 #
 # Indexes
 #
-#  index_barion_payments_on_billing_address_id       (billing_address_id)
-#  index_barion_payments_on_order_number             (order_number)
-#  index_barion_payments_on_payer_account_id         (payer_account_id)
-#  index_barion_payments_on_payment_id               (payment_id)
-#  index_barion_payments_on_payment_request_id       (payment_request_id)
-#  index_barion_payments_on_payment_type             (payment_type)
-#  index_barion_payments_on_poskey                   (poskey)
-#  index_barion_payments_on_purchase_information_id  (purchase_information_id)
-#  index_barion_payments_on_recurrence_id            (recurrence_id)
-#  index_barion_payments_on_shipping_address_id      (shipping_address_id)
-#  index_barion_payments_on_status                   (status)
-#
-# Foreign Keys
-#
-#  billing_address_id       (billing_address_id => barion_addresses.id)
-#  payer_account_id         (payer_account_id => barion_payer_accounts.id)
-#  purchase_information_id  (purchase_information_id => barion_purchases.id)
-#  shipping_address_id      (shipping_address_id => barion_addresses.id)
+#  index_barion_payments_on_order_number        (order_number)
+#  index_barion_payments_on_payment_id          (payment_id)
+#  index_barion_payments_on_payment_request_id  (payment_request_id)
+#  index_barion_payments_on_payment_type        (payment_type)
+#  index_barion_payments_on_poskey              (poskey)
+#  index_barion_payments_on_recurrence_id       (recurrence_id)
+#  index_barion_payments_on_status              (status)
 #
 
 one:
@@ -69,12 +54,11 @@ one:
   payment_window: 1700
   guest_checkout: false
   initiate_recurrence: false
-  recurrence_id: MyString
-  recurrence_type: MyString
   funding_sources: 1
   locale: hu-HU
   currency: HUF
   status: 0
+  checksum: 64c62ef90b21be8b070a8a98da2a52805f50e030d5de8fbdef578a10aa0e2eb1eae823e3e5400ca8a8ecefdd9558a56a2cd19959429266ade06a92c70fe4e6d2
 
 two:
   poskey: test_poskey
@@ -84,9 +68,8 @@ two:
   payment_window: 60
   guest_checkout: false
   initiate_recurrence: false
-  recurrence_id: MyString
-  recurrence_type: MyString
-  funding_sources: 2
+  funding_sources: 0
   locale: hu-HU
   currency: HUF
   status: 0
+  checksum: 822f7429d09a78b82363f82858dc03c5b0bc9bf587a228b053d00fc53261947618e99dde1c8914481de7d3502bfbc1de8aae22c339b76716e85a53a0f36969d9

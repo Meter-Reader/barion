@@ -76,6 +76,27 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.index ["payment_id"], name: "index_barion_payer_accounts_on_payment_id"
   end
 
+  create_table "barion_payment_transactions", force: :cascade do |t|
+    t.string "pos_transaction_id", null: false
+    t.string "payee", null: false
+    t.decimal "total", null: false
+    t.string "comment"
+    t.integer "payee_transactions_id"
+    t.integer "payment_id"
+    t.integer "status", default: 0, null: false
+    t.string "transaction_id"
+    t.string "currency", limit: 3
+    t.datetime "transaction_time"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["payee"], name: "index_barion_payment_transactions_on_payee"
+    t.index ["payee_transactions_id"], name: "index_barion_payment_transactions_on_payee_transactions_id"
+    t.index ["payment_id"], name: "index_barion_payment_transactions_on_payment_id"
+    t.index ["pos_transaction_id"], name: "index_barion_payment_transactions_on_pos_transaction_id"
+    t.index ["status"], name: "index_barion_payment_transactions_on_status"
+    t.index ["transaction_id"], name: "index_barion_payment_transactions_on_transaction_id"
+  end
+
   create_table "barion_payments", force: :cascade do |t|
     t.string "poskey", null: false
     t.integer "payment_type", default: 0, null: false
@@ -94,17 +115,13 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "redirect_url", limit: 2000
     t.string "callback_url", limit: 2000
     t.string "order_number", limit: 100
-    t.integer "shipping_address_id"
     t.string "locale", limit: 10, null: false
     t.string "currency", limit: 3, null: false
     t.string "payer_phone_number", limit: 30
     t.string "payer_work_phone_number", limit: 30
     t.string "payer_home_number", limit: 30
-    t.integer "billing_address_id"
-    t.integer "payer_account_id"
-    t.integer "purchase_information_id"
-    t.string "challenge_preference"
-    t.string "checksum"
+    t.integer "challenge_preference", default: 0
+    t.string "checksum", null: false
     t.string "payment_id"
     t.integer "status", null: false
     t.string "qr_url", limit: 2000
@@ -112,16 +129,12 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "gateway_url", limit: 2000
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["billing_address_id"], name: "index_barion_payments_on_billing_address_id"
     t.index ["order_number"], name: "index_barion_payments_on_order_number"
-    t.index ["payer_account_id"], name: "index_barion_payments_on_payer_account_id"
     t.index ["payment_id"], name: "index_barion_payments_on_payment_id"
     t.index ["payment_request_id"], name: "index_barion_payments_on_payment_request_id"
     t.index ["payment_type"], name: "index_barion_payments_on_payment_type"
     t.index ["poskey"], name: "index_barion_payments_on_poskey"
-    t.index ["purchase_information_id"], name: "index_barion_payments_on_purchase_information_id"
     t.index ["recurrence_id"], name: "index_barion_payments_on_recurrence_id"
-    t.index ["shipping_address_id"], name: "index_barion_payments_on_shipping_address_id"
     t.index ["status"], name: "index_barion_payments_on_status"
   end
 
@@ -144,32 +157,7 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.index ["payment_id"], name: "index_barion_purchases_on_payment_id"
   end
 
-  create_table "barion_transactions", force: :cascade do |t|
-    t.string "pos_transaction_id", null: false
-    t.string "payee", null: false
-    t.decimal "total", null: false
-    t.string "comment"
-    t.integer "payee_transactions_id"
-    t.integer "payment_id"
-    t.integer "status", default: 0, null: false
-    t.string "transaction_id"
-    t.string "currency", limit: 3
-    t.datetime "transaction_time"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["payee"], name: "index_barion_transactions_on_payee"
-    t.index ["payee_transactions_id"], name: "index_barion_transactions_on_payee_transactions_id"
-    t.index ["payment_id"], name: "index_barion_transactions_on_payment_id"
-    t.index ["pos_transaction_id"], name: "index_barion_transactions_on_pos_transaction_id"
-    t.index ["status"], name: "index_barion_transactions_on_status"
-    t.index ["transaction_id"], name: "index_barion_transactions_on_transaction_id"
-  end
-
-  add_foreign_key "barion_items", "barion_transactions", column: "payment_transaction_id"
-  add_foreign_key "barion_payments", "barion_addresses", column: "billing_address_id"
-  add_foreign_key "barion_payments", "barion_addresses", column: "shipping_address_id"
-  add_foreign_key "barion_payments", "barion_payer_accounts", column: "payer_account_id"
-  add_foreign_key "barion_payments", "barion_purchases", column: "purchase_information_id"
-  add_foreign_key "barion_transactions", "barion_payments", column: "payment_id"
-  add_foreign_key "barion_transactions", "barion_transactions", column: "payee_transactions_id"
+  add_foreign_key "barion_items", "barion_payment_transactions", column: "payment_transaction_id"
+  add_foreign_key "barion_payment_transactions", "barion_payment_transactions", column: "payee_transactions_id"
+  add_foreign_key "barion_payment_transactions", "barion_payments", column: "payment_id"
 end

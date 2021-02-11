@@ -7,8 +7,8 @@
 #  id                      :integer          not null, primary key
 #  callback_url            :string(2000)
 #  card_holder_name_hint   :string(45)
-#  challenge_preference    :string
-#  checksum                :string
+#  challenge_preference    :integer          default("no_preference")
+#  checksum                :string           not null
 #  currency                :string(3)        not null
 #  delayed_capture_period  :integer
 #  funding_sources         :integer          default("all")
@@ -32,35 +32,20 @@
 #  status                  :integer          not null
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  billing_address_id      :integer
-#  payer_account_id        :integer
 #  payment_id              :string
 #  payment_request_id      :string(100)
-#  purchase_information_id :integer
 #  recurrence_id           :string(100)
-#  shipping_address_id     :integer
 #  trace_id                :string(100)
 #
 # Indexes
 #
-#  index_barion_payments_on_billing_address_id       (billing_address_id)
-#  index_barion_payments_on_order_number             (order_number)
-#  index_barion_payments_on_payer_account_id         (payer_account_id)
-#  index_barion_payments_on_payment_id               (payment_id)
-#  index_barion_payments_on_payment_request_id       (payment_request_id)
-#  index_barion_payments_on_payment_type             (payment_type)
-#  index_barion_payments_on_poskey                   (poskey)
-#  index_barion_payments_on_purchase_information_id  (purchase_information_id)
-#  index_barion_payments_on_recurrence_id            (recurrence_id)
-#  index_barion_payments_on_shipping_address_id      (shipping_address_id)
-#  index_barion_payments_on_status                   (status)
-#
-# Foreign Keys
-#
-#  billing_address_id       (billing_address_id => barion_addresses.id)
-#  payer_account_id         (payer_account_id => barion_payer_accounts.id)
-#  purchase_information_id  (purchase_information_id => barion_purchases.id)
-#  shipping_address_id      (shipping_address_id => barion_addresses.id)
+#  index_barion_payments_on_order_number        (order_number)
+#  index_barion_payments_on_payment_id          (payment_id)
+#  index_barion_payments_on_payment_request_id  (payment_request_id)
+#  index_barion_payments_on_payment_type        (payment_type)
+#  index_barion_payments_on_poskey              (poskey)
+#  index_barion_payments_on_recurrence_id       (recurrence_id)
+#  index_barion_payments_on_status              (status)
 #
 module Barion
   # Represents a payment in Barion engine
@@ -106,7 +91,7 @@ module Barion
     attribute :home_number, :string
     attribute :checksum, :string
 
-    has_many :transactions,
+    has_many :payment_transactions,
              inverse_of: :payment,
              dependent: :destroy
 
@@ -154,9 +139,9 @@ module Barion
     validates :qr_url, length: { maximum: 2000 }
     validates :order_number, length: { maximum: 100 }
     validates :payer_hint, length: { maximum: 256 }
-    validates :transactions, presence: true
+    validates :payment_transactions, presence: true
     validates :checksum, presence: true
-    validates_associated :transactions
+    validates_associated :payment_transactions
     validates_associated :payer_account
 
     after_initialize :set_defaults
@@ -166,7 +151,7 @@ module Barion
     before_validation :refresh_checksum
 
     def poskey=(value = nil)
-      value = Barion.poskey if value.nil?
+      value = ::Barion.poskey if value.nil?
       super(value)
     end
 
@@ -180,21 +165,21 @@ module Barion
         self.reservation_period = 1.minutes.to_i
         self.delayed_capture_period = 1.week.to_i
       else
-        raise ArgumentError
+        raise ArgumentError, "#{value} is not a valid payment_type"
       end
       super(value)
     end
 
     def payer_work_phone_number=(number)
-      super(Barion::DataFormats.phone_number(number))
+      super(::Barion::DataFormats.phone_number(number))
     end
 
     def payer_phone_number=(number)
-      super(Barion::DataFormats.phone_number(number))
+      super(::Barion::DataFormats.phone_number(number))
     end
 
     def payer_home_number=(number)
-      super(Barion::DataFormats.phone_number(number))
+      super(::Barion::DataFormats.phone_number(number))
     end
 
     def readonly?
@@ -205,28 +190,64 @@ module Barion
       self.checksum = gen_checksum
     end
 
+    def execute
+      if validate?
+        process_response(
+          ::Barion.endpoint['v2/Payment/Start'].post(
+            as_json.to_json,
+            { content_type: :json, accept: :json }
+          )
+        )
+      else
+        false
+      end
+    end
+
+    def as_json(options = {})
+      defaults = {
+        except: %i[id checksum payment_id qr_url recurrence_result gateway_url created_at updated_at],
+        include: {
+          billing_address: { except: %i[id created_at updated_at] },
+          shipping_address: { except: %i[id created_at updated_at] },
+          payment_transactions: {
+            except: %i[id created_at updated_at],
+            include: {
+              items: { except: %i[id created_at updated_at] }
+            }
+          }
+        }
+      }
+      super(defaults.merge(options))
+    end
+
+    def checksum=(_value)
+      raise NoMethodError
+    end
+
     protected
 
-    def checksum=(value)
-      super(value)
+    def process_response(response)
+      ::JSON.parse(response.body)
     end
 
     def set_defaults
-      self.poskey = Barion.poskey if poskey.nil?
+      self.poskey = ::Barion.poskey if poskey.nil?
     end
 
     def create_payment_request_id
-      self.payment_request_id = "#{Barion.acronym}#{Time.now.to_f.to_s.gsub('.', '')}" if payment_request_id.nil?
+      self.payment_request_id = "#{::Barion.acronym}#{::Time.now.to_f.to_s.gsub('.', '')}" if payment_request_id.nil?
     end
 
     def gen_checksum
-      Digest::SHA512.hexdigest(
-        as_json(except: %i[checksum created_at updated_at]).to_json
-      )
+      ::Digest::SHA512.hexdigest(as_json.to_json)
     end
 
     def validate_checksum
-      raise Barion::TamperedData if checksum.present? && checksum != gen_checksum
+      if checksum.present? && checksum != gen_checksum
+        raise ::Barion::TamperedData, "checksum: #{refresh_checksum}, json: #{as_json}"
+      end
+
+      true
     end
   end
 end
