@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'rest_client'
 
 module Barion
   class Test < ActiveSupport::TestCase
@@ -33,6 +34,7 @@ module Barion
       ::Barion.acronym = 'test'
       assert_equal 'test', ::Barion.acronym
 
+      ::Barion.sandbox = true
       assert ::Barion.sandbox
       assert ::Barion.sandbox?
       ::Barion.sandbox = false
@@ -60,6 +62,16 @@ module Barion
       end
       ::Barion.item_class = 'Object'
       assert_kind_of ::Object, ::Barion.item_class
+    end
+
+    test 'endpoint returns a configured RestClient instance' do
+      ::Barion.sandbox = true
+      test_endpoint = ::Barion.endpoint
+      assert_kind_of ::RestClient::Resource, test_endpoint
+      ::Barion.sandbox = false
+      prod_endpoint = ::Barion.endpoint
+      assert_kind_of ::RestClient::Resource, prod_endpoint
+      refute_equal prod_endpoint.url, test_endpoint.url
     end
   end
 end

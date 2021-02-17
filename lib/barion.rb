@@ -27,10 +27,9 @@ module Barion
 
   def self.endpoint
     env = sandbox? ? :prod : :test
-    RestClient::Resource.new BASE_URL[env]
+    ::RestClient::Resource.new BASE_URL[env]
   end
 
-  # @param user_class_name [String]
   def self.user_class=(user_class_name)
     unless user_class_name.is_a?(String)
       raise ArgumentError, "Barion.user_class must be set to a String, got #{user_class_name.inspect}"
