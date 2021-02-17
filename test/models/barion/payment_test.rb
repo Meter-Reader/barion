@@ -55,9 +55,7 @@ module Barion
     setup do
       @poskey = 'test_poskey'
       Barion.poskey = @poskey
-      @payment = Barion::Payment.new
-      @payment.payment_transactions.build
-      @payment.payment_transactions.first.payee = 'a@b.c'
+      @payment = build(:barion_payment)
     end
 
     test 'poskey comes from configuration' do
@@ -230,7 +228,7 @@ module Barion
     test 'payment request id unique' do
       ids = []
       1000.times do
-        obj = Barion::Payment.new
+        obj = build(:barion_payment)
         obj.valid?
         refute ids.include?(obj.payment_request_id), msg: obj.payment_request_id
         ids << obj.payment_request_id
@@ -241,7 +239,7 @@ module Barion
       @payment.valid?
       assert_match(/\d+/, @payment.payment_request_id)
       Barion.acronym = 'SHOP'
-      @payment = Barion::Payment.new
+      @payment = build(:barion_payment)
       @payment.valid?
       assert_match(/^SHOP\d+/, @payment.payment_request_id)
     end
@@ -321,7 +319,7 @@ module Barion
       assert_equal 2_000, @payment.qr_url.length, msg: @payment.qr_url
     end
     test 'transactions has at least one element' do
-      assert_equal 1, @payment.payment_transactions.size
+      assert @payment.payment_transactions.size.pozitive?
       assert_instance_of ::Barion::PaymentTransaction, @payment.payment_transactions[0]
     end
 
@@ -361,7 +359,7 @@ module Barion
       assert_raise ::ActiveRecord::AssociationTypeMismatch do
         @payment.shipping_address = []
       end
-      @payment.shipping_address = ::Barion::Address.new
+      @payment.shipping_address = build(:barion_address)
       assert_instance_of ::Barion::Address, @payment.shipping_address
     end
 
@@ -451,7 +449,7 @@ module Barion
     test 'billing address is address or nil' do
       assert_nil @payment.billing_address
       assert_valid @payment
-      @payment.billing_address = Barion::Address.new
+      @payment.billing_address = build(:barion_address, payment: @payment)
       assert_instance_of ::Barion::Address, @payment.billing_address
     end
 
@@ -481,7 +479,7 @@ module Barion
     test 'payer account can be set' do
       assert_nil @payment.payer_account
       assert_valid @payment
-      @payment.payer_account = barion_payer_accounts(:one)
+      @payment.payer_account = build(:barion_payer_account)
       assert_valid @payment
     end
 
@@ -493,7 +491,7 @@ module Barion
     test 'purchase information can be set' do
       assert_nil @payment.purchase_information
       assert_valid @payment
-      @payment.purchase_information = barion_purchases(:one)
+      @payment.purchase_information = build(:barion_purchase)
       assert_valid @payment
     end
 
@@ -571,10 +569,8 @@ module Barion
     end
 
     test 'checksum is persisted on save' do
-      @payment = barion_payments(:two)
-      assert_valid @payment
+      @payment = create(:barion_payment)
       sum = @payment.checksum
-      @payment.save
       table = ::Arel::Table.new(:barion_payments)
       sql = table.project('checksum').where(table[:id].eq(@payment.id)).take(1).to_sql
       result = ::ActiveRecord::Base.connection.execute sql
@@ -582,21 +578,14 @@ module Barion
     end
 
     test 'checksum is checked when loading from db' do
-      @payment = barion_payments(:two)
-      assert_valid @payment
-      assert @payment.save
-      sum = @payment.checksum
-      id = @payment.id
-      json = @payment.as_json
-      ::Barion::Payment.find(id) # should be valid, no exception
-
+      @payment = create(:barion_payment)
       # simulate external data tampering by skipping callback
       @payment.update_column(:status, ::Barion::Payment.statuses[:succeeded])
 
       assert_raises ::Barion::TamperedData do
-        payment = ::Barion::Payment.find(id) # data change detected, raise exception
-        refute_equal json, payment.as_json
-        refute_equal sum, payment.checksum
+        payment = ::Barion::Payment.find(@payment.id) # data change detected, raise exception
+        refute_equal @payment.as_json, payment.as_json
+        refute_equal @payment.sum, payment.checksum
       end
     end
   end

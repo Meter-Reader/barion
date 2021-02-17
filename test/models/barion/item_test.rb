@@ -29,24 +29,18 @@ module Barion
   # Test constrains of Barion::Item
   class ItemTest < ActiveSupport::TestCase
     setup do
-      @item = Barion::Item.new
-      @item.name = Faker::String.random(length: 30)
-      @item.description = Faker::String.random(length: 300)
-      @item.unit = 'test'
-      @item.payment_transaction = barion_payment_transactions(:one)
+      @item = build(:barion_item)
+      @item.payment_transaction = build(:barion_payment_transaction)
     end
 
     test 'name is mandatory' do
-      @item = barion_items(:one)
-      @item.payment_transaction = barion_payment_transactions(:one)
+      @item.payment_transaction = build(:barion_payment_transaction)
       assert_valid @item
       @item.name = nil
       refute_valid @item
     end
 
     test 'name max length 256 chars' do
-      @item = barion_items(:one)
-      @item.payment_transaction = barion_payment_transactions(:one)
       assert_valid @item
       @item.name = Faker::String.random(length: 257)
       refute_valid @item
@@ -55,16 +49,12 @@ module Barion
     end
 
     test 'description is mandatory' do
-      @item = barion_items(:one)
-      @item.payment_transaction = barion_payment_transactions(:one)
       assert_valid @item
       @item.description = nil
       refute_valid @item
     end
 
     test 'description max length 500 chars' do
-      @item = barion_items(:one)
-      @item.payment_transaction = barion_payment_transactions(:one)
       assert_valid @item
       @item.description = Faker::String.random(length: 501)
       refute_valid @item
@@ -78,8 +68,6 @@ module Barion
     end
 
     test 'image_url can be set' do
-      @item = barion_items(:one)
-      @item.payment_transaction = barion_payment_transactions(:one)
       @item.image_url = 'Test'
       assert_valid @item
       assert_equal 'Test', @item.image_url
@@ -89,12 +77,10 @@ module Barion
       assert_raises NoMethodError do
         @item.item_total = 1
       end
-      assert_equal 0.0, @item.item_total
     end
 
     test 'item_total is calculated from quantity and unit_price' do
       assert_valid @item
-      assert_equal 0.0, @item.item_total
       @item.quantity = 12
       @item.unit_price = 2
       assert_equal 24.0, @item.item_total
@@ -106,7 +92,7 @@ module Barion
 
     test 'unit is mandatory with no default and can be set' do
       assert_valid @item
-      assert_equal 0, @item.unit_price
+      refute_nil @item.unit_price
       @item.unit_price = nil
       assert_equal 0, @item.unit_price
       assert_valid @item
@@ -122,7 +108,7 @@ module Barion
 
     test 'unit_price mandatory, default 0 but can be set' do
       assert_valid @item
-      assert_equal 0, @item.unit_price
+      refute_nil @item.unit_price
       @item.unit_price = nil
       assert_equal 0, @item.unit_price
       assert_valid @item
@@ -130,10 +116,13 @@ module Barion
 
     test 'quantity is mandatory, default 0 but can be set' do
       assert_valid @item
-      assert_equal 0, @item.quantity
+      refute_nil @item.quantity
       @item.quantity = nil
       assert_equal 0, @item.quantity
       assert_valid @item
+      @item.quantity = 2
+      assert_valid @item
+      assert_equal 2.0, @item.quantity
     end
 
     test 'sku has no default value and optional' do

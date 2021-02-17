@@ -29,6 +29,13 @@ module Barion
     belongs_to :payment_transaction,
                inverse_of: :items
 
+    attribute :name, :string
+    attribute :description, :string
+    attribute :unit_price, :decimal, default: 0
+    attribute :quantity, :decimal, default: 0
+    attribute :item_total, :decimal, default: 0
+    attribute :unit, :string
+
     validates :name, presence: true, length: { maximum: 256 }
     validates :description, presence: true, length: { maximum: 500 }
     validates :quantity, presence: true
@@ -39,19 +46,17 @@ module Barion
 
     after_initialize :set_defaults
 
-    attr_reader :unit_price, :quantity
-
     def item_total
       calculate_total
     end
 
     def unit_price=(value)
-      @unit_price = value.to_d
+      super(value.to_d)
       calculate_total
     end
 
     def quantity=(value)
-      @quantity = value.to_d
+      super(value.to_d)
     end
 
     def item_total=(_value)
@@ -67,7 +72,7 @@ module Barion
     end
 
     def calculate_total
-      @item_total = @quantity * @unit_price.to_d
+      @item_total = quantity * unit_price.to_d
     end
   end
 end

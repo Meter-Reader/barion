@@ -31,8 +31,8 @@ require 'test_helper'
 module Barion
   class AddressTest < ActiveSupport::TestCase
     setup do
-      @address = Barion::Address.new
-      @address.payment = Barion::Payment.new
+      @address = build(:barion_address)
+      @address.payment = build(:barion_payment, billing_address: @address)
     end
 
     test 'country has default value' do

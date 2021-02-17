@@ -18,6 +18,7 @@ gemspec
 gem 'annotate'
 gem 'codecov', require: false
 gem 'debase'
+gem 'factory_bot_rails'
 gem 'minitest-reporters', require: false
 gem 'overcommit'
 gem 'rubocop'
