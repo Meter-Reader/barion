@@ -24,17 +24,14 @@ module Barion
     end
 
     test 'module can be configured' do
-      assert_nil ::Barion.poskey
-      ::Barion.poskey = ::Faker::String.random
-      refute_nil ::Barion.poskey
+      ::Barion.poskey = 'test'
+      assert_equal 'test', ::Barion.poskey
 
-      assert_nil Barion.publickey
-      ::Barion.publickey = ::Faker::String.random
-      refute_nil ::Barion.publickey
+      ::Barion.publickey = 'test'
+      assert_equal 'test', ::Barion.publickey
 
-      assert_empty ::Barion.acronym
-      ::Barion.acronym = ::Faker::String.random
-      refute_nil ::Barion.acronym
+      ::Barion.acronym = 'test'
+      assert_equal 'test', ::Barion.acronym
 
       assert ::Barion.sandbox
       assert ::Barion.sandbox?

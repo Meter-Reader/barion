@@ -319,7 +319,7 @@ module Barion
       assert_equal 2_000, @payment.qr_url.length, msg: @payment.qr_url
     end
     test 'transactions has at least one element' do
-      assert @payment.payment_transactions.size.pozitive?
+      assert @payment.payment_transactions.size.positive?
       assert_instance_of ::Barion::PaymentTransaction, @payment.payment_transactions[0]
     end
 
