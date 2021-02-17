@@ -11,10 +11,11 @@ module Barion
 
     test 'Barion engine has version number' do
       refute_nil ::Barion::VERSION
+      assert_match Regexp.new(/(\d+\.){2}\d+/), ::Barion::VERSION
     end
 
     test 'module cannot be instantiated' do
-      assert_raises NoMethodError do
+      assert_raises ::NoMethodError do
         ::Barion.new
       end
     end
