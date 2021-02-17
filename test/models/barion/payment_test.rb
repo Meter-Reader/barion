@@ -588,5 +588,18 @@ module Barion
         refute_equal @payment.sum, payment.checksum
       end
     end
+
+    test 'payment can only be executed if valid' do
+      @payment.payment_type = :reservation
+      @payment.reservation_period = 59
+      refute @payment.valid?
+      refute @payment.execute
+      @payment.payment_type = :immediate
+      assert @payment.valid?
+      assert_raise RestClient::BadRequest do
+        result = @payment.execute
+        refute_equal false, result
+      end
+    end
   end
 end
