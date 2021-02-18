@@ -34,6 +34,8 @@
 #
 module Barion
   class PaymentTransaction < ApplicationRecord
+    include Barion::Currencies
+
     enum status: {
       Prepared: 0,                            # The transaction is prepared, and is ready to be completed.
       Started: 1,                             # The transaction has been started. This is used at reservation payments.

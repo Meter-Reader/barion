@@ -51,8 +51,8 @@ module Barion
   # Represents a payment in Barion engine
   class Payment < ApplicationRecord
     include Barion::DataFormats
+    include Barion::Currencies
 
-    enum currency: { EUR: 'EUR', USD: 'USD', HUF: 'HUF', CZK: 'CZK' }, _default: :HUF
     enum locale: { 'cs-CZ': 'cs-CZ',
                    'de-DE': 'de-DE',
                    'en-US': 'en-US',
@@ -191,7 +191,7 @@ module Barion
     end
 
     def execute
-      if validate?
+      if valid?
         process_response(
           ::Barion.endpoint['v2/Payment/Start'].post(
             as_json.to_json,
@@ -217,7 +217,9 @@ module Barion
           }
         }
       }
-      super(defaults.merge(options))
+      super(defaults.merge(options)).deep_transform_keys! do |key|
+        key.camelize.sub(/Poskey/, 'POSKey')
+      end
     end
 
     protected
