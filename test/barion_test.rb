@@ -69,9 +69,11 @@ module Barion
       ::Barion.sandbox = true
       test_endpoint = ::Barion.endpoint
       assert_kind_of ::RestClient::Resource, test_endpoint
+      assert_equal ::Barion::BASE_URL[:test], test_endpoint.url
       ::Barion.sandbox = false
       prod_endpoint = ::Barion.endpoint
       assert_kind_of ::RestClient::Resource, prod_endpoint
+      assert_equal ::Barion::BASE_URL[:prod], prod_endpoint.url
       refute_equal prod_endpoint.url, test_endpoint.url
     end
   end

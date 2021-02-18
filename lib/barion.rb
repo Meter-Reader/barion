@@ -26,7 +26,7 @@ module Barion
   end
 
   def self.endpoint
-    env = sandbox? ? :prod : :test
+    env = sandbox? ? :test : :prod
     ::RestClient::Resource.new BASE_URL[env]
   end
 
