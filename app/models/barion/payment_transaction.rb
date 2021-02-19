@@ -33,6 +33,7 @@
 #  payment_id             (payment_id => barion_payments.id)
 #
 module Barion
+  # Barion Transaction implementation
   class PaymentTransaction < ApplicationRecord
     include Barion::Currencies
 
@@ -59,7 +60,42 @@ module Barion
     }, _default: 'Prepared'
 
     belongs_to :payment, inverse_of: :payment_transactions
+    has_many :items,
+             inverse_of: :payment_transaction,
+             after_add: :calc_total,
+             after_remove: :calc_total
+    attribute :total, :decimal, default: 0.0
+    attribute :pos_transaction_id, :string
 
-    has_many :items, inverse_of: :payment_transaction
+    validates :payee, presence: true
+    validates :status, presence: true
+    validates :pos_transaction_id, presence: true
+
+    after_initialize :set_defaults
+
+    def currency=(val = nil)
+      super(val || payment&.currency)
+    end
+
+    def set_defaults
+      self.currency = payment&.currency if currency.nil?
+    end
+
+    def total=(value)
+      value = calc_item_totals if value.nil?
+      super(value)
+    end
+
+    protected
+
+    def calc_item_totals
+      items.sum(&:item_total)
+    end
+
+    private
+
+    def calc_total(_item)
+      self.total = calc_item_totals
+    end
   end
 end

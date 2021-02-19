@@ -31,9 +31,9 @@ module Barion
 
     attribute :name, :string
     attribute :description, :string
-    attribute :unit_price, :decimal, default: 0
-    attribute :quantity, :decimal, default: 0
-    attribute :item_total, :decimal, default: 0
+    attribute :unit_price, :decimal, default: 0.0
+    attribute :quantity, :decimal, default: 0.0
+    attribute :item_total, :decimal, default: 0.0
     attribute :unit, :string
 
     validates :name, presence: true, length: { maximum: 256 }
@@ -46,10 +46,6 @@ module Barion
 
     after_initialize :set_defaults
 
-    def item_total
-      calculate_total
-    end
-
     def unit_price=(value)
       super(value.to_d)
       calculate_total
@@ -57,6 +53,7 @@ module Barion
 
     def quantity=(value)
       super(value.to_d)
+      calculate_total
     end
 
     def item_total=(_value)
@@ -66,13 +63,11 @@ module Barion
     private
 
     def set_defaults
-      @quantity = 0
-      @unit_price = 0.0
       calculate_total
     end
 
     def calculate_total
-      @item_total = quantity * unit_price.to_d
+      self[:item_total] = (quantity * unit_price.to_d)
     end
   end
 end

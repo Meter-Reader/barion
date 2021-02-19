@@ -16,7 +16,6 @@ FactoryBot.define do
   factory :barion_payment_transaction, class: 'Barion::PaymentTransaction' do
     pos_transaction_id { Faker::String.random }
     payee { Faker::Internet.email }
-    total { Faker::Commerce.price }
     after(:build) { |i| i.items << build(:barion_item) }
   end
 
