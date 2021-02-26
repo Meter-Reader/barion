@@ -20,6 +20,8 @@ FactoryBot.define do
   end
 
   factory :barion_payment, class: 'Barion::Payment' do
+    redirect_url { Faker::Internet.url }
+    callback_url { Faker::Internet.url }
     after(:build) do |p|
       p.payment_transactions << build(:barion_payment_transaction)
       p.refresh_checksum

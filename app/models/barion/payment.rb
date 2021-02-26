@@ -52,6 +52,7 @@ module Barion
   class Payment < ApplicationRecord
     include Barion::DataFormats
     include Barion::Currencies
+    include Barion::JsonSerializer
 
     enum locale: { 'cs-CZ': 'cs-CZ',
                    'de-DE': 'de-DE',
@@ -192,34 +193,25 @@ module Barion
 
     def execute
       if valid?
-        process_response(
-          ::Barion.endpoint['v2/Payment/Start'].post(
-            as_json.to_json,
-            { content_type: :json, accept: :json }
-          )
-        )
+        ::Barion.endpoint['v2/Payment/Start'].post(
+          as_json.to_json,
+          { content_type: :json, accept: :json }
+        ) { |response, request, _result| process_response(response, request) }
       else
         false
       end
     end
 
-    def as_json(options = {})
-      defaults = {
-        except: %i[id checksum payment_id qr_url recurrence_result gateway_url created_at updated_at],
-        include: {
-          billing_address: { except: %i[id created_at updated_at] },
-          shipping_address: { except: %i[id created_at updated_at] },
-          payment_transactions: {
-            except: %i[id created_at updated_at],
-            include: {
-              items: { except: %i[id created_at updated_at] }
-            }
-          }
-        }
-      }
-      super(defaults.merge(options)).deep_transform_keys! do |key|
-        key.camelize.sub(/Poskey/, 'POSKey')
-      end
+    def json_options
+      { except: %i[id checksum payment_id qr_url recurrence_result gateway_url created_at updated_at status],
+        include: %i[billing_address shipping_address payment_transactions],
+        map: {
+          keys: {
+            Poskey: 'POSKey',
+            PaymentTransactions: 'Transactions'
+          },
+          values: {}
+        } }
     end
 
     protected
@@ -230,8 +222,29 @@ module Barion
     end
     # rubocop:enable Lint/UselessMethodDefinition
 
-    def process_response(response)
-      ::JSON.parse(response.body)
+    def process_response(response, request)
+      case response.code
+      when 200
+        # TODO: process the content of response
+      when 301, 302, 307
+        raise Barion::Error.new(
+          { Title: response.description,
+            Description: 'No redirection is allowed in communication, please check endpoint!',
+            HappenedAt: DateTime.now,
+            ErrorCode: response.code,
+            EndPoint: request.url }
+        )
+      when 400
+        errors = ::JSON.parse(response)['Errors']
+        raise Barion::Error.new(
+          { Title: response.description,
+            Description: 'Request failed, please check errors',
+            HappenedAt: DateTime.now,
+            Errors: errors,
+            ErrorCode: response.code,
+            EndPoint: request.url }
+        )
+      end
     end
 
     def set_defaults

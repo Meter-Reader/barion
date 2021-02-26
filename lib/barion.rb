@@ -60,6 +60,20 @@ module Barion
     @item_class_name.constantize
   end
 
+  # Error to signal the data in the db has been changed since saving it
   class TamperedData < RuntimeError
+  end
+
+  # Generic error class for Barion module
+  class Error < StandardError
+    def initialize(params)
+      @title = params[:Title]
+      @error_code = params[:ErrorCode]
+      @happened_at = params[:HappenedAt]
+      @auth_data = params[:AuthData]
+      @endpoint = params[:Endpoint]
+      @errors = params[:Errors].map { |e| Barion::Error.new(e) } if params.key? :Errors
+      super(params[:Description])
+    end
   end
 end
