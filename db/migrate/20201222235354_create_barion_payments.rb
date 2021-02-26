@@ -10,7 +10,7 @@ class CreateBarionPayments < ActiveRecord::Migration[6.0]
       t.integer :reservation_period, limit: 8
       t.integer :delayed_capture_period, limit: 6
       t.string :payment_window, limit: 6
-      t.boolean :guest_checkout
+      t.boolean :guest_check_out
       t.boolean :initiate_recurrence
       t.string :recurrence_id, limit: 100, index: true
       t.integer :funding_sources, default: 0

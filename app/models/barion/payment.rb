@@ -13,7 +13,7 @@
 #  delayed_capture_period  :integer
 #  funding_sources         :integer          default("all")
 #  gateway_url             :string(2000)
-#  guest_checkout          :boolean
+#  guest_check_out         :boolean
 #  initiate_recurrence     :boolean
 #  locale                  :string(10)       not null
 #  order_number            :string(100)
@@ -85,7 +85,7 @@ module Barion
       expired: 70
     }, _default: :initial
     attribute :payment_window, :integer, default: 30.minutes.to_i
-    attribute :guest_checkout, :boolean, default: true
+    attribute :guest_check_out, :boolean, default: true
     attribute :initiate_recurrence, :boolean, default: false
     attribute :phone_number, :string
     attribute :home_number, :string

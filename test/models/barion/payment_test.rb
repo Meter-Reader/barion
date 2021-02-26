@@ -172,18 +172,18 @@ module Barion
     end
 
     test 'guest checkout is bool' do
-      @payment.guest_checkout = true
-      assert @payment.guest_checkout
-      @payment.guest_checkout = false
-      refute @payment.guest_checkout
-      @payment.guest_checkout = 'test'
-      assert @payment.guest_checkout
-      @payment.guest_checkout = nil
-      refute @payment.guest_checkout
+      @payment.guest_check_out = true
+      assert @payment.guest_check_out
+      @payment.guest_check_out = false
+      refute @payment.guest_check_out
+      @payment.guest_check_out = 'test'
+      assert @payment.guest_check_out
+      @payment.guest_check_out = nil
+      refute @payment.guest_check_out
     end
 
     test 'guest checkout default true' do
-      assert_equal true, @payment.guest_checkout
+      assert_equal true, @payment.guest_check_out
     end
 
     test 'initiate recurrence is bool' do
@@ -284,8 +284,6 @@ module Barion
     end
 
     test 'redirect url max length 2000chars' do
-      assert_nil @payment.redirect_url
-      assert_valid @payment
       @payment.redirect_url = Faker::String.random(length: 2001)
       refute_valid @payment
       @payment.redirect_url = Faker::String.random(length: 2000)
@@ -293,8 +291,6 @@ module Barion
     end
 
     test 'callback url max length 2000chars' do
-      assert_nil @payment.callback_url
-      assert_valid @payment
       @payment.callback_url = Faker::String.random(length: 2001)
       refute_valid @payment
       @payment.callback_url = Faker::String.random(length: 2000)
@@ -302,8 +298,6 @@ module Barion
     end
 
     test 'gateway url max length 2000chars' do
-      assert_nil @payment.gateway_url
-      assert_valid @payment
       @payment.gateway_url = Faker::String.random(length: 2001)
       refute_valid @payment
       @payment.gateway_url = Faker::String.random(length: 2000)
@@ -311,8 +305,6 @@ module Barion
     end
 
     test 'qr url max length 2000chars' do
-      assert_nil @payment.qr_url
-      assert_valid @payment
       @payment.qr_url = Faker::String.random(length: 2001)
       refute_valid @payment
       @payment.qr_url = Faker::String.random(length: 2000)
@@ -589,6 +581,45 @@ module Barion
       end
     end
 
+    test 'payment as json have the correct format' do
+      @payment.valid?
+      json = @payment.as_json
+      assert json, json
+      assert json['POSKey'], json.to_s
+      assert json['PaymentType'], json.to_s
+      # assert json['ReservationPeriod']
+      # assert json['DelayedCapturePeriod']
+      # assert json['PaymentWindow']
+      assert json['GuestCheckOut'], json.to_s
+      # assert json['InitiateRecurrence']
+      # assert json['RecurrenceId']
+      assert json['FundingSources'], json.to_s
+      assert json['PaymentRequestId'], json.to_s
+      # assert json['PayerHint']
+      # assert json['CardHolderNameHint']
+      # assert json['RecurrenceType']
+      # assert json['TraceId']
+      assert json['RedirectUrl'], json.to_s
+      assert json['CallbackUrl'], json.to_s
+      assert json['Transactions'], json.to_s
+      # assert json['OrderNumber']
+      # assert json['ShippingAddress']
+      assert json['Locale'], json.to_s
+      assert json['Currency'], json.to_s
+      # assert json['PayerPhoneNumber']
+      # assert json['PayerWorkPhoneNumber']
+      # assert json['PayerHomeNumber']
+      # assert json['BillingAddress']
+      # assert json['PayerAccount']
+      # assert json['PurchaseInformation']
+      # assert json['ChallengePreference']
+      refute json['PaymentId'], json.to_s
+      refute json['Status'], json.to_s
+      refute json['QRUrl'], json.to_s
+      refute json['RecurrenceResult'], json.to_s
+      refute json['GatewayUrl'], json.to_s
+    end
+
     test 'payment can only be executed if valid' do
       @payment.payment_type = :reservation
       @payment.reservation_period = 59
@@ -596,7 +627,7 @@ module Barion
       refute @payment.execute
       @payment.payment_type = :immediate
       assert @payment.valid?
-      assert_raise RestClient::BadRequest do
+      assert_raise Barion::Error do
         result = @payment.execute
         refute_equal false, result
       end
