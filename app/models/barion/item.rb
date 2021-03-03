@@ -26,6 +26,8 @@
 module Barion
   # Represents an item in a transaction for Barion engine
   class Item < ApplicationRecord
+    include Barion::JsonSerializer
+
     belongs_to :payment_transaction,
                inverse_of: :items
 
@@ -46,6 +48,18 @@ module Barion
 
     after_initialize :set_defaults
 
+    def json_options
+      {
+        except: %i[updated_at created_at],
+        map: {
+          keys: {
+            _all: :camelize,
+            Sku: 'SKU'
+          }
+        }
+      }
+    end
+
     def unit_price=(value)
       super(value.to_d)
       calculate_total
@@ -56,8 +70,9 @@ module Barion
       calculate_total
     end
 
-    def item_total=(_value)
-      raise ::NoMethodError, 'item_total is a calculated readonly field'
+    def item_total=(value)
+      value = calculate_total if value.nil?
+      super(value)
     end
 
     private
@@ -67,7 +82,7 @@ module Barion
     end
 
     def calculate_total
-      self[:item_total] = (quantity * unit_price.to_d)
+      self.item_total = (quantity * unit_price.to_d)
     end
   end
 end
