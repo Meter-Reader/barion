@@ -26,7 +26,10 @@
 #  index_barion_addresses_on_zip         (zip)
 #
 module Barion
+  # Represents a postal address fro Barion engine
   class Address < ApplicationRecord
+    include Barion::JsonSerializer
+
     belongs_to :payment, inverse_of: :shipping_address
     belongs_to :payment, inverse_of: :billing_address
 
@@ -38,5 +41,20 @@ module Barion
     validates :street2, length: { maximum: 50 }, allow_nil: true
     validates :street3, length: { maximum: 50 }, allow_nil: true
     validates :full_name, length: { maximum: 45 }, allow_nil: true
+
+    def json_options
+      {
+        map: {
+          except: %i[updated_at created_at],
+          keys: {
+            _all: :camelize
+          },
+          values: {
+            _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
+            _except: %w[Country]
+          }
+        }
+      }
+    end
   end
 end
