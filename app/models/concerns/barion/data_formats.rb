@@ -8,5 +8,12 @@ module Barion
     def self.phone_number(number)
       number.sub(/^\+/, '').sub(/^00/, '')[0..29]
     end
+
+    def self.as_time(sec)
+      day, sec = sec.divmod(1.days)
+      hour, sec = sec.divmod(1.hour)
+      min, sec = sec.divmod(1.minute)
+      format('%<day>d.%02<hour>d:%02<min>d:%02<sec>d', day: day, hour: hour, min: min, sec: sec)
+    end
   end
 end

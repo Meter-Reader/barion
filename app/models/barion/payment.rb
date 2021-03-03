@@ -204,13 +204,20 @@ module Barion
 
     def json_options
       { except: %i[id checksum payment_id qr_url recurrence_result gateway_url created_at updated_at status],
-        include: %i[billing_address shipping_address payment_transactions],
+        include: %i[billing_address shipping_address payment_transactions payer_account purchase_information],
         map: {
           keys: {
+            _all: :camelize,
             Poskey: 'POSKey',
             PaymentTransactions: 'Transactions'
           },
-          values: {}
+          values: {
+            _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
+            _except: %w[POSKey RedirectUrl CallbackUrl Locale PaymentRequestId PayerHint CardHolderNameHint],
+            ReservationPeriod: :as_time,
+            DelayedCapturePeriod: :as_time,
+            PaymentWindow: :as_time
+          }
         } }
     end
 

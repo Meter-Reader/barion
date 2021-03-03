@@ -81,8 +81,8 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "payee", null: false
     t.decimal "total", null: false
     t.string "comment"
-    t.integer "payee_transactions_id"
-    t.integer "payment_id"
+    t.bigint "payee_transactions_id"
+    t.bigint "payment_id"
     t.integer "status", default: 0, null: false
     t.string "transaction_id"
     t.string "currency", limit: 3
@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.integer "reservation_period", limit: 8
     t.integer "delayed_capture_period", limit: 6
     t.string "payment_window", limit: 6
-    t.boolean "guest_checkout"
+    t.boolean "guest_check_out"
     t.boolean "initiate_recurrence"
     t.string "recurrence_id", limit: 100
     t.integer "funding_sources", default: 0
