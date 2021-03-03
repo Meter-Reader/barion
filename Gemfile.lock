@@ -76,7 +76,7 @@ GEM
     benchmark (0.1.1)
     builder (3.2.4)
     childprocess (4.0.0)
-    codecov (0.4.3)
+    codecov (0.5.0)
       simplecov (>= 0.15, < 0.22)
     concurrent-ruby (1.1.8)
     crass (1.0.6)
@@ -180,7 +180,7 @@ GEM
     reverse_markdown (2.0.0)
       nokogiri
     rexml (3.2.4)
-    rubocop (1.10.0)
+    rubocop (1.11.0)
       parallel (~> 1.10)
       parser (>= 3.0.0.0)
       rainbow (>= 2.2.2, < 4.0)
@@ -202,7 +202,7 @@ GEM
       simplecov (~> 0.8)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.2)
-    solargraph (0.40.3)
+    solargraph (0.40.4)
       backport (~> 1.1)
       benchmark
       bundler (>= 1.17.2)
