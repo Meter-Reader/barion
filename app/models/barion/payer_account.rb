@@ -33,29 +33,30 @@ module Barion
   # Represents a PayerAccount in Barion engine
   class PayerAccount < ApplicationRecord
     include Barion::DataFormats
+    include Barion::JsonSerializer
 
     attribute :account_is, :string
     enum account_change_indicator: {
-      ChangedDuringThisTransaction: 0,
-      LessThan30Days: 10,
-      Between30And60Days: 20,
-      MoreThan60Days: 30
+      changed_during_this_transaction: 0,
+      less_than_30_days: 10,
+      between_30_and_60_days: 20,
+      more_than_60_days: 30
     }, _default: 0, _prefix: true
     attribute :account_created, :datetime
     enum account_creation_indicator: {
-      NoAccount: 0,
-      CreatedDuringThisTransaction: 10,
-      LessThan30Days: 20,
-      Between30And60Days: 30,
-      MoreThan60Days: 40
+      no_account: 0,
+      created_during_this_transaction: 10,
+      less_than_30_days: 20,
+      between_30_and_60_days: 30,
+      more_than_60_days: 40
     }, _default: 0, _prefix: true
     attribute :account_last_changed, :datetime
     enum password_change_indicator: {
-      NoChange: 0,
-      ChangedDuringThisTransaction: 10,
-      LessThan30Days: 20,
-      Between30And60Days: 30,
-      MoreThan60Days: 40
+      no_change: 0,
+      changed_during_this_transaction: 10,
+      less_than_30_days: 20,
+      between_30_and_60_days: 30,
+      more_than_60_days: 40
     }, _default: 0, _prefix: true
     attribute :password_last_changed, :datetime
     attribute :payment_method_added, :boolean
@@ -63,14 +64,14 @@ module Barion
     attribute :purchases_in_the_last_6_months, :integer
     attribute :shipping_address_added, :datetime
     enum shipping_address_usage_indicator: {
-      ThisTransaction: 0,
-      LessThan30Days: 10,
-      Between30And60Days: 20,
-      MoreThan60Days: 30
+      this_transaction: 0,
+      less_than_30_days: 10,
+      between_30_and_60_days: 20,
+      more_than_60_days: 30
     }, _default: 0
     enum suspicious_activity_indicator: {
-      NoSuspiciousActivityObserved: 0,
-      SuspiciousActivityObserved: 10
+      no_suspicious_activity_observed: 0,
+      suspicious_activity_observed: 10
     }, _default: 0
     attribute :transactional_activity_per_day, :integer
     attribute :transactional_activity_per_year, :integer
@@ -94,5 +95,20 @@ module Barion
               numericality: { only_integer: true },
               inclusion: { in: 0..999 },
               allow_nil: true
+
+    def json_options
+      { except: %i[id created_at updated_at],
+        map: {
+          keys: {
+            _all: :camelize
+          },
+          values: {
+            _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
+            AccountCreated: :as_datetime,
+            AccountLastChanged: :as_datetime,
+            PasswordLastChanged: :as_datetime
+          }
+        } }
+    end
   end
 end
