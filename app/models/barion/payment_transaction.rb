@@ -36,28 +36,29 @@ module Barion
   # Barion Transaction implementation
   class PaymentTransaction < ApplicationRecord
     include Barion::Currencies
+    include Barion::JsonSerializer
 
     enum status: {
-      Prepared: 0,                            # The transaction is prepared, and is ready to be completed.
-      Started: 1,                             # The transaction has been started. This is used at reservation payments.
-      Succeeded: 2,                           # The transaction was successfully completed.
-      Timeout: 3,                             # The transaction has timed out.
-      ShopIsDeleted: 4,                       # The shop that created the transaction has been deleted in the meantime.
-      ShopIsClosed: 5,                        # The shop that created the transaction has been closed in the meantime.
-      Rejected: 6,                            # The user rejected the transaction.
-      RejectedByShop: 12,                     # The transaction was cancelled by the shop.
-      Storno: 13,                             # Storno amount for a previous transaction.
-      Reserved: 14,                           # The transaction amount has been reserved.
-      Deleted: 15,                            # The transaction was deleted.
-      Expired: 16,                            # The transaction has expired.
-      Authorized: 17,                         # The card payment transaction is authorized but not captured yet.
-      Reversed: 18,                           # The authorization was reversed.
-      InvalidPaymentRecord: 210,              # A payment to the given transaction does not exists.
-      PaymentTimeOut: 211,                    # The payment of the transaction has timed out.
-      InvalidPaymentStatus: 212,              # The payment of the transaction is in an invalid status.
-      PaymentSenderOrRecipientIsInvalid: 213, # The sender or recipient user was not found in the Barion system.
-      Unknown: 255                            # The transaction is in an unknown state.
-    }, _default: 'Prepared'
+      prepared: 0,                            # The transaction is prepared, and is ready to be completed.
+      started: 1,                             # The transaction has been started. This is used at reservation payments.
+      succeeded: 2,                           # The transaction was successfully completed.
+      timeout: 3,                             # The transaction has timed out.
+      shop_is_deleted: 4,                     # The shop that created the transaction has been deleted in the meantime.
+      shop_is_closed: 5,                      # The shop that created the transaction has been closed in the meantime.
+      rejected: 6,                            # The user rejected the transaction.
+      rejected_by_shop: 12,                   # The transaction was cancelled by the shop.
+      storno: 13,                             # Storno amount for a previous transaction.
+      reserved: 14,                           # The transaction amount has been reserved.
+      deleted: 15,                            # The transaction was deleted.
+      expired: 16,                            # The transaction has expired.
+      authorized: 17,                         # The card payment transaction is authorized but not captured yet.
+      reversed: 18,                           # The authorization was reversed.
+      invalid_payment_record: 210,            # A payment to the given transaction does not exists.
+      payment_time_out: 211,                  # The payment of the transaction has timed out.
+      invalid_payment_status: 212,            # The payment of the transaction is in an invalid status.
+      payment_sender_or_recipient_is_invalid: 213, # The sender or recipient user was not found in the Barion system.
+      unknown: 255                            # The transaction is in an unknown state.
+    }, _default: :prepared
 
     belongs_to :payment, inverse_of: :payment_transactions
     has_many :items,
@@ -84,6 +85,21 @@ module Barion
     def total=(value)
       value = calc_item_totals if value.nil?
       super(value)
+    end
+
+    def json_options
+      { except: %i[id status created_at updated_at],
+        include: %i[items],
+        map: {
+          keys: {
+            _all: :camelize,
+            PosTransactionId: 'POSTransactionId'
+          },
+          values: {
+            _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
+            _except: %w[items POSTransactionId Payee Comment]
+          }
+        } }
     end
 
     protected

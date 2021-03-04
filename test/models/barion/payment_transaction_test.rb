@@ -40,10 +40,12 @@ module Barion
       Barion.poskey = 'test'
       @transaction = build(:barion_payment_transaction)
       @transaction.payment = build(:barion_payment)
+      @json = @transaction.as_json
     end
 
     test 'comment is not mandatory' do
       @transaction.comment = nil
+      refute @json['Comment']
       assert_valid @transaction
     end
 
@@ -51,10 +53,12 @@ module Barion
       @transaction.currency = nil
       assert_valid @transaction
       assert_equal @transaction.payment.currency, @transaction.currency
+      assert_equal @transaction.payment.currency, @json['Currency']
       @transaction.payment.currency = :HUF
       @transaction.currency = :EUR
       assert_valid @transaction
       refute_equal @transaction.payment.currency, @transaction.currency
+      assert_equal 'EUR', @transaction.as_json['Currency']
     end
 
     test 'payee is mandatory' do
@@ -63,7 +67,8 @@ module Barion
     end
 
     test 'status is mandatory' do
-      assert_equal 'Prepared', @transaction.status
+      assert_equal 'prepared', @transaction.status
+      refute @json['Status']
       @transaction.status = nil
       refute_valid @transaction
     end
@@ -78,19 +83,24 @@ module Barion
         payment_transaction: @transaction
       )
       assert_equal 147, @transaction.total
+      assert_equal '147.0', @transaction.as_json['Total']
       @transaction.total = 10
       assert_equal 10, @transaction.total
+      assert_equal '10.0', @transaction.as_json['Total']
       @transaction.total = nil
       assert_equal 147, @transaction.total
+      assert_equal '147.0', @transaction.as_json['Total']
       assert_valid @transaction
     end
 
     test 'transaction_time is not mandatory' do
       @transaction.transaction_time = nil
+      refute @json['TransactionTime']
       assert_valid @transaction
     end
 
     test 'pos_transaction_id is mandatory' do
+      assert @json['POSTransactionId']
       @transaction.pos_transaction_id = nil
       refute_valid @transaction
     end
