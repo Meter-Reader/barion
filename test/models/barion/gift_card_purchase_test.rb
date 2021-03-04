@@ -21,20 +21,20 @@ module Barion
   # Represents a Gift card purchase in Barion engine
   class GiftCardPurchaseTest < ActiveSupport::TestCase
     setup do
-      @gcp = Barion::GiftCardPurchase.new
-      @gcp.purchase = Barion::Purchase.new
-      @payment = Barion::Payment.new
-      @gcp.purchase.payment = @payment
-      @gcp.count = 1
-      @gcp.amount = 1
+      @gcp = build(:barion_gift_card_purchase)
+      @gcp.purchase.payment = build(:barion_payment, purchase_information: @gcp.purchase)
+      @json = @gcp.as_json
     end
 
     test 'amount can be set and mandatory' do
+      assert @json['Amount']
       @gcp.amount = nil
       refute_valid @gcp
+      refute @gcp.as_json['Amount']
       @gcp.amount = 1
       assert_valid @gcp
       assert_equal 1, @gcp.amount
+      assert_equal 1, @gcp.as_json['Amount']
     end
 
     test 'amount bigger then zero' do
@@ -45,29 +45,36 @@ module Barion
     end
 
     test 'currency is delegated to payment' do
-      assert_equal @gcp.currency, @gcp.purchase.payment.currency
-      @payment.currency = :USD
-      assert_equal @gcp.currency, @gcp.purchase.payment.currency
+      assert_equal @gcp.purchase.payment.currency, @gcp.currency
+      refute @json['Currency']
+      @gcp.purchase.payment.currency = :USD
+      assert_equal @gcp.purchase.payment.currency, @gcp.currency
+      refute @gcp.as_json['Currency']
     end
 
     test 'amount precision depends on payment currency' do
-      @payment.currency = :EUR
+      @gcp.purchase.payment.currency = :EUR
       @gcp.amount = 1.55555555
       assert_equal 1.56, @gcp.amount
-      @payment.currency = :HUF
+      assert_equal '1.56', @gcp.as_json['Amount']
+      @gcp.purchase.payment.currency = :HUF
       @gcp.amount = 1.55555555
       assert_equal 2, @gcp.amount
-      @payment.currency = :USD
+      assert_equal 2, @gcp.as_json['Amount']
+      @gcp.purchase.payment.currency = :USD
       @gcp.amount = 1.55555555
       assert_equal 1.56, @gcp.amount
+      assert_equal '1.56', @gcp.as_json['Amount']
     end
 
     test 'count can be set and mandatory' do
       @gcp.count = nil
+      refute @gcp.as_json['Count']
       refute_valid @gcp
       @gcp.count = 1
       assert_valid @gcp
       assert_equal 1, @gcp.count
+      assert_equal 1, @gcp.as_json['Count']
     end
 
     test 'count valid between 1 and 99' do
@@ -75,12 +82,14 @@ module Barion
       refute_valid @gcp
       @gcp.count = 1
       assert_valid @gcp
+      assert_equal 1, @gcp.as_json['Count']
       @gcp.count = 100
       refute_valid @gcp
       @gcp.count = 1.2
       refute_valid @gcp
       @gcp.count = 99
       assert_valid @gcp
+      assert_equal 99, @gcp.as_json['Count']
     end
   end
 end

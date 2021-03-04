@@ -254,7 +254,7 @@ module Barion
     end
 
     test 'gift_card_purchase can be set' do
-      @purchase.gift_card_purchase = build(:barion_gif_card_purchase, purchase: @purchase)
+      @purchase.gift_card_purchase = build(:barion_gift_card_purchase, purchase: @purchase)
       assert_valid @purchase
       assert @purchase.as_json['GiftCardPurchase']
     end

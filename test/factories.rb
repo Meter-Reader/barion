@@ -40,7 +40,7 @@ FactoryBot.define do
     # no mandatory attributes
   end
 
-  factory :barion_gif_card_purchase, class: 'Barion::GiftCardPurchase' do
+  factory :barion_gift_card_purchase, class: 'Barion::GiftCardPurchase' do
     amount { Faker::Commerce.price }
     count { 10 }
     purchase { association(:barion_purchase) }

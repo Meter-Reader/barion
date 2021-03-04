@@ -19,24 +19,40 @@
 module Barion
   # Represents a Gift card purchase in Barion engine
   class GiftCardPurchase < ApplicationRecord
+    include Barion::JsonSerializer
+
     belongs_to :purchase, inverse_of: :gift_card_purchase
+
+    attribute :amount, :decimal
+    attribute :count, :integer
 
     validates_associated :purchase
     validates :amount, numericality: { greater_than: 0 }
     validates :count, numericality: { only_integer: true }, inclusion: { in: 1..99 }
 
-    attr_writer :amount
+    def json_options
+      { except: %i[id created_at updated_at currency],
+        map: {
+          keys: {
+            _all: :camelize
+          },
+          values: {
+            _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v }
+          }
+        } }
+    end
 
     def amount
-      return nil if @amount.nil?
+      value = super
+      return nil if value.nil?
 
       case currency
       when nil
-        nil
+        value
       when 'HUF'
-        @amount.round(0)
+        value.round(0)
       else
-        @amount.round(2)
+        value.round(2)
       end
     end
 
