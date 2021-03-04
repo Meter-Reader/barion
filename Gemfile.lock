@@ -76,7 +76,7 @@ GEM
     benchmark (0.1.1)
     builder (3.2.4)
     childprocess (4.0.0)
-    codecov (0.5.0)
+    codecov (0.5.1)
       simplecov (>= 0.15, < 0.22)
     concurrent-ruby (1.1.8)
     crass (1.0.6)
@@ -129,7 +129,7 @@ GEM
       minitest (>= 5.0)
       ruby-progressbar
     netrc (0.11.0)
-    nio4r (2.5.5)
+    nio4r (2.5.7)
     nokogiri (1.11.1)
       mini_portile2 (~> 2.5.0)
       racc (~> 1.4)
