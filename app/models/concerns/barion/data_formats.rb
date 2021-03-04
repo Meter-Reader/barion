@@ -15,5 +15,9 @@ module Barion
       min, sec = sec.divmod(1.minute)
       format('%<day>d.%02<hour>d:%02<min>d:%02<sec>d', day: day, hour: hour, min: min, sec: sec)
     end
+
+    def self.as_datetime(date)
+      date.delete_suffix('Z')
+    end
   end
 end

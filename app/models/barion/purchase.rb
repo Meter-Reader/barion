@@ -28,38 +28,40 @@
 module Barion
   # Represents a purchase in Barion engine
   class Purchase < ApplicationRecord
+    include Barion::JsonSerializer
+
     enum availability_indicator: {
-      MerchandiseAvailable: 0,
-      FutureAvailability: 10
-    }, _default: :MerchandiseAvailable
+      merchandise_available: 0,
+      future_availability: 10
+    }, _default: :merchandise_available
 
     attr_accessor :delivery_email_address
 
     enum delivery_timeframe: {
-      ElectronicDelivery: 0,
-      SameDayShipping: 10,
-      OvernightShipping: 20,
-      TwoDayOrMoreShipping:	30
+      electronic_delivery: 0,
+      same_day_shipping: 10,
+      overnight_shipping: 20,
+      two_day_or_more_shipping:	30
     }
     enum re_order_indicator: {
-      FirstTimeOrdered: 0,
-      Reordered: 10
+      first_time_ordered: 0,
+      reordered: 10
     }
     enum shipping_address_indicator: {
-      ShipToCardholdersBillingAddress: 0,
-      ShipToAnotherVerifiedAddress: 10,
-      ShipToDifferentAddress: 20,
-      ShipToStore: 30,
-      DigitalGoods: 40,
-      TravelAndEventTickets: 50,
-      Other: 60
+      ship_to_cardholders_billing_address: 0,
+      ship_to_another_verified_address: 10,
+      ship_to_different_address: 20,
+      ship_to_store: 30,
+      digital_goods: 40,
+      travel_and_event_tickets: 50,
+      other: 60
     }
     enum purchase_type: {
-      GoodsAndServicePurchase: 0,
-      CheckAcceptance: 1,
-      AccountFunding: 2,
-      QuasiCashTransaction: 3,
-      PrePaidVacationAndLoan: 4
+      goods_and_service_purchase: 0,
+      check_acceptance: 1,
+      account_funding: 2,
+      quasi_cash_transaction: 3,
+      pre_paid_vacation_and_loan: 4
     }
 
     belongs_to :payment, inverse_of: :purchase_information
@@ -73,6 +75,22 @@ module Barion
     with_options if: :initial_recurring_payment? do |purchase|
       purchase.validates :recurring_frequency, presence: true
       purchase.validates :recurring_expiry, presence: true
+    end
+
+    def json_options
+      { except: %i[id created_at updated_at],
+        include: %i[gift_card_purchase],
+        map: {
+          keys: {
+            _all: :camelize
+          },
+          values: {
+            _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
+            PreOrderDate: :as_datetime,
+            RecurringExpiry: :as_datetime,
+            PurchaseDate: :as_datetime
+          }
+        } }
     end
 
     private
