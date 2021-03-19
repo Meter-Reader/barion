@@ -6,4 +6,5 @@
 #  shop.sandbox = true
 #  shop.acronym = ''
 #  shop.default_country = 'zz'
+#  shop.default_payee = 'me@example.org'
 # end

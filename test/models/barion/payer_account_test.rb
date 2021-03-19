@@ -68,13 +68,13 @@ module Barion
 
     test 'account change indicator has default value' do
       assert_equal 'changed_during_this_transaction', @payer.account_change_indicator
-      assert_equal 'ChangedDuringThisTransaction', @json['AccountChangeIndicator']
+      assert_equal 0, @json['AccountChangeIndicator']
     end
 
     test 'account change indicator can be set' do
       @payer.account_change_indicator = :less_than_30_days
       assert_equal 'less_than_30_days', @payer.account_change_indicator
-      assert_equal 'LessThan30Days', @payer.as_json['AccountChangeIndicator']
+      assert_equal 10, @payer.as_json['AccountChangeIndicator']
     end
 
     test 'account change indicator allows only valid values' do
@@ -95,13 +95,13 @@ module Barion
 
     test 'account creation indicator has default value' do
       assert_equal 'no_account', @payer.account_creation_indicator
-      assert_equal 'NoAccount', @json['AccountCreationIndicator']
+      assert_equal 0, @json['AccountCreationIndicator']
     end
 
     test 'account creation indicator can be set' do
       @payer.account_creation_indicator = :less_than_30_days
       assert_equal 'less_than_30_days', @payer.account_creation_indicator
-      assert_equal 'LessThan30Days', @payer.as_json['AccountCreationIndicator']
+      assert_equal 20, @payer.as_json['AccountCreationIndicator']
     end
 
     test 'account creation indicator allows only valid values' do
@@ -122,13 +122,13 @@ module Barion
 
     test 'password change indicator has default value' do
       assert_equal 'no_change', @payer.password_change_indicator
-      assert_equal 'NoChange', @json['PasswordChangeIndicator']
+      assert_equal 0, @json['PasswordChangeIndicator']
     end
 
     test 'password change indicator can be set' do
       @payer.password_change_indicator = :less_than_30_days
       assert_equal 'less_than_30_days', @payer.password_change_indicator
-      assert_equal 'LessThan30Days', @payer.as_json['PasswordChangeIndicator']
+      assert_equal 20, @payer.as_json['PasswordChangeIndicator']
     end
 
     test 'password change indicator allows only valid values' do
@@ -226,13 +226,13 @@ module Barion
 
     test 'shipping_address_usage_indicator has default value' do
       assert_equal 'this_transaction', @payer.shipping_address_usage_indicator
-      assert_equal 'ThisTransaction', @json['ShippingAddressUsageIndicator']
+      assert_equal 0, @json['ShippingAddressUsageIndicator']
     end
 
     test 'shipping_address_usage_indicator can be set' do
       @payer.shipping_address_usage_indicator = :less_than_30_days
       assert_equal 'less_than_30_days', @payer.shipping_address_usage_indicator
-      assert_equal 'LessThan30Days', @payer.as_json['ShippingAddressUsageIndicator']
+      assert_equal 10, @payer.as_json['ShippingAddressUsageIndicator']
     end
 
     test 'shipping_address_usage_indicator allows only valid values' do
@@ -243,13 +243,13 @@ module Barion
 
     test 'suspicious_activity_indicator has default value' do
       assert_equal 'no_suspicious_activity_observed', @payer.suspicious_activity_indicator
-      assert_equal 'NoSuspiciousActivityObserved', @json['SuspiciousActivityIndicator']
+      assert_equal 0, @json['SuspiciousActivityIndicator']
     end
 
     test 'suspicious_activity_indicator can be set' do
       @payer.suspicious_activity_indicator = :suspicious_activity_observed
       assert_equal 'suspicious_activity_observed', @payer.suspicious_activity_indicator
-      assert_equal 'SuspiciousActivityObserved', @payer.as_json['SuspiciousActivityIndicator']
+      assert_equal 10, @payer.as_json['SuspiciousActivityIndicator']
     end
 
     test 'suspicious_activity_indicator allows only valid values' do

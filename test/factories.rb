@@ -13,22 +13,32 @@ FactoryBot.define do
     unit { Faker::String.random(length: 5) }
   end
 
+  factory :fix_barion_item, class: 'Barion::Item' do
+    description { 'Ezittaleíráshelye' }
+    name { 'Termék_x' }
+    quantity { 2 }
+    unit_price { 42.0 }
+    unit { 'db' }
+  end
+
   factory :barion_payment_transaction, class: 'Barion::PaymentTransaction' do
     pos_transaction_id { Faker::String.random }
-    payee { Faker::Internet.email }
-    after(:build) { |i| i.items << build(:barion_item) }
+  end
+
+  factory :fix_barion_payment_transaction, class: 'Barion::PaymentTransaction' do
+    pos_transaction_id { 'PosTr1' }
+    payee { ENV['TEST_PAYEE'] }
   end
 
   factory :barion_payment, class: 'Barion::Payment' do
     redirect_url { Faker::Internet.url }
     callback_url { Faker::Internet.url }
-    after(:build) do |p|
-      p.payment_transactions << build(:barion_payment_transaction)
-      p.refresh_checksum
-    end
+    after(:build) { |p| p.refresh_checksum }
 
-    factory :barion_payment_with_address do
-      billing_address { association(:barion_address) }
+    factory :fix_barion_payment do
+      poskey { ENV['TEST_POSKEY'] }
+      redirect_url { 'https://example.com/redirect' }
+      callback_url { 'https://example.com/callback' }
     end
   end
 
@@ -43,6 +53,5 @@ FactoryBot.define do
   factory :barion_gift_card_purchase, class: 'Barion::GiftCardPurchase' do
     amount { Faker::Commerce.price }
     count { 10 }
-    purchase { association(:barion_purchase) }
   end
 end

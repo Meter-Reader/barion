@@ -104,5 +104,7 @@ Style/RescueStandardError:
   Enabled: true
 Style/SlicingWithRange:
   Enabled: true
+Style/SymbolProc:
+  AllowMethodsWithArguments: true
 Style/SwapValues:
   Enabled: true

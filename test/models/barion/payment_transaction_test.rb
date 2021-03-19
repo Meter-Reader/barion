@@ -35,11 +35,14 @@
 require 'test_helper'
 
 module Barion
+  # Tests constrains of transactions in Barion
   class PaymentTransactionTest < ActiveSupport::TestCase
     setup do
-      Barion.poskey = 'test'
+      ::Barion.poskey = 'test'
+      ::Barion.default_payee = 'payee@test'
       @transaction = build(:barion_payment_transaction)
       @transaction.payment = build(:barion_payment)
+      @transaction.items << build(:barion_item)
       @json = @transaction.as_json
     end
 
@@ -61,7 +64,9 @@ module Barion
       assert_equal 'EUR', @transaction.as_json['Currency']
     end
 
-    test 'payee is mandatory' do
+    test 'payee is mandatory and has default' do
+      assert_equal ::Barion.default_payee, @transaction.payee
+      assert_valid @transaction
       @transaction.payee = nil
       refute_valid @transaction
     end
@@ -102,6 +107,14 @@ module Barion
     test 'pos_transaction_id is mandatory' do
       assert @json['POSTransactionId']
       @transaction.pos_transaction_id = nil
+      refute_valid @transaction
+    end
+
+    test 'items are mandatory and has at least one' do
+      assert_valid @transaction
+      assert_equal 1, @transaction.items.size
+      assert_equal 1, @json['Items'].size
+      @transaction.items = []
       refute_valid @transaction
     end
   end

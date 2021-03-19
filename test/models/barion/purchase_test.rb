@@ -40,13 +40,13 @@ module Barion
     test 'availability_indicator has default value' do
       assert_valid @purchase
       assert_equal 'merchandise_available', @purchase.availability_indicator
-      assert_equal 'MerchandiseAvailable', @json['AvailabilityIndicator']
+      assert_equal 0, @json['AvailabilityIndicator']
     end
 
     test 'availability_indicator can be set' do
       @purchase.availability_indicator = :future_availability
       assert_equal 'future_availability', @purchase.availability_indicator
-      assert_equal 'FutureAvailability', @purchase.as_json['AvailabilityIndicator']
+      assert_equal 10, @purchase.as_json['AvailabilityIndicator']
     end
 
     test 'availability_indicator allows only valid values' do
@@ -83,7 +83,7 @@ module Barion
       assert_valid @purchase
       assert_equal 'electronic_delivery', @purchase.delivery_timeframe
       assert @purchase.electronic_delivery?
-      assert_equal 'ElectronicDelivery', @purchase.as_json['DeliveryTimeframe']
+      assert_equal 0, @purchase.as_json['DeliveryTimeframe']
     end
 
     test 'delivery_timeframe allows only valid values' do
@@ -130,7 +130,7 @@ module Barion
       @purchase.purchase_type = :goods_and_service_purchase
       assert_valid @purchase
       assert_equal 'goods_and_service_purchase', @purchase.purchase_type
-      assert_equal 'GoodsAndServicePurchase', @purchase.as_json['PurchaseType']
+      assert_equal 0, @purchase.as_json['PurchaseType']
       assert @purchase.goods_and_service_purchase?
     end
 
@@ -237,7 +237,7 @@ module Barion
       @purchase.shipping_address_indicator = :ship_to_cardholders_billing_address
       assert_valid @purchase
       assert_equal 'ship_to_cardholders_billing_address', @purchase.shipping_address_indicator
-      assert_equal 'ShipToCardholdersBillingAddress', @purchase.as_json['ShippingAddressIndicator']
+      assert_equal 0, @purchase.as_json['ShippingAddressIndicator']
       assert @purchase.ship_to_cardholders_billing_address?
     end
 

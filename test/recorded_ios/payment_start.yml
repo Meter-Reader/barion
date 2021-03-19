@@ -1,0 +1,66 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.test.barion.com/v2/Payment/Start
+    body:
+      encoding: UTF-8
+      string: '{"POSKey":"<POSKEY>","PaymentType":"Immediate","PaymentWindow":"0.00:30:00","GuestCheckOut":true,"InitiateRecurrence":false,"FundingSources":["All"],"PaymentRequestId":"test16161905585147388","RedirectUrl":"https://example.com/redirect","CallbackUrl":"https://example.com/callback","Locale":"hu-HU","Currency":"HUF","ChallengePreference":0,"Transactions":[{"POSTransactionId":"PosTr1","Payee":"<PAYEE>","Total":"84.0","PaymentId":1,"Currency":"HUF","Items":[{"Name":"Termék_x","Description":"Ezittaleíráshelye","Quantity":"2.0","Unit":"db","UnitPrice":"42.0","ItemTotal":"84.0","PaymentTransactionId":1}]}]}'
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - rest-client/2.1.0 (linux x86_64) ruby/3.0.0p0
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '650'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Host:
+      - api.test.barion.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 21:49:17 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=dba725bb929aea81bc2e648941407d5a91616190557; expires=Sun, 18-Apr-21
+        21:49:17 GMT; path=/; domain=.barion.com; HttpOnly; SameSite=Lax; Secure
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Expires:
+      - "-1"
+      Strict-Transport-Security:
+      - max-age=15552000
+      Vary:
+      - Accept-Encoding
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08ee0fe5ee0000d42b4a135000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6329e8e978f3d42b-BUD
+      Alt-Svc:
+      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: '{"PaymentId":"dc37c0f3fc88eb118bc8001dd8b71cc4","PaymentRequestId":"test16161905585147388","Status":"Prepared","QRUrl":"https://api.test.barion.com/qr/generate?paymentId=dc37c0f3-fc88-eb11-8bc8-001dd8b71cc4&size=Large","Transactions":[{"POSTransactionId":"PosTr1","TransactionId":"dd37c0f3fc88eb118bc8001dd8b71cc4","Status":"Prepared","Currency":"HUF","TransactionTime":"2021-03-19T21:49:17.755","RelatedId":null}],"RecurrenceResult":"None","ThreeDSAuthClientData":null,"GatewayUrl":"https://secure.test.barion.com/Pay?Id=dc37c0f3fc88eb118bc8001dd8b71cc4&lang=hu_HU","RedirectUrl":"https://example.com/redirect?paymentId=dc37c0f3fc88eb118bc8001dd8b71cc4","CallbackUrl":"https://example.com/callback?paymentId=dc37c0f3fc88eb118bc8001dd8b71cc4","TraceId":null,"Errors":[]}'
+  recorded_at: Fri, 19 Mar 2021 21:49:18 GMT
+recorded_with: VCR 6.0.0

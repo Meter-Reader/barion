@@ -22,6 +22,7 @@ module Barion
   class GiftCardPurchaseTest < ActiveSupport::TestCase
     setup do
       @gcp = build(:barion_gift_card_purchase)
+      @gcp.purchase = build(:barion_purchase)
       @gcp.purchase.payment = build(:barion_payment, purchase_information: @gcp.purchase)
       @json = @gcp.as_json
     end

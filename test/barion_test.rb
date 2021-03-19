@@ -45,6 +45,9 @@ module Barion
       assert_equal 'zz', ::Barion.default_country
       ::Barion.default_country = 'HU'
       assert_equal 'HU', ::Barion.default_country
+
+      ::Barion.default_payee = 'test'
+      assert_equal 'test', ::Barion.default_payee
     end
 
     test 'user class can be configured and accept string only' do
@@ -75,6 +78,50 @@ module Barion
       assert_kind_of ::RestClient::Resource, prod_endpoint
       assert_equal ::Barion::BASE_URL[:prod], prod_endpoint.url
       refute_equal prod_endpoint.url, test_endpoint.url
+    end
+
+    test 'Error can be raised and has attributes' do
+      exception = Barion::Error.new(
+        { Title: 'ErrorTitle',
+          Description: 'Request failed, please check errors',
+          HappenedAt: DateTime.now,
+          ErrorCode: 404,
+          Endpoint: 'https://example.com' }
+      )
+      assert_equal 'ErrorTitle', exception.title
+      assert_equal 'Request failed, please check errors', exception.message
+      assert_equal 404, exception.error_code
+      assert_equal 'https://example.com', exception.endpoint
+      assert_empty exception.all_errors
+    end
+
+    test 'Error can be nested' do
+      errors = [
+        {
+          Title: 'NestedError1Title',
+          Description: 'Request failed 1',
+          HappenedAt: DateTime.now,
+          ErrorCode: 404,
+          Endpoint: 'https://example.com'
+        }, {
+          Title: 'NestedError2Title',
+          Description: 'Request failed 2',
+          HappenedAt: DateTime.now,
+          ErrorCode: 404,
+          Endpoint: 'https://example.com'
+        }
+      ]
+      exception = Barion::Error.new(
+        { Title: 'ErrorTitle',
+          Description: 'Request failed, please check errors',
+          Errors: errors,
+          HappenedAt: DateTime.now,
+          ErrorCode: 404,
+          Endpoint: 'https://example.com' }
+      )
+      assert_equal 'NestedError1Title', exception.errors.first.title
+      assert_equal 'NestedError2Title', exception.errors.second.title
+      assert_equal "Request failed 1\nRequest failed 2", exception.all_errors
     end
   end
 end

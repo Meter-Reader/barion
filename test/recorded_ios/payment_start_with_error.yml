@@ -1,0 +1,83 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.test.barion.com/v2/Payment/Start
+    body:
+      encoding: UTF-8
+      string: "{\"POSKey\":\"test_poskey\",\"PaymentType\":\"Immediate\",\"PaymentWindow\":\"0.00:30:00\",\"GuestCheckOut\":true,\"InitiateRecurrence\":false,\"FundingSources\":[\"All\"],\"PaymentRequestId\":\"test16161905654742656\",\"RedirectUrl\":\"http://cronin.name/melany.carroll\",\"CallbackUrl\":\"http://hills-ebert.com/nicky\",\"Locale\":\"hu-HU\",\"Currency\":\"HUF\",\"ChallengePreference\":0,\"Transactions\":[{\"POSTransactionId\":\"5t\U000B2442%Q
+        \ 읧+껕腗 '9\U000CE617) \U000D59310D 䙼 䙉G\U000A5E2F\\u003e 5D΢;\",\"Payee\":\"test\",\"Total\":\"7.92\",\"Currency\":\"HUF\",\"Items\":[{\"Name\":\"Rustic
+        Plastic Shirt\",\"Description\":\";jZk ZY퀠弟l\\\\%\\u00198\\u0000+凓\U00094CD41
+        ⫇U\U0004D819뽡姐i\U000BE544\U0003429Eꐜ=Y朄4Je난z窩J \\u0016嚪O G粰 N픁P\U000C469F\U000DB39D\U0001B8CF嬎\\u000b\\n
+        0\\\"B\\u0017B\U00104B3E䥍\U0008AA37SC7퀉 \U0003A594P\U000A60A6뻏 \\nN !\\u0026
+        \U000749D3M)y\\u003e瓚\U000B0BBD菢\U000F53C3Y\U0005CF0A뤃箨/U\U0010850D\U0006E82BHVᧅ\U000846A5
+        ᨤ\\u0026  \\u001a  ق\U0008943Ed2瓠鐥M쟯\\b覿ၓ 㣴\\\"l䎍᥮ ?mNR 삠 c\\u000b뒬T\U00098376\\u001f\U00081612\U000D2C50
+        \U000C8054\U00079CC0MJ$\\u003eᾒ G\U0002676EW:\U000730BD\U000D26DC唦 .\U000484E8Y
+        \ 1+ P QS詰c,\U0005F76A\U000176FF \U00056AAA跇G䱯/ \U000A2702 \U000689A8 \\u0005\U00061028
+        춄Q⿭\U0004973CF QþA\\u0026 \\u0013䁛):늢\\u003e \\\"\\u001a \\u0010珠䞐?7\U00087DFA즷\U000F61F7\U000A48902Q˞o
+        \ $鵥\U0006E047:\U0004CE8E E=\U000DE564\U0008822Cꌄ\U0003D97BA\\n覄OYC- 汹) 䈪\U000B8664Z@H\U000D9175
+        \U000696FD䜓ꔷ᷸ 홳 \U0005C5DA1낟暟- \U0007D74A傾\U000EACCAP\U000FC449 獫E\U00074D53\U0009DC39삑\\u00119N
+        \U0001154F\U000C7F33^\\u0014荚  ፧}SAV\U000663DE;W\U0001AC5EJė\U0003690E 4X
+        (F\U0001A329    ꬔ힇 \U00018AAF\U00020A36\U00046992橳툪솾ꊚ9M,)庬 \U0005D35F \U000599E4溚
+        8U翊\\u003ce  \U0008C9E9觨?\U0005AD9E?A 2\U000BC1DB S 噪U:\U00066B72 \\u0026+\U0003E040m:A$\\u003c\U000A2519\U0002B0FE\\u0003\\u0026\U00107312Q\U000B2129\U00011131摹\\u000bU軛胮$,
+        \U000BF1CA郥]悚u yA즲_䝙 \\t \U000A2D1F\U000B5776,\\u00268\\u0019\\u001c-뼃\U0001205F
+        yײ6↣쟱   E\U00054BCAx:쯱 J$\U000AEE53 츇\\u0006\\f悏\\u0013⶜\\u0017蟏\\u0001\\u0003X6큘\\u001cTeYp뒤\U0010B05F\\\"~O쿴X\U000F7FF63ꭹ㷐\U000C169A\U000340A3괩螧=\U000CE86B!\U00107994H镮\U00024591\U000FB09C\U00098DF0
+        Rښ\\u001eڙ#㝠 t7\U0001B420魅% \U000927D3\\u001c R  \U000C5B42芷禉+R \U000AEDB4\U00023DDC뼛:\",\"Quantity\":\"2.0\",\"Unit\":\"\U000401DC䲞\U0005CF38㥬\",\"UnitPrice\":\"3.96\",\"ItemTotal\":\"7.92\"}]}]}"
+    headers:
+      Accept:
+      - application/json
+      User-Agent:
+      - rest-client/2.1.0 (linux x86_64) ruby/3.0.0p0
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1821'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Host:
+      - api.test.barion.com
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Fri, 19 Mar 2021 21:49:24 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '332'
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=d67b1ba8413589131de3803e2479eb56f1616190564; expires=Sun, 18-Apr-21
+        21:49:24 GMT; path=/; domain=.barion.com; HttpOnly; SameSite=Lax; Secure
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Expires:
+      - "-1"
+      Strict-Transport-Security:
+      - max-age=15552000
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '08ee1000cd0000d413e4be3000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6329e9147a68d413-BUD
+      Alt-Svc:
+      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: '{"Errors":[{"Title":"User authentication failed.","Description":"The
+        login information provided is incorrect. There is no such user in the system
+        or the password is incorrect.","ErrorCode":"AuthenticationFailed","HappenedAt":"2021-03-19T21:49:24.5796791Z","AuthData":null,"EndPoint":"https://api.test.barion.com/v2/Payment/Start"}]}'
+  recorded_at: Fri, 19 Mar 2021 21:49:25 GMT
+recorded_with: VCR 6.0.0

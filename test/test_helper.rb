@@ -44,3 +44,13 @@ end
 
 require 'minitest/autorun'
 require 'faker'
+require 'webmock/minitest'
+require 'vcr'
+require 'English'
+
+VCR.configure do |config|
+  config.cassette_library_dir = 'test/recorded_ios'
+  config.hook_into :webmock
+  config.filter_sensitive_data('<POSKEY>') { ENV['TEST_POSKEY'] }
+  config.filter_sensitive_data('<PAYEE>') { ENV['TEST_PAYEE'] }
+end

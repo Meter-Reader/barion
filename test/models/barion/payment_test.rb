@@ -53,9 +53,14 @@ module Barion
   # Test cases for Barion::Payment model
   class PaymentTest < ActiveSupport::TestCase
     setup do
+      Barion.sandbox = true
       @poskey = 'test_poskey'
       Barion.poskey = @poskey
+      Barion.default_payee = 'test'
       @payment = build(:barion_payment)
+      tr = build(:barion_payment_transaction)
+      tr.items << build(:barion_item)
+      @payment.payment_transactions << tr
       @json = @payment.as_json
     end
 
@@ -252,13 +257,13 @@ module Barion
 
     test 'funding sources default value is all' do
       assert_equal 'all', @payment.funding_sources
-      assert_equal 'All', @json['FundingSources']
+      assert_equal ['All'], @json['FundingSources']
     end
 
     test 'funding sources can be set' do
       @payment.funding_sources = :balance
       assert_equal 'balance', @payment.funding_sources
-      assert_equal 'Balance', @payment.as_json['FundingSources']
+      assert_equal ['Balance'], @payment.as_json['FundingSources']
     end
 
     test 'funding sources allows only valid values' do
@@ -583,7 +588,7 @@ module Barion
     test 'challenge preference default NoPreference' do
       assert_equal 'no_preference', @payment.challenge_preference
       assert_valid @payment
-      assert_equal 'NoPreference', @json['ChallengePreference']
+      assert_equal 0, @json['ChallengePreference']
     end
 
     test 'challenge preference can be set' do
@@ -591,7 +596,7 @@ module Barion
       @payment.challenge_preference = :challenge_required
       assert_valid @payment
       assert_equal 'challenge_required', @payment.challenge_preference
-      assert_equal 'ChallengeRequired', @payment.as_json['ChallengePreference']
+      assert_equal 10, @payment.as_json['ChallengePreference']
     end
 
     test 'challenge preference only allows valid values' do
@@ -662,7 +667,7 @@ module Barion
     end
 
     test 'checksum is persisted on save' do
-      @payment = create(:barion_payment)
+      @payment.save
       sum = @payment.checksum
       table = ::Arel::Table.new(:barion_payments)
       sql = table.project('checksum').where(table[:id].eq(@payment.id)).take(1).to_sql
@@ -671,7 +676,7 @@ module Barion
     end
 
     test 'checksum is checked when loading from db' do
-      @payment = create(:barion_payment)
+      @payment.save
       # simulate external data tampering by skipping callback
       @payment.update_column(:guest_check_out, false)
 
@@ -689,9 +694,28 @@ module Barion
       refute @payment.execute
       @payment.payment_type = :immediate
       assert @payment.valid?
-      assert_raise Barion::Error do
-        result = @payment.execute
-        refute_equal false, result
+      VCR.use_cassette('payment_start_with_error', match_requests_on: %i[method uri query]) do
+        assert_raise Barion::Error do
+          result = @payment.execute
+          refute_equal false, result
+        end
+      end
+    end
+
+    test 'valid payment processing' do
+      @payment = build(:fix_barion_payment)
+      tr = build(:fix_barion_payment_transaction)
+      tr.items << build(:fix_barion_item)
+      @payment.payment_transactions << tr
+      @payment.save
+      assert @payment.valid?
+      VCR.use_cassette('payment_start') do
+        begin
+          assert @payment.execute
+        rescue Barion::Error
+          refute $ERROR_INFO, $ERROR_INFO.all_errors
+        end
+        assert_equal 'prepared', @payment.status
       end
     end
   end
