@@ -283,12 +283,12 @@ module Barion
     end
 
     test 'payment request id contains shop acronym' do
-      @payment.valid?
+      assert @payment.valid?
       assert_match(/\d+/, @payment.payment_request_id)
       assert_equal @payment.payment_request_id, @payment.as_json['PaymentRequestId']
       Barion.acronym = 'SHOP'
       @payment = build(:barion_payment)
-      @payment.valid?
+      refute @payment.valid?
       assert_match(/^SHOP\d+/, @payment.payment_request_id)
       assert_equal @payment.payment_request_id, @payment.as_json['PaymentRequestId']
     end
@@ -655,7 +655,7 @@ module Barion
       sum = @payment.checksum
       refute @payment.as_json['Checksum']
       @payment.status = :prepared
-      @payment.valid?
+      assert @payment.valid?
       refute_equal sum, @payment.checksum
     end
 
