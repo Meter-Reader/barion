@@ -77,7 +77,7 @@ module Barion
       purchase.validates :recurring_expiry, presence: true
     end
 
-    def json_options
+    def serialize_options
       { except: %i[id created_at updated_at],
         include: %i[gift_card_purchase],
         map: {
@@ -86,9 +86,14 @@ module Barion
           },
           values: {
             _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
-            PreOrderDate: :as_datetime,
-            RecurringExpiry: :as_datetime,
-            PurchaseDate: :as_datetime
+            pre_order_date: :as_datetime,
+            recurring_expiry: :as_datetime,
+            purchase_date: :as_datetime,
+            availability_indicator: :as_enum_id,
+            delivery_timeframe: :as_enum_id,
+            re_order_indicator: :as_ennum_id,
+            shipping_address_indicator: :as_enum_id,
+            purchase_type: :as_enum_id
           }
         } }
     end

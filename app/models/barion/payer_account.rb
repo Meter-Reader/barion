@@ -96,7 +96,7 @@ module Barion
               inclusion: { in: 0..999 },
               allow_nil: true
 
-    def json_options
+    def serialize_options
       { except: %i[id created_at updated_at],
         map: {
           keys: {
@@ -104,9 +104,14 @@ module Barion
           },
           values: {
             _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
-            AccountCreated: :as_datetime,
-            AccountLastChanged: :as_datetime,
-            PasswordLastChanged: :as_datetime
+            account_created: :as_datetime,
+            account_last_changed: :as_datetime,
+            password_last_changed: :as_datetime,
+            account_change_indicator: :as_enum_id,
+            account_creation_indicator: :as_enum_id,
+            password_change_indicator: :as_enum_id,
+            shipping_address_usage_indicator: :as_enum_id,
+            suspicious_activity_indicator: :as_enum_id
           }
         } }
     end

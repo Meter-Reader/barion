@@ -48,13 +48,13 @@ module Barion
 
     after_initialize :set_defaults
 
-    def json_options
+    def serialize_options
       {
-        except: %i[updated_at created_at],
+        except: %i[id updated_at created_at],
         map: {
           keys: {
             _all: :camelize,
-            Sku: 'SKU'
+            sku: 'SKU'
           }
         }
       }

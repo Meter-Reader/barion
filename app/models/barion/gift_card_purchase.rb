@@ -30,7 +30,7 @@ module Barion
     validates :amount, numericality: { greater_than: 0 }
     validates :count, numericality: { only_integer: true }, inclusion: { in: 1..99 }
 
-    def json_options
+    def serialize_options
       { except: %i[id created_at updated_at currency],
         map: {
           keys: {

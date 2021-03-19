@@ -71,6 +71,8 @@ module Barion
     validates :payee, presence: true
     validates :status, presence: true
     validates :pos_transaction_id, presence: true
+    validates :items, presence: true
+    validates_associated :items
 
     after_initialize :set_defaults
 
@@ -80,6 +82,7 @@ module Barion
 
     def set_defaults
       self.currency = payment&.currency if currency.nil?
+      self.payee = Barion.default_payee if payee.nil?
     end
 
     def total=(value)
@@ -87,19 +90,34 @@ module Barion
       super(value)
     end
 
-    def json_options
+    def serialize_options
       { except: %i[id status created_at updated_at],
         include: %i[items],
         map: {
           keys: {
             _all: :camelize,
-            PosTransactionId: 'POSTransactionId'
+            pos_transaction_id: 'POSTransactionId'
           },
           values: {
             _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
-            _except: %w[items POSTransactionId Payee Comment]
+            _except: %w[items pos_transaction_id payee comment]
           }
         } }
+    end
+
+    def deserialize_options
+      {
+        map: {
+          keys: {
+            _all: :underscore,
+            POSTransactionId: 'pos_transaction_id'
+          },
+          values: {
+            _all: proc { |v| v.respond_to?(:underscore) ? v.underscore : v },
+            _except: %w[Currency]
+          }
+        }
+      }
     end
 
     protected

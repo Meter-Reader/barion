@@ -184,6 +184,8 @@ module Barion
     end
 
     def readonly?
+      return false if @_bypass_readonly
+
       !initial?
     end
 
@@ -196,29 +198,51 @@ module Barion
         ::Barion.endpoint['v2/Payment/Start'].post(
           as_json.to_json,
           { content_type: :json, accept: :json }
-        ) { |response, request, _result| process_response(response, request) }
+        ) { |response, request, _result| handle_response(response, request) }
       else
         false
       end
     end
 
-    def json_options
+    def serialize_options
       { except: %i[id checksum payment_id qr_url recurrence_result gateway_url created_at updated_at status],
         include: %i[billing_address shipping_address payment_transactions payer_account purchase_information],
         map: {
           keys: {
             _all: :camelize,
-            Poskey: 'POSKey',
-            PaymentTransactions: 'Transactions'
+            poskey: 'POSKey',
+            payment_transactions: 'Transactions'
           },
           values: {
             _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
-            _except: %w[POSKey RedirectUrl CallbackUrl Locale PaymentRequestId PayerHint CardHolderNameHint],
-            ReservationPeriod: :as_time,
-            DelayedCapturePeriod: :as_time,
-            PaymentWindow: :as_time
+            _except: %w[poskey redirect_url callback_url locale payment_request_id payer_hint card_holder_name_hint],
+            reservation_period: :as_time,
+            delayed_capture_period: :as_time,
+            payment_window: :as_time,
+            funding_sources: :as_list,
+            challenge_preference: :as_enum_id
           }
         } }
+    end
+
+    def deserialize_options
+      {
+        assoc: {
+          payment_transactions: {
+            pos_transaction_id: 'POSTransactionId'
+          }
+        },
+        map: {
+          keys: {
+            _all: :underscore,
+            Transactions: 'payment_transactions'
+          },
+          values: {
+            _all: proc { |v| v.respond_to?(:underscore) ? v.underscore : v }
+          }
+        },
+        before_save: :refresh_checksum
+      }
     end
 
     protected
@@ -229,10 +253,15 @@ module Barion
     end
     # rubocop:enable Lint/UselessMethodDefinition
 
-    def process_response(response, request)
+    def handle_response(response, request)
       case response.code
       when 200
-        # TODO: process the content of response
+        process_response(JSON.parse(response))
+        refresh_checksum
+        _bypass_readonly do
+          save
+        end
+        true
       when 301, 302, 307
         raise Barion::Error.new(
           { Title: response.description,
@@ -272,6 +301,14 @@ module Barion
       end
 
       true
+    end
+
+    private
+
+    def _bypass_readonly
+      @_bypass_readonly = true
+      yield
+      @_bypass_readonly = false
     end
   end
 end

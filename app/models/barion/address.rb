@@ -42,7 +42,7 @@ module Barion
     validates :street3, length: { maximum: 50 }, allow_nil: true
     validates :full_name, length: { maximum: 45 }, allow_nil: true
 
-    def json_options
+    def serialize_options
       {
         map: {
           except: %i[updated_at created_at],
@@ -51,7 +51,7 @@ module Barion
           },
           values: {
             _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
-            _except: %w[Country]
+            _except: %w[country]
           }
         }
       }
