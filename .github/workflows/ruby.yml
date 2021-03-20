@@ -23,6 +23,7 @@ jobs:
     env:
       RAILS_ENV: test
       CODECOV: true
+      PARALLEL_WORKERS: 1
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
