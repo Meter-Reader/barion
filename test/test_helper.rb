@@ -10,7 +10,6 @@ if ENV['CODECOV']
   require 'minitest/reporters'
 
   Minitest::Reporters.use! [
-    Minitest::Reporters::DefaultReporter.new,
     Minitest::Reporters::MeanTimeReporter.new,
     Minitest::Reporters::JUnitReporter.new(ENV['TESTRESULTS_REPORTS'])
   ]
