@@ -708,7 +708,6 @@ module Barion
       tr.items << build(:fix_barion_item)
       @payment.payment_transactions << tr
       @payment.save
-      assert @payment.valid?
       VCR.use_cassette('payment_start') do
         begin
           assert @payment.execute
