@@ -35,7 +35,7 @@ module Barion
       @gcp.amount = 1
       assert_valid @gcp
       assert_equal 1, @gcp.amount
-      assert_equal 1, @gcp.as_json['Amount']
+      assert_equal '1', @gcp.as_json['Amount']
     end
 
     test 'amount bigger then zero' do
@@ -61,7 +61,7 @@ module Barion
       @gcp.purchase.payment.currency = :HUF
       @gcp.amount = 1.55555555
       assert_equal 2, @gcp.amount
-      assert_equal 2, @gcp.as_json['Amount']
+      assert_equal '2', @gcp.as_json['Amount']
       @gcp.purchase.payment.currency = :USD
       @gcp.amount = 1.55555555
       assert_equal 1.56, @gcp.amount

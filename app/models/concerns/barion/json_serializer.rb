@@ -97,5 +97,9 @@ module Barion
       hash = self.class.send(enum.to_s.pluralize)
       hash.fetch(id)
     end
+
+    def as_string(_, value)
+      value.to_s
+    end
   end
 end

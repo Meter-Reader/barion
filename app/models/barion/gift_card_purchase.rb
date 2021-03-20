@@ -37,7 +37,8 @@ module Barion
             _all: :camelize
           },
           values: {
-            _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v }
+            _all: proc { |v| v.respond_to?(:camelize) ? v.camelize : v },
+            amount: :as_string
           }
         } }
     end
