@@ -24,6 +24,8 @@ jobs:
       RAILS_ENV: test
       CODECOV: true
       PARALLEL_WORKERS: 1
+      TEST_POSKEY: ${{ secrets.TEST_POSKEY }}
+      TEST_PAYEE: ${{ secrets.TEST_PAYEE }}
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
