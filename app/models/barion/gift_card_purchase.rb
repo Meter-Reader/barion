@@ -51,7 +51,7 @@ module Barion
       when nil
         value
       when 'HUF'
-        value.round(0)
+        value.round
       else
         value.round(2)
       end
