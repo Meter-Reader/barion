@@ -9,8 +9,13 @@
 #  card_holder_name_hint   :string(45)
 #  challenge_preference    :integer          default("no_preference")
 #  checksum                :string           not null
+#  completed_at            :datetime
+#  created_at_barion       :datetime
 #  currency                :string(3)        not null
 #  delayed_capture_period  :integer
+#  delayed_capture_until   :datetime
+#  fraud_risk_score        :integer
+#  funding_source          :integer
 #  funding_sources         :integer          default("all")
 #  gateway_url             :string(2000)
 #  guest_check_out         :boolean
@@ -23,17 +28,26 @@
 #  payer_work_phone_number :string(30)
 #  payment_type            :integer          default("immediate"), not null
 #  payment_window          :string(6)
+#  pos_name                :string
+#  pos_owner_country       :string
+#  pos_owner_email         :string
 #  poskey                  :string           not null
 #  qr_url                  :string(2000)
 #  recurrence_result       :integer
 #  recurrence_type         :integer          default(NULL)
 #  redirect_url            :string(2000)
 #  reservation_period      :integer
+#  reserved_until          :datetime
+#  started_at              :datetime
 #  status                  :integer          not null
+#  suggested_local         :string
+#  total                   :decimal(, )
+#  valid_until             :datetime
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  payment_id              :string
 #  payment_request_id      :string(100)
+#  pos_id                  :string
 #  recurrence_id           :string(100)
 #  trace_id                :string(100)
 #
@@ -91,6 +105,7 @@ module Barion
     attribute :phone_number, :string
     attribute :home_number, :string
     attribute :checksum, :string
+    enum funding_source: { balance: 1, bank_card: 2, bank_transfer: 3 }, _suffix: true
 
     has_many :payment_transactions,
              inverse_of: :payment,
@@ -204,8 +219,23 @@ module Barion
       end
     end
 
+    def refresh_state
+      ::Barion.endpoint['v2/Payment/GetPaymentState'].get(
+        {
+          params: {
+            POSKey: poskey,
+            PaymentId: payment_id
+          }
+        }
+      ) { |response, request, _| handle_response(response, request) }
+    end
+
     def serialize_options
-      { except: %i[id checksum payment_id qr_url recurrence_result gateway_url created_at updated_at status],
+      { only: %i[callback_url card_holder_name_hint challenge_preference currency
+                 delayed_capture_period funding_sources guest_check_out initiate_recurrence
+                 locale order_number payer_hint payer_home_number payer_phone_number
+                 payer_work_phone_number payment_type payment_window poskey recurrence_type
+                 redirect_url reservation_period payment_request_id recurrence_id trace_id],
         include: %i[billing_address shipping_address payment_transactions payer_account purchase_information],
         map: {
           keys: {
@@ -235,10 +265,12 @@ module Barion
         map: {
           keys: {
             _all: :underscore,
-            Transactions: 'payment_transactions'
+            Transactions: 'payment_transactions',
+            CreatedAt: 'barion_created_at'
           },
           values: {
-            _all: proc { |v| v.respond_to?(:underscore) ? v.underscore : v }
+            _all: proc { |v| v.respond_to?(:underscore) ? v.underscore : v },
+            _except: %w[Locale Currency]
           }
         },
         before_save: :refresh_checksum

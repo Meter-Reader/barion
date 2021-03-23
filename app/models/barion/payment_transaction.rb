@@ -8,14 +8,17 @@
 #  comment               :string
 #  currency              :string(3)
 #  payee                 :string           not null
-#  status                :integer          default("Prepared"), not null
+#  payer                 :string
+#  status                :integer          default("prepared"), not null
 #  total                 :decimal(, )      not null
 #  transaction_time      :datetime
+#  transaction_type      :integer
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  payee_transactions_id :bigint
 #  payment_id            :bigint
 #  pos_transaction_id    :string           not null
+#  related_id            :string
 #  transaction_id        :string
 #
 # Indexes
@@ -39,26 +42,21 @@ module Barion
     include Barion::JsonSerializer
 
     enum status: {
-      prepared: 0,                            # The transaction is prepared, and is ready to be completed.
-      started: 1,                             # The transaction has been started. This is used at reservation payments.
-      succeeded: 2,                           # The transaction was successfully completed.
-      timeout: 3,                             # The transaction has timed out.
-      shop_is_deleted: 4,                     # The shop that created the transaction has been deleted in the meantime.
-      shop_is_closed: 5,                      # The shop that created the transaction has been closed in the meantime.
-      rejected: 6,                            # The user rejected the transaction.
-      rejected_by_shop: 12,                   # The transaction was cancelled by the shop.
-      storno: 13,                             # Storno amount for a previous transaction.
-      reserved: 14,                           # The transaction amount has been reserved.
-      deleted: 15,                            # The transaction was deleted.
-      expired: 16,                            # The transaction has expired.
-      authorized: 17,                         # The card payment transaction is authorized but not captured yet.
-      reversed: 18,                           # The authorization was reversed.
-      invalid_payment_record: 210,            # A payment to the given transaction does not exists.
-      payment_time_out: 211,                  # The payment of the transaction has timed out.
-      invalid_payment_status: 212,            # The payment of the transaction is in an invalid status.
-      payment_sender_or_recipient_is_invalid: 213, # The sender or recipient user was not found in the Barion system.
-      unknown: 255                            # The transaction is in an unknown state.
+      prepared: 0, started: 1, succeeded: 2, timeout: 3, shop_is_deleted: 4,
+      shop_is_closed: 5, rejected: 6, rejected_by_shop: 12, storno: 13, reserved: 14,
+      deleted: 15, expired: 16, authorized: 17, reversed: 18, invalid_payment_record: 210,
+      payment_time_out: 211, invalid_payment_status: 212,
+      payment_sender_or_recipient_is_invalid: 213, unknown: 255
     }, _default: :prepared
+    enum transaction_type: {
+      shop: 1, transfer_to_existing_user: 2, transfer_to_technical_account: 3,
+      reserve: 16, storno_reserve: 17, card_processing_fee: 21, gateway_fee: 22,
+      card_processing_fee_storno: 23, unspecified: 100, card_payment: 150,
+      refund: 151, refund_to_bank_card: 152, storno_un_successful_refund_to_bank_card: 153,
+      under_review: 180, release_review: 190, bank_transfer_payment: 200,
+      refund_to_bank_account: 201, storno_un_successful_refund_to_bank_account: 202,
+      bank_transfer_payment_fee: 203
+    }
 
     belongs_to :payment, inverse_of: :payment_transactions
     has_many :items,
@@ -91,7 +89,7 @@ module Barion
     end
 
     def serialize_options
-      { except: %i[id status created_at updated_at],
+      { except: %i[id status created_at updated_at transaction_type related_id],
         include: %i[items],
         map: {
           keys: {
@@ -107,6 +105,7 @@ module Barion
 
     def deserialize_options
       {
+        except: %i[items],
         map: {
           keys: {
             _all: :underscore,

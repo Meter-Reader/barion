@@ -9,8 +9,13 @@
 #  card_holder_name_hint   :string(45)
 #  challenge_preference    :integer          default("no_preference")
 #  checksum                :string           not null
+#  completed_at            :datetime
+#  created_at_barion       :datetime
 #  currency                :string(3)        not null
 #  delayed_capture_period  :integer
+#  delayed_capture_until   :datetime
+#  fraud_risk_score        :integer
+#  funding_source          :integer
 #  funding_sources         :integer          default("all")
 #  gateway_url             :string(2000)
 #  guest_check_out         :boolean
@@ -23,17 +28,26 @@
 #  payer_work_phone_number :string(30)
 #  payment_type            :integer          default("immediate"), not null
 #  payment_window          :string(6)
+#  pos_name                :string
+#  pos_owner_country       :string
+#  pos_owner_email         :string
 #  poskey                  :string           not null
 #  qr_url                  :string(2000)
 #  recurrence_result       :integer
 #  recurrence_type         :integer          default(NULL)
 #  redirect_url            :string(2000)
 #  reservation_period      :integer
+#  reserved_until          :datetime
+#  started_at              :datetime
 #  status                  :integer          not null
+#  suggested_local         :string
+#  total                   :decimal(, )
+#  valid_until             :datetime
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  payment_id              :string
 #  payment_request_id      :string(100)
+#  pos_id                  :string
 #  recurrence_id           :string(100)
 #  trace_id                :string(100)
 #
@@ -61,6 +75,7 @@ module Barion
       tr = build(:barion_payment_transaction)
       tr.items << build(:barion_item)
       @payment.payment_transactions << tr
+      @date = '2019-06-27 07:15:51.327'.to_datetime
       @json = @payment.as_json
     end
 
@@ -702,22 +717,124 @@ module Barion
       end
     end
 
-    test 'valid payment processing' do
-      @payment = build(:fix_barion_payment)
-      tr = build(:fix_barion_payment_transaction)
-      tr.items << build(:fix_barion_item)
-      @payment.payment_transactions << tr
-      assert_valid tr
-      @payment.save
-      assert_valid @payment
-      VCR.use_cassette('payment_start') do
-        begin
-          assert @payment.execute
-        rescue Barion::Error
-          refute $ERROR_INFO, $ERROR_INFO.all_errors
-        end
-        assert_equal 'prepared', @payment.status
-      end
+    test 'completed_at can be set, default nil, not serialized' do
+      assert_nil @payment.completed_at
+      refute @json['CompletedAt']
+      @payment.completed_at = @date
+      refute_nil @payment.completed_at
+      refute @payment.as_json['CompletedAt']
+    end
+
+    test 'created_at_barion can be set, default nil, not serialized' do
+      assert_nil @payment.created_at_barion
+      refute @json['CreatedAt']
+      refute @json['CreatedAtBarion']
+      @payment.created_at_barion = @date
+      refute_nil @payment.created_at_barion
+      refute @payment.as_json['CreatedAt']
+      refute @payment.as_json['CreatedAtBarion']
+    end
+
+    test 'delayed_capture_until can be set, default nil, not serialized' do
+      assert_nil @payment.delayed_capture_until
+      refute @json['DelayedCaptureUntil']
+      @payment.delayed_capture_until = @date
+      refute_nil @payment.delayed_capture_until
+      refute @payment.as_json['DelayedCaptureUntil']
+    end
+
+    test 'fraud_risk_score can be set, default nil, not serialized' do
+      assert_nil @payment.fraud_risk_score
+      refute @json['FraudRiskScore']
+      @payment.fraud_risk_score = 100
+      assert_equal 100, @payment.fraud_risk_score
+      refute @payment.as_json['FraudRiskScore']
+    end
+
+    test 'funding_source can be set, default nil, not serialized' do
+      assert_nil @payment.funding_source
+      refute @json['FundingSource']
+      @payment.funding_source = :balance
+      assert_equal 'balance', @payment.funding_source
+      refute @payment.as_json['FundingSource']
+      @payment.funding_source = :bank_card
+      assert_equal 'bank_card', @payment.funding_source
+      refute @payment.as_json['FundingSource']
+      @payment.funding_source = :bank_transfer
+      assert_equal 'bank_transfer', @payment.funding_source
+      refute @payment.as_json['FundingSource']
+    end
+
+    test 'pos_name can be set, default nil, not serialized' do
+      assert_nil @payment.pos_name
+      refute @json['PosName']
+      @payment.pos_name = 'Test'
+      assert_equal 'Test', @payment.pos_name
+      refute @payment.as_json['PosName']
+    end
+
+    test 'pos_owner_country can be set, default nil, not serialized' do
+      assert_nil @payment.pos_owner_country
+      refute @json['POSOwnerCountry']
+      @payment.pos_owner_country = 'Test'
+      assert_equal 'Test', @payment.pos_owner_country
+      refute @payment.as_json['POSOwnerCountry']
+    end
+
+    test 'pos_owner_email can be set, default nil, not serialized' do
+      assert_nil @payment.pos_owner_email
+      refute @json['POSOwnerEmail']
+      @payment.pos_owner_email = 'Test'
+      assert_equal 'Test', @payment.pos_owner_email
+      refute @payment.as_json['POSOwnerEmail']
+    end
+
+    test 'reserved_until can be set, default nil, not serialized' do
+      assert_nil @payment.reserved_until
+      refute @json['ReservedUntil']
+      @payment.reserved_until = @date
+      refute_nil @payment.reserved_until
+      refute @payment.as_json['ReservedUntil']
+    end
+
+    test 'started_at can be set, default nil, not serialized' do
+      assert_nil @payment.started_at
+      refute @json['StartedAt']
+      @payment.started_at = @date
+      refute_nil @payment.started_at
+      refute @payment.as_json['StartedAt']
+    end
+
+    test 'suggested_local can be set, default nil, not serialized' do
+      assert_nil @payment.suggested_local
+      refute @json['SuggestedLocal']
+      @payment.suggested_local = 'Test'
+      assert_equal 'Test', @payment.suggested_local
+      refute @payment.as_json['SuggestedLocal']
+    end
+
+    test 'total can be set, default nil, not serialized' do
+      assert_nil @payment.total
+      refute @json['Total']
+      @payment.total = 42
+      assert_equal 42, @payment.total
+      refute @payment.as_json['Total']
+    end
+
+    test 'valid_until can be set, default nil, not serialized' do
+      assert_nil @payment.valid_until
+      refute @json['ValidUntil']
+      @payment.valid_until = @date
+      refute_nil @payment.valid_until
+      refute @payment.as_json['ValidUntil']
+    end
+
+    test 'pos_id can be set, default nil, not serialized' do
+      assert_nil @payment.pos_id
+      refute @json['POSid']
+      @payment.pos_id = 'Test'
+      assert_equal 'Test', @payment.pos_id
+      refute @payment.as_json['POSid']
     end
   end
 end

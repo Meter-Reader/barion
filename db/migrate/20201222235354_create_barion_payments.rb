@@ -37,6 +37,21 @@ class CreateBarionPayments < ActiveRecord::Migration[6.0]
       t.integer :recurrence_result
       t.string :gateway_url, limit: 2000
 
+      t.string :pos_id
+      t.string :pos_name
+      t.string :pos_owner_email
+      t.string :pos_owner_country
+      t.integer :funding_source
+      t.datetime :created_at_barion
+      t.datetime :started_at
+      t.datetime :completed_at
+      t.datetime :valid_until
+      t.datetime :reserved_until
+      t.datetime :delayed_capture_until
+      t.decimal :total
+      t.string :suggested_local
+      t.integer :fraud_risk_score
+
       t.timestamps
     end
     # rubocop:enable Metrics/BlockLength

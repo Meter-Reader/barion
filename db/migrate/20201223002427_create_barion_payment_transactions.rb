@@ -18,6 +18,9 @@ class CreateBarionPaymentTransactions < ActiveRecord::Migration[6.0]
       t.string :transaction_id, index: true
       t.string :currency, limit: 3
       t.timestamp :transaction_time
+      t.string :payer
+      t.integer :transaction_type
+      t.string :related_id
 
       t.timestamps
     end

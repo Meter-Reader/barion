@@ -21,12 +21,9 @@ module Barion
       options ||= serialize_options
       result = super(serialize_options.merge(options))
       if serialize_options.key?(:map)
-        if serialize_options[:map].key?(:values)
-          convert_values(result, serialize_options[:map][:values], &serialize_options[:map][:values][:_all])
-        end
-        if serialize_options[:map].key?(:keys)
-          convert_keys(result, serialize_options[:map][:keys], &serialize_options[:map][:keys][:_all])
-        end
+        map = serialize_options[:map]
+        convert_values(result, map[:values], &map[:values][:_all]) if map.key?(:values)
+        convert_keys(result, map[:keys], &map[:keys][:_all]) if map.key?(:keys)
       end
       result.compact!
     end
@@ -36,20 +33,24 @@ module Barion
       deserialize_options.merge(options)
       return unless deserialize_options.key?(:map)
 
-      if deserialize_options[:map].key?(:values)
-        convert_values(hash, deserialize_options[:map][:values], &deserialize_options[:map][:values][:_all])
-      end
-      return unless deserialize_options[:map].key?(:keys)
+      map = deserialize_options[:map]
+      convert_values(hash, map[:values], &map[:values][:_all]) if map.key?(:values)
+      return unless map.key?(:keys)
 
-      convert_keys(hash, deserialize_options[:map][:keys], &deserialize_options[:map][:keys][:_all])
+      convert_keys(hash, map[:keys], &map[:keys][:_all])
     end
 
     def process_response(response)
+      exceptions = deserialize_options.fetch(:except, {})
+      associations = deserialize_options.fetch(:assoc, {})
+
       hash = deserialize(response)
       hash.map do |key, value|
+        next if exceptions.include?(key.to_sym)
+
         association = self.class.reflect_on_association(key)
         if association
-          (model_key_name, key_name) = deserialize_options[:assoc][key.to_sym].shift if deserialize_options.key?(:assoc)
+          (model_key_name, key_name) = associations[key.to_sym].shift
           value.each do |params|
             id = params[key_name]
             item = association.klass.send("find_by_#{model_key_name}", id)

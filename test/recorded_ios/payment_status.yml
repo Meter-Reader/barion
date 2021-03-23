@@ -1,0 +1,63 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.test.barion.com/v2/Payment/GetPaymentState?POSKey=<POSKEY>&PaymentId=dc37c0f3fc88eb118bc8001dd8b71cc4
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*"
+      User-Agent:
+      - rest-client/2.1.0 (linux x86_64) ruby/3.0.0p0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Host:
+      - api.test.barion.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Tue, 23 Mar 2021 09:46:43 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - __cfduid=db896a4bfae632a8ac0533af4a27819ba1616492803; expires=Thu, 22-Apr-21
+        09:46:43 GMT; path=/; domain=.barion.com; HttpOnly; SameSite=Lax; Secure
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Expires:
+      - "-1"
+      Strict-Transport-Security:
+      - max-age=15552000
+      Vary:
+      - Accept-Encoding
+      Cf-Cache-Status:
+      - DYNAMIC
+      Cf-Request-Id:
+      - '090013ce3100001cd0ffaa6000000001'
+      Expect-Ct:
+      - max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 6346bbf6b8ab1cd0-BUD
+      Alt-Svc:
+      - h3-27=":443"; ma=86400, h3-28=":443"; ma=86400, h3-29=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJQYXltZW50SWQiOiJkYzM3YzBmM2ZjODhlYjExOGJjODAwMWRkOGI3MWNjNCIsIlBheW1lbnRSZXF1ZXN0SWQiOiJ0ZXN0MTYxNjE5MDU1ODUxNDczODgiLCJPcmRlck51bWJlciI6bnVsbCwiUE9TSWQiOiIxMmQxMjYxMzYwZTY0YTg3OWE2ODIzMDQxNjllMGJlNCIsIlBPU05hbWUiOiJNZXRlci1yZWFkZXIuY29tIiwiUE9TT3duZXJFbWFpbCI6IjxQQVlFRT4iLCJQT1NPd25lckNvdW50cnkiOiJIVSIsIlN0YXR1cyI6IkV4cGlyZWQiLCJQYXltZW50VHlwZSI6IkltbWVkaWF0ZSIsIkZ1bmRpbmdTb3VyY2UiOm51bGwsIlJlY3VycmVuY2VUeXBlIjpudWxsLCJUcmFjZUlkIjpudWxsLCJGdW5kaW5nSW5mb3JtYXRpb24iOm51bGwsIkFsbG93ZWRGdW5kaW5nU291cmNlcyI6WyJBbGwiXSwiR3Vlc3RDaGVja291dCI6dHJ1ZSwiQ3JlYXRlZEF0IjoiMjAyMS0wMy0xOVQyMTo0OToxNy43NTFaIiwiVmFsaWRVbnRpbCI6IjIwMjEtMDMtMTlUMjI6MTk6MTcuNzUxWiIsIkNvbXBsZXRlZEF0IjoiMjAyMS0wMy0xOVQyMjoyMzo1Mi40MjlaIiwiUmVzZXJ2ZWRVbnRpbCI6bnVsbCwiRGVsYXllZENhcHR1cmVVbnRpbCI6bnVsbCwiVHJhbnNhY3Rpb25zIjpbeyJUcmFuc2FjdGlvbklkIjoiZGQzN2MwZjNmYzg4ZWIxMThiYzgwMDFkZDhiNzFjYzQiLCJQT1NUcmFuc2FjdGlvbklkIjoiUG9zVHIxIiwiVHJhbnNhY3Rpb25UaW1lIjoiMjAyMS0wMy0xOVQyMTo0OToxNy43NTVaIiwiVG90YWwiOjg0LjAwLCJDdXJyZW5jeSI6IkhVRiIsIlBheWVyIjpudWxsLCJQYXllZSI6eyJOYW1lIjp7IkxvZ2luTmFtZSI6IjxQQVlFRT4iLCJGaXJzdE5hbWUiOm51bGwsIkxhc3ROYW1lIjpudWxsLCJPcmdhbml6YXRpb25OYW1lIjoiTmFneSBDb25zdWx0aW5nIn0sIkVtYWlsIjoiPFBBWUVFPiJ9LCJDb21tZW50IjpudWxsLCJTdGF0dXMiOiJFeHBpcmVkIiwiVHJhbnNhY3Rpb25UeXBlIjoiVW5zcGVjaWZpZWQiLCJJdGVtcyI6W3siTmFtZSI6IlRlcm3DqWtfeCIsIkRlc2NyaXB0aW9uIjoiRXppdHRhbGXDrXLDoXNoZWx5ZSIsIlF1YW50aXR5IjoyLjAwLCJVbml0IjoiZGIiLCJVbml0UHJpY2UiOjQyLjAwLCJJdGVtVG90YWwiOjg0LjAwLCJTS1UiOm51bGx9XSwiUmVsYXRlZElkIjpudWxsfV0sIlRvdGFsIjowLjAwLCJTdWdnZXN0ZWRMb2NhbGUiOiJodS1IVSIsIkZyYXVkUmlza1Njb3JlIjpudWxsLCJSZWRpcmVjdFVybCI6Imh0dHBzOi8vZXhhbXBsZS5jb20vcmVkaXJlY3Q/cGF5bWVudElkPWRjMzdjMGYzZmM4OGViMTE4YmM4MDAxZGQ4YjcxY2M0IiwiQ2FsbGJhY2tVcmwiOiJodHRwczovL2V4YW1wbGUuY29tL2NhbGxiYWNrP3BheW1lbnRJZD1kYzM3YzBmM2ZjODhlYjExOGJjODAwMWRkOGI3MWNjNCIsIkN1cnJlbmN5IjoiSFVGIiwiRXJyb3JzIjpbXX0=
+  recorded_at: Tue, 23 Mar 2021 09:46:44 GMT
+recorded_with: VCR 6.0.0

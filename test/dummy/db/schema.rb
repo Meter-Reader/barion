@@ -87,6 +87,9 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "transaction_id"
     t.string "currency", limit: 3
     t.datetime "transaction_time"
+    t.string "payer"
+    t.integer "transaction_type"
+    t.string "related_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["payee"], name: "index_barion_payment_transactions_on_payee"
@@ -127,6 +130,20 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "qr_url", limit: 2000
     t.integer "recurrence_result"
     t.string "gateway_url", limit: 2000
+    t.string "pos_id"
+    t.string "pos_name"
+    t.string "pos_owner_email"
+    t.string "pos_owner_country"
+    t.integer "funding_source"
+    t.datetime "created_at_barion"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "valid_until"
+    t.datetime "reserved_until"
+    t.datetime "delayed_capture_until"
+    t.decimal "total"
+    t.string "suggested_local"
+    t.integer "fraud_risk_score"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["order_number"], name: "index_barion_payments_on_order_number"
