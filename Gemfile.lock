@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    barion (0.1.0)
+    barion (0.2.0)
       rails (~> 6.1)
       rest-client (~> 2.1)
 
