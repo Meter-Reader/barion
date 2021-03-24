@@ -63,7 +63,14 @@ Barion requires an e-mail address in every transaction to identify the recipient
 
 You can see this address in the Barion Shop interface below your shop icon on the top left corner.
 
-### Mountin the engine
+### Set up your database
+This gem comes with predefined models. To use them, you have to copy the migrations into your application and migrate them using:
+```bash
+bundle exec rails barion:install:migrations
+bundle exec rails db:migrate SCOPE=barion
+```
+
+### Mounting the engine
 You have to mount the Barion engine to be able to receive callback(s) from Barion Gateway like:
 ```ruby
 mount ::Barion::Engine, at: "/barion"
