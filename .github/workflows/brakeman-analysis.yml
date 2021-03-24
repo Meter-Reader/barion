@@ -16,6 +16,9 @@ jobs:
   brakeman-scan:
     name: Brakeman Scan
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ruby-version: ['2.6', '2.7', '3.0']
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -25,12 +28,11 @@ jobs:
     - name: Setup Ruby
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: '3.0'
+        ruby-version: ${{ matrix.ruby-version }}
+        bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Setup Brakeman
-      env:
-        BRAKEMAN_VERSION: '4.10' # SARIF support is provided in Brakeman version 4.10+
       run: |
-        gem install brakeman --version $BRAKEMAN_VERSION
+        gem install brakeman
 
     # Execute Brakeman CLI and generate a SARIF output with the security issues identified during the analysis
     - name: Scan
