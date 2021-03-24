@@ -28,7 +28,7 @@
 module Barion
   # Represents a purchase in Barion engine
   class Purchase < ApplicationRecord
-    include Barion::JsonSerializer
+    include ::Barion::JsonSerializer
 
     enum availability_indicator: {
       merchandise_available: 0,

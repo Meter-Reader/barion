@@ -21,6 +21,7 @@ module Barion
   # Represents a Gift card purchase in Barion engine
   class GiftCardPurchaseTest < ActiveSupport::TestCase
     setup do
+      ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
       @gcp = build(:barion_gift_card_purchase)
       @gcp.purchase = build(:barion_purchase)
       @gcp.purchase.payment = build(:barion_payment, purchase_information: @gcp.purchase)

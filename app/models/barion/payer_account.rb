@@ -32,8 +32,8 @@
 module Barion
   # Represents a PayerAccount in Barion engine
   class PayerAccount < ApplicationRecord
-    include Barion::DataFormats
-    include Barion::JsonSerializer
+    include ::Barion::DataFormats
+    include ::Barion::JsonSerializer
 
     attribute :account_is, :string
     enum account_change_indicator: {

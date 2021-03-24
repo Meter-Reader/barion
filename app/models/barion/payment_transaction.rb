@@ -38,8 +38,8 @@
 module Barion
   # Barion Transaction implementation
   class PaymentTransaction < ApplicationRecord
-    include Barion::Currencies
-    include Barion::JsonSerializer
+    include ::Barion::Currencies
+    include ::Barion::JsonSerializer
 
     enum status: {
       prepared: 0, started: 1, succeeded: 2, timeout: 3, shop_is_deleted: 4,
@@ -80,7 +80,7 @@ module Barion
 
     def set_defaults
       self.currency = payment&.currency if currency.nil?
-      self.payee = Barion.default_payee if payee.nil?
+      self.payee = ::Barion.default_payee if payee.nil?
     end
 
     def total=(value)

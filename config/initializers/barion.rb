@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Barion.config do |shop|
+# ::Barion.config do |shop|
 #  shop.poskey = 'test'
 #  shop.publickey = 'test2'
 #  shop.sandbox = true

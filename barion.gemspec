@@ -8,7 +8,7 @@ require 'barion/version'
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |spec|
   spec.name                  = 'barion'
-  spec.version               = Barion::VERSION
+  spec.version               = ::Barion::VERSION
   spec.required_ruby_version = '>= 2.5.0'
   spec.authors               = ['Péter Nagy']
   spec.email                 = ['peter@nagy.consulting']

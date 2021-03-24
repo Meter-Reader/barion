@@ -28,7 +28,7 @@ $ gem install barion
 After installing the gem you have to initalize it.
 Just create a file in `config/initializers/barion.rb` with the below content:
 ```ruby
-Barion.config do |shop|
+::Barion.config do |shop|
   shop.poskey = ''
   shop.publickey = ''
   shop.sandbox = true

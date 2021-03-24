@@ -34,8 +34,9 @@ require 'test_helper'
 module Barion
   class PayerAccountTest < ActiveSupport::TestCase
     setup do
-      @payer = Barion::PayerAccount.new
-      @payer.payment = Barion::Payment.new
+      ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
+      @payer = ::Barion::PayerAccount.new
+      @payer.payment = ::Barion::Payment.new
       @json = @payer.as_json
       @date = '2019-06-27 07:15:51.327'.to_datetime
     end

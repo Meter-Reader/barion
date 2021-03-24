@@ -31,6 +31,7 @@ require 'test_helper'
 module Barion
   class AddressTest < ActiveSupport::TestCase
     setup do
+      ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
       @address = build(:barion_address)
       @address.payment = build(:barion_payment, billing_address: @address)
       @json = @address.as_json

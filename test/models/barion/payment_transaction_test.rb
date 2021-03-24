@@ -41,6 +41,7 @@ module Barion
   # Tests constrains of transactions in Barion
   class PaymentTransactionTest < ActiveSupport::TestCase
     setup do
+      ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
       ::Barion.poskey = 'test'
       ::Barion.default_payee = 'payee@test'
       @transaction = build(:barion_payment_transaction)

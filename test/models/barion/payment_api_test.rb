@@ -67,7 +67,8 @@ module Barion
   # Test cases for Barion::Payment model
   class PaymentApiTest < ActiveSupport::TestCase
     setup do
-      Barion.sandbox = true
+      ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
+      ::Barion.sandbox = true
       @payment = build(:fix_barion_payment)
       tr = build(:fix_barion_payment_transaction)
       tr.items << build(:fix_barion_item)
@@ -77,14 +78,14 @@ module Barion
 
     test 'valid payment processing' do
       assert_valid @payment
-      VCR.use_cassette('payment_start') do
+      ::VCR.use_cassette('payment_start') do
         begin
           assert_nil @payment.gateway_url
           assert_nil @payment.qr_url
           assert @payment.execute
           refute_nil @payment.gateway_url
           refute_nil @payment.qr_url
-        rescue Barion::Error
+        rescue ::Barion::Error
           refute $ERROR_INFO, $ERROR_INFO.all_errors
         end
         assert_equal 'prepared', @payment.status
@@ -92,17 +93,17 @@ module Barion
     end
 
     test 'proxy method exists for requesting payment state' do
-      VCR.use_cassette('payment_start') do
+      ::VCR.use_cassette('payment_start') do
         @payment.execute
       end
-      VCR.use_cassette('payment_status') do
+      ::VCR.use_cassette('payment_status') do
         @payment.refresh_state
         assert_equal 'hu-HU', @payment.locale
         assert_equal 'HUF', @payment.currency
         refute_nil @payment.pos_id
         refute_nil @payment.pos_owner_country
         refute_nil @payment.pos_owner_email
-      rescue Barion::Error
+      rescue ::Barion::Error
         refute $ERROR_INFO, $ERROR_INFO.all_errors
       end
     end

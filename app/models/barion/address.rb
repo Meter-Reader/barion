@@ -28,7 +28,7 @@
 module Barion
   # Represents a postal address fro Barion engine
   class Address < ApplicationRecord
-    include Barion::JsonSerializer
+    include ::Barion::JsonSerializer
 
     belongs_to :payment, inverse_of: :shipping_address
     belongs_to :payment, inverse_of: :billing_address

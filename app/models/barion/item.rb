@@ -26,7 +26,7 @@
 module Barion
   # Represents an item in a transaction for Barion engine
   class Item < ApplicationRecord
-    include Barion::JsonSerializer
+    include ::Barion::JsonSerializer
 
     belongs_to :payment_transaction,
                inverse_of: :items

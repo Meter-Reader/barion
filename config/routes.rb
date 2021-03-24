@@ -3,7 +3,7 @@
 # == Route Map
 #
 
-Barion::Engine.routes.draw do
+::Barion::Engine.routes.draw do
   post 'callback', to: 'main#callback', as: :gateway_callback
-  get 'land', to: 'main#land', as: :getway_back
+  get 'land', to: 'main#land', as: :gateway_back
 end

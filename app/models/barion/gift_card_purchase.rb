@@ -19,7 +19,7 @@
 module Barion
   # Represents a Gift card purchase in Barion engine
   class GiftCardPurchase < ApplicationRecord
-    include Barion::JsonSerializer
+    include ::Barion::JsonSerializer
 
     belongs_to :purchase, inverse_of: :gift_card_purchase
 

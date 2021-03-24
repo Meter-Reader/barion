@@ -31,8 +31,9 @@ module Barion
   # Test cases for Barion::Purchase
   class PurchaseTest < ActiveSupport::TestCase
     setup do
-      @purchase = Barion::Purchase.new
-      @purchase.payment = Barion::Payment.new
+      ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
+      @purchase = ::Barion::Purchase.new
+      @purchase.payment = ::Barion::Payment.new
       @json = @purchase.as_json
       @date = '2019-06-27 07:15:51.327'.to_datetime
     end

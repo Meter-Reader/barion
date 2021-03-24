@@ -64,9 +64,9 @@
 module Barion
   # Represents a payment in Barion engine
   class Payment < ApplicationRecord
-    include Barion::DataFormats
-    include Barion::Currencies
-    include Barion::JsonSerializer
+    include ::Barion::DataFormats
+    include ::Barion::Currencies
+    include ::Barion::JsonSerializer
 
     enum locale: { 'cs-CZ': 'cs-CZ',
                    'de-DE': 'de-DE',
@@ -112,17 +112,17 @@ module Barion
              dependent: :destroy
 
     has_one :shipping_address,
-            class_name: 'Barion::Address',
+            class_name: '::Barion::Address',
             inverse_of: :payment
 
     has_one :billing_address,
-            class_name: 'Barion::Address',
+            class_name: '::Barion::Address',
             inverse_of: :payment
 
     has_one :payer_account, inverse_of: :payment
 
     has_one :purchase_information,
-            class_name: 'Barion::Purchase',
+            class_name: '::Barion::Purchase',
             inverse_of: :payment
 
     validates :payment_type, presence: true
@@ -295,7 +295,7 @@ module Barion
         end
         true
       when 301, 302, 307
-        raise Barion::Error.new(
+        raise ::Barion::Error.new(
           { Title: response.description,
             Description: 'No redirection is allowed in communication, please check endpoint!',
             HappenedAt: DateTime.now,
@@ -304,7 +304,7 @@ module Barion
         )
       when 400
         errors = ::JSON.parse(response)['Errors']
-        raise Barion::Error.new(
+        raise ::Barion::Error.new(
           { Title: response.description,
             Description: 'Request failed, please check errors',
             HappenedAt: DateTime.now,
@@ -317,8 +317,8 @@ module Barion
 
     def set_defaults
       self.poskey = ::Barion.poskey if poskey.nil?
-      self.callback_url = Rails.application.routes.url_helpers.gateway_callback_url
-      self.redirect_url = Rails.application.routes.url_helpers.gateway_back_url
+      self.callback_url = ::Barion::Engine.routes.url_helpers.gateway_callback_url
+      self.redirect_url = ::Barion::Engine.routes.url_helpers.gateway_back_url
     end
 
     def create_payment_request_id
