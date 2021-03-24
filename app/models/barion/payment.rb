@@ -317,6 +317,8 @@ module Barion
 
     def set_defaults
       self.poskey = ::Barion.poskey if poskey.nil?
+      self.callback_url = Rails.application.routes.url_helpers.gateway_callback_url
+      self.redirect_url = Rails.application.routes.url_helpers.gateway_back_url
     end
 
     def create_payment_request_id

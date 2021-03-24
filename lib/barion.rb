@@ -13,7 +13,6 @@ module Barion
   mattr_accessor :publickey, default: nil
   mattr_accessor :acronym, default: ''
   mattr_accessor :sandbox, default: true
-  mattr_accessor :default_country, default: 'zz'
   mattr_accessor :default_payee
   mattr_accessor :user_class
   mattr_accessor :item_class

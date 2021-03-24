@@ -1,0 +1,7 @@
+<h1>Payment <%= @payment.status.to_s.camelize %></h1>
+<dl>
+  <dt>Request id:</dt>
+  <dd><%= @payment.payment_request_id %></dd>
+  <dt>Order number:</dt>
+  <dd><%= @payment.order_number %></dd>
+</dl>

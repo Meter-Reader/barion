@@ -42,10 +42,6 @@ module Barion
       refute ::Barion.sandbox
       refute ::Barion.sandbox?
 
-      assert_equal 'zz', ::Barion.default_country
-      ::Barion.default_country = 'HU'
-      assert_equal 'HU', ::Barion.default_country
-
       ::Barion.default_payee = 'test'
       assert_equal 'test', ::Barion.default_payee
     end

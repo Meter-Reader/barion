@@ -4,7 +4,6 @@
 #
 
 Barion::Engine.routes.draw do
-  get 'callback', to: 'main#callback', as: :server_callback
-  get 'success', to: 'main#success', as: :payment_success
-  get 'fail', to: 'main#failed', as: :payment_failed
+  post 'callback', to: 'main#callback', as: :gateway_callback
+  get 'land', to: 'main#land', as: :getway_back
 end
