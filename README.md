@@ -43,7 +43,7 @@ Test : https://secure.test.barion.com/Shop/
 
 Production : https://secure.barion.com/Shop/
 
-![POSKey and PublicKey at Barion Shop](https://docs.barion.com/File:Poskey.jpg "POSKey and PublicKey at Barion Shop")
+![POSKey and PublicKey at Barion Shop](https://docs.barion.com/images/2/2b/Poskey.jpg "POSKey and PublicKey at Barion Shop")
 
 You have to open the shop Details from the `Action` dropdown of your shop. Please be aware that these values are different for Test and Production shops.
 
