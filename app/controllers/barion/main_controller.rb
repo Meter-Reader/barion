@@ -8,10 +8,10 @@ module Barion
     def callback
       @payment = ::Barion::Payment.find_by_payment_id(payment_params)
       if @payment.present?
-        render head :ok
+        head :ok
         @payment.refresh_state
       else
-        render head :unprocessable_entity
+        head :unprocessable_entity
       end
     end
 

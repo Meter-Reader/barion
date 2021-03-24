@@ -31,14 +31,10 @@ FactoryBot.define do
   end
 
   factory :barion_payment, class: '::Barion::Payment' do
-    redirect_url { ::Faker::Internet.url }
-    callback_url { ::Faker::Internet.url }
     after(:build) { |p| p.refresh_checksum }
 
     factory :fix_barion_payment do
       poskey { ENV['TEST_POSKEY'] }
-      redirect_url { 'https://example.com/redirect' }
-      callback_url { 'https://example.com/callback' }
     end
   end
 
