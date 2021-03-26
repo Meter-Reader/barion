@@ -4,9 +4,6 @@
 
 This is a Ruby-on-Rails engine to use the Barion Payment Gateway in any RoR application.
 
-## Usage
-How to use my plugin.
-
 ## Installation
 Add this line to your application's Gemfile:
 

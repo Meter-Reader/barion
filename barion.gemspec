@@ -15,8 +15,7 @@ Gem::Specification.new do |spec|
   spec.homepage              = 'https://www.nagy.consulting'
   spec.summary               = 'Barion payment engine for Ruby on Rails'
   spec.description           = <<-DESC
-  Barion Payment Zrt. established in 2015 serve customers across the EEA.
-  See https://barion.com for details.
+  This is a Ruby-on-Rails engine to use the Barion Payment Gateway in any RoR application.
   DESC
   spec.license = 'MIT'
 
