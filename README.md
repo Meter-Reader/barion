@@ -1,6 +1,7 @@
 # Barion
 ![Barion](https://github.com/Meter-reader/Barion/workflows/Ruby/badge.svg)
 [![codecov](https://codecov.io/gh/Meter-Reader/barion/branch/main/graph/badge.svg?token=DCOKCM7B2J)](https://codecov.io/gh/Meter-Reader/barion)
+[![Gem Version](https://badge.fury.io/rb/barion.svg)](https://badge.fury.io/rb/barion)
 
 This is a Ruby-on-Rails engine to use the Barion Payment Gateway in any RoR application.
 
