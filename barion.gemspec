@@ -11,6 +11,7 @@ Gem::Specification.new do |spec|
   spec.version               = ::Barion::VERSION
   spec.required_ruby_version = '>= 2.5.0'
   spec.authors               = ['Péter Nagy']
+  spec.metadata              = { 'rubygems_mfa_required' => 'true' }
   spec.email                 = ['peter@nagy.consulting']
   spec.homepage              = 'https://www.nagy.consulting'
   spec.summary               = 'Barion payment engine for Ruby on Rails'
@@ -27,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'faker', '~> 2.15'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'rake', '~> 13.0'
+  spec.add_development_dependency 'solargraph', '~> 0.44'
   spec.add_development_dependency 'sqlite3', '~> 1.4'
   spec.add_development_dependency 'vcr', '~>6.0'
   spec.add_development_dependency 'webmock', '~>3.12'
