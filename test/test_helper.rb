@@ -11,7 +11,7 @@ if ENV['CODECOV']
 
   ::Minitest::Reporters.use! [
     ::Minitest::Reporters::MeanTimeReporter.new,
-    ::Minitest::Reporters::JUnitReporter.new(ENV['TESTRESULTS_REPORTS'])
+    ::Minitest::Reporters::JUnitReporter.new(ENV.fetch('TESTRESULTS_REPORTS'))
   ]
 end
 require_relative '../test/dummy/config/environment'
@@ -50,6 +50,6 @@ require 'English'
 ::VCR.configure do |config|
   config.cassette_library_dir = 'test/recorded_ios'
   config.hook_into :webmock
-  config.filter_sensitive_data('<POSKEY>') { ENV['TEST_POSKEY'] }
-  config.filter_sensitive_data('<PAYEE>') { ENV['TEST_PAYEE'] }
+  config.filter_sensitive_data('<POSKEY>') { ENV.fetch('TEST_POSKEY') }
+  config.filter_sensitive_data('<PAYEE>') { ENV.fetch('TEST_PAYEE') }
 end

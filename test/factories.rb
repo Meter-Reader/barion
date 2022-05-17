@@ -27,14 +27,14 @@ FactoryBot.define do
 
   factory :fix_barion_payment_transaction, class: '::Barion::PaymentTransaction' do
     pos_transaction_id { 'PosTr1' }
-    payee { ENV['TEST_PAYEE'] }
+    payee { ENV.fetch('TEST_PAYEE') }
   end
 
   factory :barion_payment, class: '::Barion::Payment' do
     after(:build) { |p| p.refresh_checksum }
 
     factory :fix_barion_payment do
-      poskey { ENV['TEST_POSKEY'] }
+      poskey { ENV.fetch('TEST_POSKEY') }
     end
   end
 
