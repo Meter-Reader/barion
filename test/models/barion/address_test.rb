@@ -15,7 +15,7 @@
 #  zip        :string(16)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  payment_id :bigint
+#  payment_id :integer
 #
 # Indexes
 #

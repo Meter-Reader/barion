@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_01_120609) do
-
+ActiveRecord::Schema[7.0].define(version: 2021_02_01_120609) do
   create_table "barion_addresses", force: :cascade do |t|
     t.string "country", limit: 2, default: "zz", null: false
     t.string "zip", limit: 16
@@ -21,9 +20,9 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "street2", limit: 50
     t.string "street3", limit: 50
     t.string "full_name", limit: 45
-    t.bigint "payment_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.integer "payment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["city"], name: "index_barion_addresses_on_city"
     t.index ["country"], name: "index_barion_addresses_on_country"
     t.index ["full_name"], name: "index_barion_addresses_on_full_name"
@@ -35,8 +34,8 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.decimal "amount", null: false
     t.integer "count", null: false
     t.integer "purchase_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["purchase_id"], name: "index_barion_gift_card_purchases_on_purchase_id"
   end
 
@@ -55,23 +54,23 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
 
   create_table "barion_payer_accounts", force: :cascade do |t|
     t.string "account_id", limit: 64
-    t.datetime "account_created"
+    t.datetime "account_created", precision: nil
     t.integer "account_creation_indicator", limit: 3
-    t.datetime "account_last_changed"
+    t.datetime "account_last_changed", precision: nil
     t.integer "account_change_indicator", limit: 3
-    t.datetime "password_last_changed"
+    t.datetime "password_last_changed", precision: nil
     t.integer "password_change_indicator", limit: 3
     t.integer "purchases_in_the_last_6_months"
-    t.datetime "shipping_address_added"
+    t.datetime "shipping_address_added", precision: nil
     t.integer "shipping_address_usage_indicator", limit: 3
     t.integer "provision_attempts"
     t.integer "transactional_activity_per_day"
     t.integer "transactional_activity_per_year"
-    t.datetime "payment_method_added"
+    t.datetime "payment_method_added", precision: nil
     t.integer "suspicious_activity_indicator", limit: 1, default: 0
-    t.bigint "payment_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.integer "payment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["account_id"], name: "index_barion_payer_accounts_on_account_id"
     t.index ["payment_id"], name: "index_barion_payer_accounts_on_payment_id"
   end
@@ -81,17 +80,17 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "payee", null: false
     t.decimal "total", null: false
     t.string "comment"
-    t.bigint "payee_transactions_id"
-    t.bigint "payment_id"
+    t.integer "payee_transactions_id"
+    t.integer "payment_id"
     t.integer "status", default: 0, null: false
     t.string "transaction_id"
     t.string "currency", limit: 3
-    t.datetime "transaction_time"
+    t.datetime "transaction_time", precision: nil
     t.string "payer"
     t.integer "transaction_type"
     t.string "related_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["payee"], name: "index_barion_payment_transactions_on_payee"
     t.index ["payee_transactions_id"], name: "index_barion_payment_transactions_on_payee_transactions_id"
     t.index ["payment_id"], name: "index_barion_payment_transactions_on_payment_id"
@@ -135,17 +134,17 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
     t.string "pos_owner_email"
     t.string "pos_owner_country"
     t.integer "funding_source"
-    t.datetime "created_at_barion"
-    t.datetime "started_at"
-    t.datetime "completed_at"
-    t.datetime "valid_until"
-    t.datetime "reserved_until"
-    t.datetime "delayed_capture_until"
+    t.datetime "created_at_barion", precision: nil
+    t.datetime "started_at", precision: nil
+    t.datetime "completed_at", precision: nil
+    t.datetime "valid_until", precision: nil
+    t.datetime "reserved_until", precision: nil
+    t.datetime "delayed_capture_until", precision: nil
     t.decimal "total"
     t.string "suggested_local"
     t.integer "fraud_risk_score"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["order_number"], name: "index_barion_payments_on_order_number"
     t.index ["payment_id"], name: "index_barion_payments_on_payment_id"
     t.index ["payment_request_id"], name: "index_barion_payments_on_payment_request_id"
@@ -158,17 +157,17 @@ ActiveRecord::Schema.define(version: 2021_02_01_120609) do
   create_table "barion_purchases", force: :cascade do |t|
     t.integer "delivery_timeframe"
     t.string "delivery_email_address"
-    t.datetime "pre_order_date"
+    t.datetime "pre_order_date", precision: nil
     t.integer "availability_indicator"
     t.integer "re_order_indicator"
     t.integer "shipping_address_indicator"
-    t.datetime "recurring_expiry"
+    t.datetime "recurring_expiry", precision: nil
     t.integer "recurring_frequency", limit: 4
     t.integer "purchase_type"
-    t.datetime "purchase_date"
-    t.bigint "payment_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "purchase_date", precision: nil
+    t.integer "payment_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["delivery_email_address"], name: "index_barion_purchases_on_delivery_email_address"
     t.index ["delivery_timeframe"], name: "index_barion_purchases_on_delivery_timeframe"
     t.index ["payment_id"], name: "index_barion_purchases_on_payment_id"

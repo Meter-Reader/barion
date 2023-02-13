@@ -22,7 +22,7 @@
 #  created_at                       :datetime         not null
 #  updated_at                       :datetime         not null
 #  account_id                       :string(64)
-#  payment_id                       :bigint
+#  payment_id                       :integer
 #
 # Indexes
 #

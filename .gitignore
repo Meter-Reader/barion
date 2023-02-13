@@ -10,3 +10,4 @@ test/dummy/tmp/
 test-results/**
 .rbenv-vars
 barion-*.gem
+.history/

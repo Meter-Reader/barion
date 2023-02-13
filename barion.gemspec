@@ -8,12 +8,12 @@ require 'barion/version'
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |spec|
   spec.name                  = 'barion'
-  spec.version               = ::Barion::VERSION
-  spec.required_ruby_version = '>= 2.5.0'
+  spec.version               = Barion::VERSION
+  spec.required_ruby_version = '>= 2.7.0'
   spec.authors               = ['Péter Nagy']
   spec.metadata              = { 'rubygems_mfa_required' => 'true' }
-  spec.email                 = ['peter@nagy.consulting']
-  spec.homepage              = 'https://www.nagy.consulting'
+  spec.email                 = ['peter@antronin.consulting']
+  spec.homepage              = 'https://antronin.consulting'
   spec.summary               = 'Barion payment engine for Ruby on Rails'
   spec.description           = <<-DESC
   This is a Ruby-on-Rails engine to use the Barion Payment Gateway in any RoR application.
@@ -22,10 +22,10 @@ Gem::Specification.new do |spec|
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
-  spec.add_dependency 'rails', '~> 6.1'
+  spec.add_dependency 'rails', '~> 7.0'
   spec.add_runtime_dependency 'rest-client', '~> 2.1'
 
-  spec.add_development_dependency 'faker', '~> 2.15'
+  spec.add_development_dependency 'faker', '~> 3.1'
   spec.add_development_dependency 'minitest', '~> 5.0'
   spec.add_development_dependency 'rake', '~> 13.0'
   spec.add_development_dependency 'solargraph', '~> 0.44'

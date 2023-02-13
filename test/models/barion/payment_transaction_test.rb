@@ -15,8 +15,8 @@
 #  transaction_type      :integer
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  payee_transactions_id :bigint
-#  payment_id            :bigint
+#  payee_transactions_id :integer
+#  payment_id            :integer
 #  pos_transaction_id    :string           not null
 #  related_id            :string
 #  transaction_id        :string
