@@ -22,7 +22,7 @@ Or install it yourself as:
 $ gem install barion
 ```
 ## Usage
-### Intitalization
+### Initalization
 After installing the gem you have to initalize it.
 Just create a file in `config/initializers/barion.rb` with the below content:
 ```ruby
