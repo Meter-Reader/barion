@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Barion
-  VERSION = '0.2.2'
+  VERSION = '0.3.3'
 end
