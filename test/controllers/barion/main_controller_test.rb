@@ -1,4 +1,4 @@
-# frozen_String_literal: true
+# frozen_string_literal: true
 
 module Barion
   class MainControllerTest < ActionDispatch::IntegrationTest
