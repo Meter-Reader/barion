@@ -1,7 +1,8 @@
 repo_name: Meter-Reader/barion
 report_id: 0c237e51b41fd4674aaa239c0f08f626
+version: 0.1
 repo_type: Public
-timestamp: '2023-11-09T15:46:48+00:00'
+timestamp: '2024-01-04T15:02:03+00:00'
 requested_by: Antronin
 provider: github
 branch: main
@@ -15,6 +16,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/6727/css.png
+  detection_source_url: https://github.com/Meter-Reader/barion
   detection_source: Repo Metadata
 - name: JavaScript
   description: Lightweight, interpreted, object-oriented language with first-class
@@ -25,6 +27,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1209/javascript.jpeg
+  detection_source_url: https://github.com/Meter-Reader/barion
   detection_source: Repo Metadata
 - name: Ruby
   description: A dynamic, interpreted, open source programming language with a focus
@@ -35,6 +38,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Languages
   image_url: https://img.stackshare.io/service/989/ruby.png
+  detection_source_url: https://github.com/Meter-Reader/barion
   detection_source: Repo Metadata
 - name: Rails
   description: Web development that doesn't hurt
@@ -46,7 +50,7 @@ tools:
   category: Languages & Frameworks
   sub_category: Frameworks (Full Stack)
   image_url: https://img.stackshare.io/service/990/x57_Lorv.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: barion.gemspec
   last_updated_by: Peter Nagy
   last_updated_on: 2023-02-13 09:09:29.000000000 Z
@@ -59,6 +63,7 @@ tools:
   category: Data Stores
   sub_category: Databases
   image_url: https://img.stackshare.io/service/1071/sqlite.jpg
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/barion.gemspec
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2020-12-16 23:37:20.000000000 Z
@@ -70,6 +75,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Code Coverage
   image_url: https://img.stackshare.io/service/2673/Codecov_Mark_Circle_Pink.png
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2021-02-03 15:49:43.000000000 Z
@@ -81,6 +87,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source_url: https://github.com/Meter-Reader/barion
   detection_source: Repo Metadata
 - name: GitHub Actions
   description: Automate your workflow from idea to production
@@ -90,7 +97,8 @@ tools:
   category: Build, Test, Deploy
   sub_category: Continuous Integration
   image_url: https://img.stackshare.io/service/11563/actions.png
-  detection_source: ".github/workflows/ruby.yml"
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/.github/workflows/brakeman-analysis.yml
+  detection_source: ".github/workflows/brakeman-analysis.yml"
   last_updated_by: Peter Nagy
   last_updated_on: 2021-03-24 03:41:43.000000000 Z
 - name: RuboCop
@@ -103,7 +111,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Code Review
   image_url: https://img.stackshare.io/service/2643/rubocop.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2020-12-16 23:37:20.000000000 Z
@@ -115,6 +123,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Package Managers
   image_url: https://img.stackshare.io/service/12795/5jL6-BA5_400x400.jpeg
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/barion.gemspec
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2021-03-26 10:19:16.000000000 Z
@@ -126,6 +135,7 @@ tools:
   category: Build, Test, Deploy
   sub_category: Front End Package Manager
   image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/barion.gemspec
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2020-12-16 23:37:20.000000000 Z
@@ -139,7 +149,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/19550/default_65fd8d3cf98551f2f8f1e0cffcf1132cb03ee4fd.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2021-01-29 09:54:05.000000000 Z
@@ -154,7 +164,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/19629/default_c20e52921fb58565300f75e5cc64e8813f40ba54.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2021-01-29 09:54:05.000000000 Z
@@ -169,7 +179,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/19040/default_6307a3eb8ac1c7d425b9163e046ba444d20d3abd.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2021-02-17 10:29:16.000000000 Z
@@ -184,7 +194,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18818/default_f36df1cfa9ff6061d7f9b4879088be8538581c49.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2020-12-16 23:37:20.000000000 Z
@@ -199,7 +209,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18888/default_1e22ca9f3f63a8c93249bae500705b9451e7e882.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2021-01-29 09:54:05.000000000 Z
@@ -213,7 +223,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/19219/default_f352021386dfaad6b71642abfc8f9666fd206ac8.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2021-01-29 09:54:05.000000000 Z
@@ -227,7 +237,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18812/default_f582e4648f4682adb72d2b201218cda7f8e894ac.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2021-01-29 09:54:05.000000000 Z
@@ -241,7 +251,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18836/default_669e0ebb464c584b580cfec09e646fddff70c02a.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2021-01-29 09:54:05.000000000 Z
@@ -255,7 +265,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/19526/default_094c86977512a69c9da9fafbee53c1a343f675a1.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2021-01-29 09:54:05.000000000 Z
@@ -270,7 +280,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18819/default_6564ae059af6c4ea7065fd2329370c7a05341cf8.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2021-02-03 15:49:43.000000000 Z
@@ -285,7 +295,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18842/default_49e8e438a279d3b7963273823890f9482ce83fb4.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2020-12-16 23:37:20.000000000 Z
@@ -300,7 +310,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18824/default_6564ae059af6c4ea7065fd2329370c7a05341cf8.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2021-03-19 22:03:59.000000000 Z
@@ -314,7 +324,7 @@ tools:
   category: Libraries
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18825/default_b8fbb83e23c963442e15398c5b56262cc6267d6f.png
-  detection_source_url: Gemfile.lock
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2021-01-29 09:54:05.000000000 Z
