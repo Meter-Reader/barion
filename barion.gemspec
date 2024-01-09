@@ -9,7 +9,7 @@ require 'barion/version'
 Gem::Specification.new do |spec|
   spec.name                  = 'barion'
   spec.version               = Barion::VERSION
-  spec.required_ruby_version = '>= 2.7.0'
+  spec.required_ruby_version = '>= 3.0.0'
   spec.authors               = ['Péter Nagy']
   spec.metadata              = { 'rubygems_mfa_required' => 'true' }
   spec.email                 = ['peter@antronin.consulting']
