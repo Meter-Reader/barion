@@ -38,6 +38,8 @@ jobs:
         bundler-cache: true # runs 'bundle install' and caches installed gems automatically
     - name: Reset db
       run: bundle exec rails db:reset
+    - name: Migrate db
+      run: bundle exec rails db:migrate
     - name: Run tests
       run: bundle exec rails test
     - uses: codecov/codecov-action@v1
