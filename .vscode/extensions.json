@@ -1,14 +1,13 @@
 {
     "recommendations": [
       "connorshea.vscode-ruby-test-adapter",
-      "castwide.solargraph",
       "editorconfig.editorconfig",
       "dbaeumer.jshint",
-      "bung87.rails",
-      "rebornix.ruby",
-      "castwide.ruby-debug",
       "misogi.ruby-rubocop",
       "ms-vscode.test-adapter-converter",
-      "bung87.vscode-gemfile"
+      "shopify.ruby-extensions-pack",
+      "koichisasada.vscode-rdbg",
+      "shopify.ruby-lsp",
+      "sorbet.sorbet-vscode-extension"
     ]
 }
