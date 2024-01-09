@@ -91,14 +91,14 @@ module Barion
         unit_price: 12,
         payment_transaction: @transaction
       )
-      assert_equal 195, @transaction.total
-      assert_equal '195.0', @transaction.as_json['Total']
+      assert_equal 147, @transaction.total
+      assert_equal '147.0', @transaction.as_json['Total']
       @transaction.total = 10
       assert_equal 10, @transaction.total
       assert_equal '10.0', @transaction.as_json['Total']
       @transaction.total = nil
-      assert_equal 195, @transaction.total
-      assert_equal '195.0', @transaction.as_json['Total']
+      assert_equal 147, @transaction.total
+      assert_equal '147.0', @transaction.as_json['Total']
       assert_valid @transaction
     end
 
