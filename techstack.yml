@@ -2,11 +2,11 @@ repo_name: Meter-Reader/barion
 report_id: 0c237e51b41fd4674aaa239c0f08f626
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-05T09:18:57+00:00'
+timestamp: '2024-01-11T12:25:47+00:00'
 requested_by: Antronin
 provider: github
 branch: main
-detected_tools_count: 24
+detected_tools_count: 25
 tools:
 - name: CSS 3
   description: The latest evolution of the Cascading Style Sheets language
@@ -43,7 +43,7 @@ tools:
 - name: Rails
   description: Web development that doesn't hurt
   website_url: http://rubyonrails.org/
-  version: 7.0.4
+  version: 7.1.2
   license: MIT
   open_source: true
   hosted_saas: false
@@ -63,8 +63,8 @@ tools:
   category: Data Stores
   sub_category: Databases
   image_url: https://img.stackshare.io/service/1071/sqlite.jpg
-  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/barion.gemspec
-  detection_source: barion.gemspec
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile
+  detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2020-12-16 23:37:20.000000000 Z
 - name: Codecov
@@ -77,8 +77,8 @@ tools:
   image_url: https://img.stackshare.io/service/2673/Codecov_Mark_Circle_Pink.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile
   detection_source: Gemfile
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-02-03 15:49:43.000000000 Z
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: Git
   description: Fast, scalable, distributed revision control system
   website_url: http://git-scm.com/
@@ -104,7 +104,7 @@ tools:
 - name: RuboCop
   description: A Ruby static code analyzer, based on the community Ruby style guide
   website_url: http://batsov.com/rubocop/
-  version: 1.45.1
+  version: 1.59.0
   license: MIT
   open_source: true
   hosted_saas: false
@@ -127,18 +127,6 @@ tools:
   detection_source: barion.gemspec
   last_updated_by: Péter Nagy
   last_updated_on: 2021-03-26 10:19:16.000000000 Z
-- name: npm
-  description: The package manager for JavaScript.
-  website_url: https://www.npmjs.com/
-  open_source: false
-  hosted_saas: false
-  category: Build, Test, Deploy
-  sub_category: Front End Package Manager
-  image_url: https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png
-  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/barion.gemspec
-  detection_source: barion.gemspec
-  last_updated_by: Péter Nagy
-  last_updated_on: 2020-12-16 23:37:20.000000000 Z
 - name: annotate
   description: Annotates Rails/ActiveRecord Models
   package_url: https://rubygems.org/annotate
@@ -151,8 +139,8 @@ tools:
   image_url: https://img.stackshare.io/package/19550/default_65fd8d3cf98551f2f8f1e0cffcf1132cb03ee4fd.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-01-29 09:54:05.000000000 Z
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: debase
   description: Debase is a fast implementation of the standard Ruby debugger debug.rb
     for Ruby 2.0
@@ -166,13 +154,13 @@ tools:
   image_url: https://img.stackshare.io/package/19629/default_c20e52921fb58565300f75e5cc64e8813f40ba54.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-01-29 09:54:05.000000000 Z
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: factory_bot_rails
   description: Factory_bot_rails provides integration between factory_bot and rails
     4.2 or newer
   package_url: https://rubygems.org/factory_bot_rails
-  version: 6.2.0
+  version: 6.4.3
   license: MIT
   open_source: true
   hosted_saas: false
@@ -181,13 +169,27 @@ tools:
   image_url: https://img.stackshare.io/package/19040/default_6307a3eb8ac1c7d425b9163e046ba444d20d3abd.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-02-17 10:29:16.000000000 Z
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
+- name: faker
+  description: Faker
+  package_url: https://rubygems.org/faker
+  version: 3.2.2
+  license: MIT
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: RubyGems Packages
+  image_url: https://img.stackshare.io/package/18897/default_31c6044490fb5c1bec1388b8ceb466b6ac78ae92.png
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
+  detection_source: Gemfile
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: minitest
   description: Minitest provides a complete suite of testing facilities supporting
     TDD, BDD, mocking, and benchmarking
   package_url: https://rubygems.org/minitest
-  version: 5.17.0
+  version: 5.20.0
   license: MIT
   open_source: true
   hosted_saas: false
@@ -195,14 +197,14 @@ tools:
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18818/default_f36df1cfa9ff6061d7f9b4879088be8538581c49.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
-  detection_source: barion.gemspec
-  last_updated_by: Péter Nagy
-  last_updated_on: 2020-12-16 23:37:20.000000000 Z
+  detection_source: Gemfile
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: minitest-reporters
   description: Death to haphazard monkey-patching! Extend Minitest through simple
     hooks
   package_url: https://rubygems.org/minitest-reporters
-  version: 1.5.0
+  version: 1.6.1
   license: MIT
   open_source: true
   hosted_saas: false
@@ -211,12 +213,12 @@ tools:
   image_url: https://img.stackshare.io/package/18888/default_1e22ca9f3f63a8c93249bae500705b9451e7e882.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-01-29 09:54:05.000000000 Z
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: overcommit
   description: Utility to install, configure, and extend Git hooks
   package_url: https://rubygems.org/overcommit
-  version: 0.60.0
+  version: 0.61.0
   license: MIT
   open_source: true
   hosted_saas: false
@@ -225,12 +227,12 @@ tools:
   image_url: https://img.stackshare.io/package/19219/default_f352021386dfaad6b71642abfc8f9666fd206ac8.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-01-29 09:54:05.000000000 Z
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: rake
   description: Rake is a Make-like program implemented in Ruby
   package_url: https://rubygems.org/rake
-  version: 13.0.6
+  version: 13.1.0
   license: MIT
   open_source: true
   hosted_saas: false
@@ -238,9 +240,9 @@ tools:
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18812/default_f582e4648f4682adb72d2b201218cda7f8e894ac.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
-  detection_source: barion.gemspec
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-01-29 09:54:05.000000000 Z
+  detection_source: Gemfile
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: rest-client
   description: A simple HTTP and REST client for Ruby
   package_url: https://rubygems.org/rest-client
@@ -267,8 +269,8 @@ tools:
   image_url: https://img.stackshare.io/package/19526/default_094c86977512a69c9da9fafbee53c1a343f675a1.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-01-29 09:54:05.000000000 Z
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: simplecov
   description: Code coverage for Ruby 1.9+ with a powerful configuration library and
     automatic merging of coverage across test suites
@@ -282,13 +284,28 @@ tools:
   image_url: https://img.stackshare.io/package/18819/default_6564ae059af6c4ea7065fd2329370c7a05341cf8.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
   detection_source: Gemfile
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-02-03 15:49:43.000000000 Z
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
+- name: sqlite3
+  description: This module allows Ruby programs to interface with the SQLite3 database
+    engine
+  package_url: https://rubygems.org/sqlite3
+  version: 1.7.0
+  license: BSD-3-Clause
+  open_source: true
+  hosted_saas: false
+  category: Libraries
+  sub_category: RubyGems Packages
+  image_url: https://img.stackshare.io/package/18820/default_6564ae059af6c4ea7065fd2329370c7a05341cf8.png
+  detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
+  detection_source: Gemfile
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: vcr
   description: Record your test suite's HTTP interactions and replay them during future
     test runs for fast
   package_url: https://rubygems.org/vcr
-  version: 6.1.0
+  version: 6.2.0
   license: MIT
   open_source: true
   hosted_saas: false
@@ -296,14 +313,14 @@ tools:
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18842/default_49e8e438a279d3b7963273823890f9482ce83fb4.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
-  detection_source: barion.gemspec
+  detection_source: Gemfile
   last_updated_by: Péter Nagy
   last_updated_on: 2020-12-16 23:37:20.000000000 Z
 - name: webmock
   description: WebMock allows stubbing HTTP requests and setting expectations on HTTP
     requests
   package_url: https://rubygems.org/webmock
-  version: 3.18.1
+  version: 3.19.1
   license: MIT
   open_source: true
   hosted_saas: false
@@ -311,13 +328,13 @@ tools:
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18824/default_6564ae059af6c4ea7065fd2329370c7a05341cf8.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
-  detection_source: barion.gemspec
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-03-19 22:03:59.000000000 Z
+  detection_source: Gemfile
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
 - name: yard
   description: YARD is a documentation generation tool for the Ruby programming language
   package_url: https://rubygems.org/yard
-  version: 0.9.28
+  version: 0.9.34
   license: MIT
   open_source: true
   hosted_saas: false
@@ -325,6 +342,6 @@ tools:
   sub_category: RubyGems Packages
   image_url: https://img.stackshare.io/package/18825/default_b8fbb83e23c963442e15398c5b56262cc6267d6f.png
   detection_source_url: https://github.com/Meter-Reader/barion/blob/main/Gemfile.lock
-  detection_source: barion.gemspec
-  last_updated_by: Péter Nagy
-  last_updated_on: 2021-01-29 09:54:05.000000000 Z
+  detection_source: Gemfile
+  last_updated_by: Peter Nagy
+  last_updated_on: 2024-01-09 14:44:43.000000000 Z
