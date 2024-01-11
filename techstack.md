@@ -36,7 +36,7 @@ Full tech stack [here](/techstack.md)
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [Meter-Reader/barion](https://github.com/Meter-Reader/barion)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|24<br/>Tools used|01/05/24 <br/>Report generated|
+|25<br/>Tools used|01/11/24 <br/>Report generated|
 |------|------|
 </div>
 
@@ -76,7 +76,7 @@ Full tech stack [here](/techstack.md)
   <br>
   <sub><a href="http://rubyonrails.org/">Rails</a></sub>
   <br>
-  <sub>v7.0.4</sub>
+  <sub>v7.1.2</sub>
 </td>
 
 </tr>
@@ -95,7 +95,7 @@ Full tech stack [here](/techstack.md)
 </tr>
 </table>
 
-## <img src='https://img.stackshare.io/devops.svg'/> DevOps (6)
+## <img src='https://img.stackshare.io/devops.svg'/> DevOps (5)
 <table><tr>
   <td align='center'>
   <img width='36' height='36' src='https://img.stackshare.io/service/2673/Codecov_Mark_Circle_Pink.png' alt='Codecov'>
@@ -126,7 +126,7 @@ Full tech stack [here](/techstack.md)
   <br>
   <sub><a href="http://batsov.com/rubocop/">RuboCop</a></sub>
   <br>
-  <sub>v1.45.1</sub>
+  <sub>v1.59.0</sub>
 </td>
 
 <td align='center'>
@@ -137,37 +137,31 @@ Full tech stack [here](/techstack.md)
   <sub></sub>
 </td>
 
-<td align='center'>
-  <img width='36' height='36' src='https://img.stackshare.io/service/1120/lejvzrnlpb308aftn31u.png' alt='npm'>
-  <br>
-  <sub><a href="https://www.npmjs.com/">npm</a></sub>
-  <br>
-  <sub></sub>
-</td>
-
 </tr>
 </table>
 
 
-## <img src='https://img.stackshare.io/group.svg' /> Open source packages (13)</h2>
+## <img src='https://img.stackshare.io/group.svg' /> Open source packages (15)</h2>
 
-## <img width='24' height='24' src='https://img.stackshare.io/service/12795/5jL6-BA5_400x400.jpeg'/> RubyGems (13)
+## <img width='24' height='24' src='https://img.stackshare.io/service/12795/5jL6-BA5_400x400.jpeg'/> RubyGems (15)
 
 |NAME|VERSION|LAST UPDATED|LAST UPDATED BY|LICENSE|VULNERABILITIES|
 |:------|:------|:------|:------|:------|:------|
-|[annotate](https://rubygems.org/annotate)|v3.2.0|01/29/21|Péter Nagy |Ruby|N/A|
-|[debase](https://rubygems.org/debase)|v0.2.4|01/29/21|Péter Nagy |MIT|N/A|
-|[factory_bot_rails](https://rubygems.org/factory_bot_rails)|v6.2.0|02/17/21|Péter Nagy |MIT|N/A|
-|[minitest](https://rubygems.org/minitest)|v5.17.0|12/16/20|Péter Nagy |MIT|N/A|
-|[minitest-reporters](https://rubygems.org/minitest-reporters)|v1.5.0|01/29/21|Péter Nagy |MIT|N/A|
-|[overcommit](https://rubygems.org/overcommit)|v0.60.0|01/29/21|Péter Nagy |MIT|N/A|
-|[rake](https://rubygems.org/rake)|v13.0.6|01/29/21|Péter Nagy |MIT|N/A|
+|[annotate](https://rubygems.org/annotate)|v3.2.0|01/09/24|Peter Nagy |Ruby|N/A|
+|[debase](https://rubygems.org/debase)|v0.2.4|01/09/24|Peter Nagy |MIT|N/A|
+|[factory_bot_rails](https://rubygems.org/factory_bot_rails)|v6.4.3|01/09/24|Peter Nagy |MIT|N/A|
+|[faker](https://rubygems.org/faker)|v3.2.2|01/09/24|Peter Nagy |MIT|N/A|
+|[minitest](https://rubygems.org/minitest)|v5.20.0|01/09/24|Peter Nagy |MIT|N/A|
+|[minitest-reporters](https://rubygems.org/minitest-reporters)|v1.6.1|01/09/24|Peter Nagy |MIT|N/A|
+|[overcommit](https://rubygems.org/overcommit)|v0.61.0|01/09/24|Peter Nagy |MIT|N/A|
+|[rake](https://rubygems.org/rake)|v13.1.0|01/09/24|Peter Nagy |MIT|N/A|
 |[rest-client](https://rubygems.org/rest-client)|v2.1.0|01/29/21|Péter Nagy |MIT|N/A|
-|[ruby-debug-ide](https://rubygems.org/ruby-debug-ide)|v0.7.3|01/29/21|Péter Nagy |MIT|N/A|
-|[simplecov](https://rubygems.org/simplecov)|v0.21.2|02/03/21|Péter Nagy |MIT|N/A|
-|[vcr](https://rubygems.org/vcr)|v6.1.0|12/16/20|Péter Nagy |MIT|N/A|
-|[webmock](https://rubygems.org/webmock)|v3.18.1|03/19/21|Péter Nagy |MIT|N/A|
-|[yard](https://rubygems.org/yard)|v0.9.28|01/29/21|Péter Nagy |MIT|N/A|
+|[ruby-debug-ide](https://rubygems.org/ruby-debug-ide)|v0.7.3|01/09/24|Peter Nagy |MIT|N/A|
+|[simplecov](https://rubygems.org/simplecov)|v0.21.2|01/09/24|Peter Nagy |MIT|N/A|
+|[sqlite3](https://rubygems.org/sqlite3)|v1.7.0|01/09/24|Peter Nagy |BSD-3-Clause|N/A|
+|[vcr](https://rubygems.org/vcr)|v6.2.0|12/16/20|Péter Nagy |MIT|N/A|
+|[webmock](https://rubygems.org/webmock)|v3.19.1|01/09/24|Peter Nagy |MIT|N/A|
+|[yard](https://rubygems.org/yard)|v0.9.34|01/09/24|Peter Nagy |MIT|N/A|
 
 <br/>
 <div align='center'>
