@@ -12,6 +12,7 @@ module Barion
   mattr_accessor :poskey, default: nil
   mattr_accessor :publickey, default: nil
   mattr_accessor :acronym, default: ''
+  mattr_accessor :pixel_id, default: ''
   mattr_accessor :sandbox, default: true
   mattr_accessor :default_payee
   mattr_accessor :user_class

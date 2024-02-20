@@ -37,6 +37,9 @@ module Barion
       ::Barion.publickey = 'test'
       assert_equal 'test', ::Barion.publickey
 
+      ::Barion.piyel_id = 'pixel_id'
+      assert_equal 'pixel_id', ::Barion.publickey
+
       ::Barion.acronym = 'test'
       assert_equal 'test', ::Barion.acronym
 
