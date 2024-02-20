@@ -9,6 +9,11 @@ module Barion
       assert_kind_of Module, Barion
     end
 
+    test 'Barion is a Rails engine' do
+      assert_includes Barion::Engine.ancestors, Rails::Engine
+      assert_equal Barion::Engine.engine_name, 'barion'
+    end
+
     test 'Barion engine has version number' do
       refute_nil ::Barion::VERSION
       assert_match(/(\d+\.){2}\d+\w*/, ::Barion::VERSION)
