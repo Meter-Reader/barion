@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'barion/engine'
+require 'barion/engine' if defined?(Rails::Engine)
 
 # Main module of Barion engine
 module Barion
