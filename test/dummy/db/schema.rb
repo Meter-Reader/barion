@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2021_02_01_120609) do
+ActiveRecord::Schema[7.1].define(version: 2021_02_01_120609) do
   create_table "barion_addresses", force: :cascade do |t|
     t.string "country", limit: 2, default: "zz", null: false
     t.string "zip", limit: 16

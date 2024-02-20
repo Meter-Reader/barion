@@ -7,7 +7,6 @@
       "ms-vscode.test-adapter-converter",
       "shopify.ruby-extensions-pack",
       "koichisasada.vscode-rdbg",
-      "shopify.ruby-lsp",
-      "sorbet.sorbet-vscode-extension"
+      "shopify.ruby-lsp"
     ]
 }

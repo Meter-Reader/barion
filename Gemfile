@@ -20,11 +20,8 @@ end
 
 group :development do
   gem 'annotate'
-  gem 'debase'
-
   gem 'faker'
   gem 'overcommit'
   gem 'rake'
-  gem 'ruby-debug-ide'
   gem 'yard'
 end
