@@ -24,6 +24,10 @@ PreCommit:
     enabled: true
     exclude:
       - '**/db/structure.sql' # Ignore trailing whitespace in generated files
+  EsLint:
+    required_executable: 'npm'
+    enabled: true
+    command: ['npm', 'run', 'lint', '--', '-f', 'compact']
 
   BundleAudit:
     enabled: true

@@ -11,3 +11,6 @@ test-results/**
 .rbenv-vars
 barion-*.gem
 .history/
+node_modules/
+package.json
+package-lock.json
