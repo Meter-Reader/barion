@@ -34,14 +34,12 @@ After installing the gem you have to initalize it.
 Just create a file in `config/initializers/barion.rb` with the below content:
 
 ```ruby
-::Barion.config do |shop|
-  shop.poskey = ''
-  shop.publickey = ''
-  shop.pixel_id = ''
-  shop.sandbox = true
-  shop.acronym = ''
-  shop.default_payee = ''
-end
+Barion.poskey = ''
+Barion.publickey = ''
+Barion.pixel_id = ''
+Barion.sandbox = true
+Barion.acronym = ''
+Barion.default_payee = ''
 ```
 
 #### POSKey and PublicKey (default: empty)
