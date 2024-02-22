@@ -30,23 +30,42 @@ module Barion
       refute_nil ::Barion::BASE_URL[:prod]
     end
 
-    test 'module can be configured' do
+    test 'poskey can be configured and accept string only' do
       ::Barion.poskey = 'test'
       assert_equal 'test', ::Barion.poskey
+      assert_raises(::ArgumentError) { ::Barion.poskey = [] }
+    end
 
+    test 'publickey can be configured and accept string only' do
       ::Barion.publickey = 'test'
       assert_equal 'test', ::Barion.publickey
+    end
 
+    test 'pixel_id can be configured and accept string only' do
+      assert_raises(::ArgumentError) { ::Barion.pixel_id = [] }
+
+      ::Barion.pixel_id = 'BP-1234567890-00'
+      assert_equal 'BP-1234567890-00', ::Barion.pixel_id
+
+      assert_raises(::ArgumentError) { ::Barion.pixel_id = 'pixel_id' }
+      refute_equal 'pixel_id', ::Barion.pixel_id
+    end
+
+    test 'acronym can be configured and accept string only' do
       ::Barion.acronym = 'test'
       assert_equal 'test', ::Barion.acronym
+    end
 
+    test 'sandboy can be configured and convert to boolean' do
       ::Barion.sandbox = true
       assert ::Barion.sandbox
       assert ::Barion.sandbox?
       ::Barion.sandbox = false
       refute ::Barion.sandbox
       refute ::Barion.sandbox?
+    end
 
+    test 'default_payee can be configured and accept string only' do
       ::Barion.default_payee = 'test'
       assert_equal 'test', ::Barion.default_payee
     end

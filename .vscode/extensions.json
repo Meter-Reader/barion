@@ -2,11 +2,11 @@
     "recommendations": [
       "connorshea.vscode-ruby-test-adapter",
       "editorconfig.editorconfig",
-      "dbaeumer.jshint",
       "misogi.ruby-rubocop",
       "ms-vscode.test-adapter-converter",
       "shopify.ruby-extensions-pack",
       "koichisasada.vscode-rdbg",
-      "shopify.ruby-lsp"
+      "shopify.ruby-lsp",
+      "dbaeumer.vscode-eslint"
     ]
 }

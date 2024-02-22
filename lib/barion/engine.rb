@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Module enclosing all Barion related functionality
 module Barion
   # Barion engine main class
   class Engine < ::Rails::Engine
@@ -10,5 +11,11 @@ module Barion
       g.fixture_replacement :factory_bot
       g.factory_bot dir: 'test/factories'
     end
+  end
+
+  ActiveSupport.on_load(:action_view) do
+    # self refers to ActiveRecord::Base here,
+    # so we can call .include
+    include ::Barion::PixelHelper
   end
 end

@@ -5,5 +5,6 @@
 #  shop.publickey = 'test2'
 #  shop.sandbox = true
 #  shop.acronym = ''
+#  shop.pixel_id = ''
 #  shop.default_payee = 'me@example.org'
 # end
