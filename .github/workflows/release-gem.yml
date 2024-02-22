@@ -9,6 +9,7 @@ on:
 jobs:
   push:
     name: Push gem to RubyGems.org
+    environment: production
     runs-on: ubuntu-latest
 
     permissions:
