@@ -9,6 +9,9 @@ module Barion
     prod: 'https://api.barion.com'
   }.freeze
 
+  PIXELID_PATTERN = ::Regexp.new('BP-\d{10}-\d{2}').freeze
+
+  # rubocop:disable Style/ClassVars
   mattr_accessor :poskey, default: nil
   mattr_accessor :publickey, default: nil
   mattr_accessor :acronym, default: ''
@@ -19,12 +22,29 @@ module Barion
   mattr_accessor :item_class
   mattr_accessor :rest_client_class, default: '::RestClient::Resource'
 
-  def self.sandbox?
-    !!sandbox
+  def self.poskey=(key)
+    raise ArgumentError, "::Barion.poskey must be set to a String, got #{key.inspect}" unless key.is_a?(String)
+
+    @@poskey = key
   end
 
-  def sandbox=(val)
-    super(!!val)
+  def self.sandbox?
+    sandbox
+  end
+
+  def self.sandbox=(val)
+    @@sandbox = !!val
+  end
+
+  def self.pixel_id=(id)
+    raise ArgumentError, "::Barion.pixel_id must be set to a String, got #{id.inspect}" unless id.is_a?(String)
+
+    if PIXELID_PATTERN.match(id).nil?
+      raise ::ArgumentError,
+            "String:'#{id}' is not in Barion Pixel ID format: 'BP-0000000000-00'"
+    end
+
+    @@pixel_id = id
   end
 
   def self.endpoint
@@ -32,7 +52,6 @@ module Barion
     rest_client_class.new BASE_URL[env]
   end
 
-  # rubocop:disable Style/ClassVars
   def self.user_class=(class_name)
     unless class_name.is_a?(String)
       raise ArgumentError, "Barion.user_class must be set to a String, got #{class_name.inspect}"
