@@ -41,11 +41,11 @@ module Barion
       assert_equal 'test', ::Barion.publickey
     end
 
-    test 'pixel_id can be configured and accept string only' do
+    test 'pixel_id can be configured and accept valid formatted string only' do
       assert_raises(::ArgumentError) { ::Barion.pixel_id = [] }
 
-      ::Barion.pixel_id = 'BP-1234567890-00'
-      assert_equal 'BP-1234567890-00', ::Barion.pixel_id
+      ::Barion.pixel_id = 'BP-abcdefgHij-00'
+      assert_equal 'BP-abcdefgHij-00', ::Barion.pixel_id
 
       assert_raises(::ArgumentError) { ::Barion.pixel_id = 'pixel_id' }
       refute_equal 'pixel_id', ::Barion.pixel_id

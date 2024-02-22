@@ -9,7 +9,7 @@ module Barion
     prod: 'https://api.barion.com'
   }.freeze
 
-  PIXELID_PATTERN = ::Regexp.new('BP-\d{10}-\d{2}').freeze
+  PIXELID_PATTERN = ::Regexp.new('BP-.{10}-\d{2}').freeze
 
   # rubocop:disable Style/ClassVars
   mattr_accessor :poskey, default: nil
