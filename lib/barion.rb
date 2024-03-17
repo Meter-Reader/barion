@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require 'barion/engine' if defined?(Rails::Engine)
+require 'barion/config'
 
 # Main module of Barion engine
+# rubocop:disable Metrics/ModuleLength
 module Barion
   BASE_URL = {
     test: 'https://api.test.barion.com',
@@ -11,89 +13,165 @@ module Barion
 
   PIXELID_PATTERN = ::Regexp.new('BP-.{10}-\d{2}').freeze
 
-  # rubocop:disable Style/ClassVars
-  mattr_accessor :poskey, default: nil
-  mattr_accessor :publickey, default: nil
-  mattr_accessor :acronym, default: ''
-  mattr_accessor :pixel_id, default: ''
-  mattr_accessor :sandbox, default: true
-  mattr_accessor :default_payee
-  mattr_accessor :user_class
-  mattr_accessor :item_class
-  mattr_accessor :rest_client_class, default: '::RestClient::Resource'
-
-  def self.poskey=(key)
-    raise ArgumentError, "::Barion.poskey must be set to a String, got #{key.inspect}" unless key.is_a?(String)
-
-    @@poskey = key
+  def self.deprecator
+    @deprecator ||= ActiveSupport::Deprecation.new('1.0', 'Barion')
   end
 
-  def self.sandbox?
-    sandbox
+  def self.config
+    ::Barion::Config.instance
+  end
+
+  def self.sandbox
+    config.sandbox
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
   def self.sandbox=(val)
-    @@sandbox = !!val
+    config.sandbox = val
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
-  def self.pixel_id=(id)
-    raise ArgumentError, "::Barion.pixel_id must be set to a String, got #{id.inspect}" unless id.is_a?(String)
-
-    if PIXELID_PATTERN.match(id).nil?
-      raise ::ArgumentError,
-            "String:'#{id}' is not in Barion Pixel ID format: 'BP-0000000000-00'"
-    end
-
-    @@pixel_id = id
+  def self.sandbox?
+    config.sandbox?
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
-  def self.endpoint
-    env = sandbox? ? :test : :prod
-    rest_client_class.new BASE_URL[env]
+  def self.poskey
+    config.poskey
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
-  def self.user_class=(class_name)
-    unless class_name.is_a?(String)
-      raise ArgumentError, "Barion.user_class must be set to a String, got #{class_name.inspect}"
-    end
+  def self.poskey=(val)
+    config.poskey = (val)
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
 
-    @@user_class = class_name
+  def self.publickey
+    config.publickey
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
+
+  def self.publickey=(val)
+    config.publickey = (val)
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
+
+  def self.acronym
+    config.acronym
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
+
+  def self.acronym=(val)
+    config.acronym = val
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
+
+  def self.pixel_id
+    config.pixel_id
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
+
+  def self.pixel_id=(val)
+    config.pixel_id = val
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
+
+  def self.default_payee
+    config.default_payee
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
+
+  def self.default_payee=(val)
+    config.default_payee = val
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
   def self.user_class
-    # This is nil before the initializer is installed.
-    return nil if @@user_class.nil?
-
-    @@user_class.constantize
+    config.user_class
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
-  def self.item_class=(class_name)
-    unless class_name.is_a?(String)
-      raise ArgumentError, "Barion.item_class must be set to a String, got #{class_name.inspect}"
-    end
-
-    @@item_class = class_name
+  def self.user_class=(val)
+    config.user_class = val
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
   def self.item_class
-    # This is nil before the initializer is installed.
-    return nil if @@item_class.nil?
+    config.item_class
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
+  end
 
-    @@item_class.constantize
+  def self.item_class=(val)
+    config.item_class = val
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
   def self.rest_client_class
-    @@rest_client_class.constantize
+    config.rest_client_class
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
 
-  def self.rest_client_class=(class_name)
-    unless class_name.is_a?(String)
-      raise ArgumentError, "Barion.rest_client_class must be set to a String, got #{class_name.inspect}"
-    end
-
-    @@rest_client_class = class_name
+  def self.rest_client_class=(val)
+    config.rest_client_class = val
+    deprecator.warn(
+      "#{__method__} is deprecated. " \
+      "Use ::Barion.config.#{__method__} instead."
+    )
   end
-  # rubocop:enable Style/ClassVars
 
   # Error to signal the data in the db has been changed since saving it
   class TamperedData < RuntimeError
@@ -118,3 +196,4 @@ module Barion
     end
   end
 end
+# rubocop:enable Metrics/ModuleLength

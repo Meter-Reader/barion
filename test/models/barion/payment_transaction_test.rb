@@ -42,8 +42,8 @@ module Barion
   class PaymentTransactionTest < ActiveSupport::TestCase
     setup do
       ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
-      ::Barion.poskey = 'test'
-      ::Barion.default_payee = 'payee@test'
+      ::Barion.config.poskey = 'test'
+      ::Barion.config.default_payee = 'payee@test'
       @transaction = build(:barion_payment_transaction)
       @transaction.payment = build(:barion_payment)
       @transaction.items << build(:barion_item)
@@ -69,7 +69,7 @@ module Barion
     end
 
     test 'payee is mandatory and has default' do
-      assert_equal ::Barion.default_payee, @transaction.payee
+      assert_equal ::Barion.config.default_payee, @transaction.payee
       assert_valid @transaction
       @transaction.payee = nil
       refute_valid @transaction

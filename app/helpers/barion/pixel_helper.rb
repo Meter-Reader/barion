@@ -16,7 +16,7 @@ module Barion
       scriptElement.async = true;
       scriptElement.src = 'https://pixel.barion.com/bp.js';
       firstScript.parentNode.insertBefore(scriptElement, firstScript);
-      window['barion_pixel_id'] = '#{::Barion.pixel_id}';
+      window['barion_pixel_id'] = '#{::Barion.config.pixel_id}';
       // Send init event
       bp('init', 'addBarionPixelId', window['barion_pixel_id']);'
 ).gsub!(/^#{[/\A\s*/]}/, '')
@@ -27,7 +27,7 @@ module Barion
         tag.img height: 1, width: 1,
                 style: 'display:none',
                 alt: 'Barion Pixel',
-                src: "https://pixel.barion.com/a.gif?ba_pixel_id='#{::Barion.pixel_id}'&ev=contentView&noscript=1"
+                src: "https://pixel.barion.com/a.gif?ba_pixel_id='#{::Barion.config.pixel_id}'&ev=contentView&noscript=1"
       end
     end
 

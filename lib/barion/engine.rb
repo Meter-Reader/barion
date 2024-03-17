@@ -18,4 +18,8 @@ module Barion
     # so we can call .include
     include ::Barion::PixelHelper
   end
+
+  def self.deprecator
+    @deprecator ||= ActiveSupport::Deprecation.new('1.0', 'Barion')
+  end
 end

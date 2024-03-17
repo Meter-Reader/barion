@@ -7,19 +7,19 @@ module Barion
     include Barion::PixelHelper
 
     setup do
-      ::Barion.pixel_id = 'BP-1234567890-12'
+      ::Barion.config.pixel_id = 'BP-1234567890-12'
     end
 
     test 'JS contains pixel ID' do
-      assert_match(/#{::Barion.pixel_id}/, pixel_basic_js)
+      assert_match(/#{::Barion.config.pixel_id}/, pixel_basic_js)
     end
 
     test 'Noscript contains pixel ID' do
-      assert_match(/#{::Barion.pixel_id}/, pixel_basic_noscript)
+      assert_match(/#{::Barion.config.pixel_id}/, pixel_basic_noscript)
     end
 
     test 'all tags contains pixel ID' do
-      assert_match(/#{::Barion.pixel_id}/, pixel_basic_tags)
+      assert_match(/#{::Barion.config.pixel_id}/, pixel_basic_tags)
     end
   end
 end

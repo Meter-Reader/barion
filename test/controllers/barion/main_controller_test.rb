@@ -7,10 +7,10 @@ module Barion
     def setup
       @routes = ::Barion::Engine.routes
       @routes.default_url_options[:host] = 'example.com'
-      ::Barion.sandbox = true
+      ::Barion.config.sandbox = true
       @poskey = 'test_poskey'
-      ::Barion.poskey = @poskey
-      ::Barion.default_payee = 'test'
+      ::Barion.config.poskey = @poskey
+      ::Barion.config.default_payee = 'test'
       @payment = build(:fix_barion_payment)
       tr = build(:fix_barion_payment_transaction)
       tr.items << build(:fix_barion_item)

@@ -68,10 +68,10 @@ module Barion
   class PaymentTest < ActiveSupport::TestCase
     setup do
       ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
-      ::Barion.sandbox = true
+      ::Barion.config.sandbox = true
       @poskey = 'test_poskey'
-      ::Barion.poskey = @poskey
-      ::Barion.default_payee = 'test'
+      ::Barion.config.poskey = @poskey
+      ::Barion.config.default_payee = 'test'
       @payment = build(:barion_payment)
       tr = build(:barion_payment_transaction)
       tr.items << build(:barion_item)
@@ -302,7 +302,7 @@ module Barion
       assert @payment.valid?
       assert_match(/\d+/, @payment.payment_request_id)
       assert_equal @payment.payment_request_id, @payment.as_json['PaymentRequestId']
-      ::Barion.acronym = 'SHOP'
+      ::Barion.config.acronym = 'SHOP'
       @payment = build(:barion_payment)
       refute @payment.valid?
       assert_match(/^SHOP\d+/, @payment.payment_request_id)

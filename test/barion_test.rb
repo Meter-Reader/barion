@@ -5,6 +5,12 @@ require 'rest_client'
 
 module Barion
   class Test < ActiveSupport::TestCase
+    setup do
+      Singleton.__init__(::Barion::Config)
+      @config = ::Barion.config
+      ::Barion.deprecator.behavior = :raise
+    end
+
     test 'Barion is a module' do
       assert_kind_of Module, Barion
     end
@@ -25,79 +31,100 @@ module Barion
       end
     end
 
+    test 'module has a Config function' do
+      refute_nil ::Barion.config
+      assert_kind_of ::Barion::Config, ::Barion.config
+    end
+
     test 'module contains base URLs' do
       refute_nil ::Barion::BASE_URL[:test]
       refute_nil ::Barion::BASE_URL[:prod]
     end
 
-    test 'poskey can be configured and accept string only' do
-      ::Barion.poskey = 'test'
-      assert_equal 'test', ::Barion.poskey
-      assert_raises(::ArgumentError) { ::Barion.poskey = [] }
-    end
-
-    test 'publickey can be configured and accept string only' do
-      ::Barion.publickey = 'test'
-      assert_equal 'test', ::Barion.publickey
-    end
-
-    test 'pixel_id can be configured and accept valid formatted string only' do
-      assert_raises(::ArgumentError) { ::Barion.pixel_id = [] }
-
-      ::Barion.pixel_id = 'BP-abcdefgHij-00'
-      assert_equal 'BP-abcdefgHij-00', ::Barion.pixel_id
-
-      assert_raises(::ArgumentError) { ::Barion.pixel_id = 'pixel_id' }
-      refute_equal 'pixel_id', ::Barion.pixel_id
-    end
-
-    test 'acronym can be configured and accept string only' do
-      ::Barion.acronym = 'test'
-      assert_equal 'test', ::Barion.acronym
-    end
-
-    test 'sandboy can be configured and convert to boolean' do
-      ::Barion.sandbox = true
-      assert ::Barion.sandbox
-      assert ::Barion.sandbox?
-      ::Barion.sandbox = false
-      refute ::Barion.sandbox
-      refute ::Barion.sandbox?
-    end
-
-    test 'default_payee can be configured and accept string only' do
-      ::Barion.default_payee = 'test'
-      assert_equal 'test', ::Barion.default_payee
-    end
-
-    test 'user class can be configured and accept string only' do
-      assert_nil ::Barion.user_class
-      assert_raises ::ArgumentError do
-        ::Barion.user_class = []
+    test 'sandbox raises deprecated' do
+      assert_raises ActiveSupport::DeprecationException do
+        assert ::Barion.sandbox
       end
-      ::Barion.user_class = 'Object'
-      assert_kind_of ::Object, ::Barion.user_class
-    end
-
-    test 'item class can be configured and accept string only' do
-      assert_nil ::Barion.item_class
-      assert_raises ::ArgumentError do
-        ::Barion.item_class = []
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.sandbox = true
       end
-      ::Barion.item_class = 'Object'
-      assert_kind_of ::Object, ::Barion.item_class
+      assert @config.sandbox
+      assert @config.sandbox?
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.sandbox = false
+      end
+      refute @config.sandbox
+      refute @config.sandbox?
     end
 
-    test 'endpoint returns a configured RestClient instance' do
-      ::Barion.sandbox = true
-      test_endpoint = ::Barion.endpoint
-      assert_kind_of ::RestClient::Resource, test_endpoint
-      assert_equal ::Barion::BASE_URL[:test], test_endpoint.url
-      ::Barion.sandbox = false
-      prod_endpoint = ::Barion.endpoint
-      assert_kind_of ::RestClient::Resource, prod_endpoint
-      assert_equal ::Barion::BASE_URL[:prod], prod_endpoint.url
-      refute_equal prod_endpoint.url, test_endpoint.url
+    test 'publickey raises deprecated' do
+      assert_raises ActiveSupport::DeprecationException do
+        assert ::Barion.publickey
+      end
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.publickey = 'test'
+      end
+      assert @config.publickey
+    end
+
+    test 'acronym raises deprecated' do
+      assert_raises ActiveSupport::DeprecationException do
+        assert ::Barion.acronym
+      end
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.acronym = 'test'
+      end
+      assert @config.acronym
+    end
+
+    test 'default_payee raises deprecated' do
+      assert_raises ActiveSupport::DeprecationException do
+        assert ::Barion.default_payee
+      end
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.default_payee = 'test'
+      end
+      assert @config.default_payee
+    end
+
+    test 'item_class raises deprecated' do
+      assert_raises ActiveSupport::DeprecationException do
+        assert ::Barion.item_class
+      end
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.item_class = 'Object'
+      end
+      assert @config.item_class
+    end
+
+    test 'user_class raises deprecated' do
+      assert_raises ActiveSupport::DeprecationException do
+        assert ::Barion.user_class
+      end
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.user_class = 'Object'
+      end
+      assert @config.user_class
+    end
+
+    test 'pixel_id raises deprecated' do
+      assert_raises ActiveSupport::DeprecationException do
+        assert ::Barion.pixel_id
+      end
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.pixel_id = 'BP-abcdefgHij-00'
+      end
+      assert @config.pixel_id
+    end
+
+    test 'poskey raises deprecated' do
+      assert_raises ActiveSupport::DeprecationException do
+        assert ::Barion.poskey
+      end
+      assert_raises ActiveSupport::DeprecationException do
+        ::Barion.poskey = 'test'
+      end
+      assert @config.poskey
     end
 
     test 'Error can be raised and has attributes' do

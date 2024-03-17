@@ -34,12 +34,14 @@ After installing the gem you have to initalize it.
 Just create a file in `config/initializers/barion.rb` with the below content:
 
 ```ruby
-Barion.poskey = ''
-Barion.publickey = ''
-Barion.pixel_id = ''
-Barion.sandbox = true
-Barion.acronym = ''
-Barion.default_payee = ''
+::Barion.config do |conf|
+  conf.poskey = ''
+  conf.publickey = ''
+  conf.pixel_id = ''
+  conf.sandbox = true
+  conf.acronym = ''
+  conf.default_payee = ''
+end
 ```
 
 #### POSKey and PublicKey (default: empty)
@@ -60,8 +62,6 @@ You have to open the shop Details from the `Action` dropdown of your shop. Pleas
 
 Your Barion Pixel ID can be found in the Details page of your Barion shop. Every webshop (with a unique POSKey) has a different Barion Pixel ID. You can find your Barion Pixel ID in your Barion wallet: click `Manage my shops` menu, `Actions` next to your shop and then `Details`.
 
-
-
 #### Sandbox (default: true)
 
 It is **highly recommended** to use a Test shop first to tune the code first. That's why `sandbox` is set to **true** by default.
@@ -72,7 +72,7 @@ Acronym is used to generate the `payment_request_id` Barion requires to identify
 
 ```ruby
 def create_payment_request_id
-  self.payment_request_id = "#{::Barion.acronym}#{::Time.now.to_f.to_s.gsub('.', '')}" if payment_request_id.nil?
+  self.payment_request_id = "#{::Barion.config.acronym}#{::Time.now.to_f.to_s.gsub('.', '')}" if payment_request_id.nil?
 end
 ```
 
