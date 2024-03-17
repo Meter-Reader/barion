@@ -9,10 +9,10 @@ module Barion
 
     attr_accessor :publickey, :default_payee
     attr_writer :acronym
-    attr_reader :pixel_id, :sandbox
+    attr_reader :pixel_id
 
     def poskey
-      @poskey || nil
+      @_poskey || nil
     end
 
     def acronym
@@ -25,19 +25,20 @@ module Barion
               "::Barion::Config.poskey must be set to a ::String, got #{key.inspect}"
       end
 
-      @poskey = key
+      @_poskey = key
+    end
+
+    def sandbox
+      sandbox?
     end
 
     def sandbox?
-      if @sandbox.present?
-        true
-      else
-        @sandbox
-      end
+      @_sandbox = true if @_sandbox.nil?
+      @_sandbox
     end
 
     def sandbox=(val)
-      @sandbox = !!val
+      @_sandbox = !!val
     end
 
     def pixel_id=(id)
@@ -61,36 +62,36 @@ module Barion
 
     def user_class=(class_name)
       unless class_name.is_a?(String)
-        raise ArgumentError, "::Barion::Config.user_class must be set to a ::String, got #{class_name.inspect}"
+        raise ArgumentError, "::Barion:.config.user_class must be set to a ::String, got #{class_name.inspect}"
       end
 
-      @user_class = class_name
+      @_user_class = class_name
     end
 
     def user_class
       # This is nil before the initializer is installed.
-      return nil if @user_class.nil?
+      return nil if @_user_class.nil?
 
-      @user_class.constantize
+      @_user_class.constantize
     end
 
     def item_class=(class_name)
       unless class_name.is_a?(String)
-        raise ArgumentError, "::Barion::Config.item_class must be set to a ::String, got #{class_name.inspect}"
+        raise ArgumentError, "::Barion.config.item_class must be set to a ::String, got #{class_name.inspect}"
       end
 
-      @item_class = class_name
+      @_item_class = class_name
     end
 
     def item_class
       # This is nil before the initializer is installed.
-      return nil if @item_class.nil?
+      return nil if @_item_class.nil?
 
-      @item_class.constantize
+      @_item_class.constantize
     end
 
     def rest_client_class
-      (@rest_client_class || '::RestClient::Resource').constantize
+      (@_rest_client_class || '::RestClient::Resource').constantize
     end
 
     def rest_client_class=(class_name)
@@ -98,7 +99,7 @@ module Barion
         raise ArgumentError, "::Barion::Config.rest_client_class must be set to a ::String, got #{class_name.inspect}"
       end
 
-      @rest_client_class = class_name
+      @_rest_client_class = class_name
     end
   end
 end

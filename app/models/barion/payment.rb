@@ -167,7 +167,7 @@ module Barion
     before_validation :refresh_checksum
 
     def poskey=(value = nil)
-      value = ::Barion.poskey if value.nil?
+      value = ::Barion.config.poskey if value.nil?
       super(value)
     end
 
@@ -210,7 +210,7 @@ module Barion
 
     def execute
       if valid?
-        ::Barion.endpoint['v2/Payment/Start'].post(
+        ::Barion.config.endpoint['v2/Payment/Start'].post(
           as_json.to_json,
           { content_type: :json, accept: :json }
         ) { |response, request, _result| handle_response(response, request) }
@@ -220,7 +220,7 @@ module Barion
     end
 
     def refresh_state
-      ::Barion.endpoint['v2/Payment/GetPaymentState'].get(
+      ::Barion.config.endpoint['v2/Payment/GetPaymentState'].get(
         {
           params: {
             POSKey: poskey,
@@ -316,13 +316,16 @@ module Barion
     end
 
     def set_defaults
-      self.poskey = ::Barion.poskey if poskey.nil?
+      self.poskey = ::Barion.config.poskey if poskey.nil?
       self.callback_url = ::Barion::Engine.routes.url_helpers.gateway_callback_url
       self.redirect_url = ::Barion::Engine.routes.url_helpers.gateway_back_url
     end
 
     def create_payment_request_id
-      self.payment_request_id = "#{::Barion.acronym}#{::Time.now.to_f.to_s.gsub('.', '')}" if payment_request_id.nil?
+      return unless payment_request_id.nil?
+
+      self.payment_request_id = "#{::Barion.config.acronym}#{::Time.now.to_f.to_s.gsub('.',
+                                                                                       '')}"
     end
 
     def gen_checksum

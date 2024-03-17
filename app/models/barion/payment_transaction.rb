@@ -80,7 +80,7 @@ module Barion
 
     def set_defaults
       self.currency = payment&.currency if currency.nil?
-      self.payee = ::Barion.default_payee if payee.nil?
+      self.payee = ::Barion.config.default_payee if payee.nil?
     end
 
     def total=(value)

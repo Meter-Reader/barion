@@ -96,5 +96,19 @@ module Barion
       assert_equal ::Barion::BASE_URL[:prod], prod_endpoint.url
       refute_equal prod_endpoint.url, test_endpoint.url
     end
+
+    test 'intitalizer style config works' do
+      ::Barion.config do |conf|
+        conf.sandbox = false
+        conf.item_class = 'Object'
+        conf.user_class = 'Object'
+        conf.acronym = 'test'
+      end
+      assert_kind_of ::RestClient::Resource, @config.endpoint
+      assert_equal ::Barion::BASE_URL[:prod], @config.endpoint.url
+      assert_kind_of ::Object, @config.item_class
+      assert_kind_of ::Object, @config.user_class
+      assert_equal 'test', @config.acronym
+    end
   end
 end

@@ -68,7 +68,7 @@ module Barion
   class PaymentApiTest < ActiveSupport::TestCase
     setup do
       ::Barion::Engine.routes.default_url_options[:host] = 'example.com'
-      ::Barion.sandbox = true
+      ::Barion.config.sandbox = true
       @payment = build(:fix_barion_payment)
       tr = build(:fix_barion_payment_transaction)
       tr.items << build(:fix_barion_item)
