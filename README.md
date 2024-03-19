@@ -61,6 +61,26 @@ You have to open the shop Details from the `Action` dropdown of your shop. Pleas
 [Implementing the Base Barion Pixel](https://docs.barion.com/Implementing_the_Base_Barion_Pixel)
 
 Your Barion Pixel ID can be found in the Details page of your Barion shop. Every webshop (with a unique POSKey) has a different Barion Pixel ID. You can find your Barion Pixel ID in your Barion wallet: click `Manage my shops` menu, `Actions` next to your shop and then `Details`.
+This gem provides helpers to inject base Barion Pixel implementation into your layout as below:
+
+```html
+<html>
+  <head>
+    ...
+    <!-- Adds JS implementation with Pixel ID -->
+    <%= pixel_pixel_basic_js %>
+
+    <!-- Adds no script supported implementation with Pixel ID -->
+    <%= pixel_basic_noscript %>
+
+    <!-- Combines the above two together -->
+    <%= pixel_basic_tags %>
+  </head>
+  <body>
+    ...
+  </body>
+  </html>
+```
 
 #### Sandbox (default: true)
 
