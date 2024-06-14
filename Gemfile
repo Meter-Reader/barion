@@ -13,7 +13,7 @@ group :development, :test do
   gem 'rubocop'
   gem 'simplecov', require: false
   gem 'simplecov-cobertura', require: false
-  gem 'sqlite3'
+  gem 'sqlite3', '~>1.7'
   gem 'vcr'
   gem 'webmock'
 end
