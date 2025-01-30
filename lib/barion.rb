@@ -17,8 +17,10 @@ module Barion
     @deprecator ||= ActiveSupport::Deprecation.new('1.0', 'Barion')
   end
 
-  def self.config
-    ::Barion::Config.instance
+  def self.config(&_block)
+    return Barion::Config.instance unless block_given?
+
+    yield(Barion::Config.instance)
   end
 
   def self.sandbox
