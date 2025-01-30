@@ -181,5 +181,19 @@ module Barion
 
       @_rest_client_class = class_name
     end
+
+    # Resets all configuration options to +nil+.
+    #
+    # It is useful when you want to restore the default configuration as the class is a Singleton.
+    def reset
+      @_poskey = nil
+      @_sandbox = nil
+      @_user_class = nil
+      @_item_class = nil
+      @_rest_client_class = nil
+      @acronym = nil
+      @pixel_id = nil
+      @publickey = nil
+    end
   end
 end

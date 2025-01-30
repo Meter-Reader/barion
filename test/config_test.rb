@@ -8,6 +8,11 @@ module Barion
     setup do
       @config = ::Barion.config
     end
+
+    teardown do
+      @config.reset
+    end
+
     test '::Barion::Config is a class' do
       assert_kind_of Class, ::Barion::Config
     end
