@@ -168,7 +168,7 @@ module Barion
 
     def poskey=(value = nil)
       value = ::Barion.config.poskey if value.nil?
-      super(value)
+      super
     end
 
     def payment_type=(value)
@@ -183,7 +183,7 @@ module Barion
       else
         raise ArgumentError, "#{value} is not a valid payment_type"
       end
-      super(value)
+      super
     end
 
     def payer_work_phone_number=(number)
@@ -281,7 +281,7 @@ module Barion
 
     # rubocop:disable Lint/UselessMethodDefinition
     def checksum=(value)
-      super(value)
+      super
     end
     # rubocop:enable Lint/UselessMethodDefinition
 
