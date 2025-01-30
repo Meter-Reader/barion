@@ -203,7 +203,7 @@ error.endpoint # Holds the value of Endpoint attribute of the API error
 
 When a payment has been sent to the gateway it will become readonly for Rails. Only the Gateway is allowed to change its state trough the callbacks.
 
-To achieve this, a has is calculated for every payment when validating it. This hash will be stored in the DB and when a record is loaded in Rails it will be checked against the stored hash. If the hash does not match with the stored data a `::Barion::TamperedData` exception will be raised and the record will not be loaded. This basically mean that the data in the DB has been tampered outside this gem and cannot be considered financially safe.
+To achieve this, a hash is calculated for every payment when validating it. This hash will be stored in the DB and when a record is loaded in Rails it will be checked against the stored hash. If the hash does not match with the stored data a `::Barion::TamperedData` exception will be raised and the record will not be loaded. This basically mean that the data in the DB has been tampered outside this gem and cannot be considered financially safe.
 
 ## Contributing
 
