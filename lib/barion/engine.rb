@@ -11,6 +11,10 @@ module Barion
       g.fixture_replacement :factory_bot
       g.factory_bot dir: 'test/factories'
     end
+
+    initializer 'barion.config', before: :load_config_initializers do |app|
+      app.config.barion = Barion.config
+    end
   end
 
   ActiveSupport.on_load(:action_view) do

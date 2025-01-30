@@ -44,6 +44,8 @@ Just create a file in `config/initializers/barion.rb` with the below content:
 end
 ```
 
+The configuration is also available in the Rail application configuration under ```Rails.application.config.barion```.
+
 #### POSKey and PublicKey (default: empty)
 
 You can find your `POSKey` and `PublicKey` at the  Barion Shop website:
