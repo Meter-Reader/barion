@@ -85,7 +85,7 @@ module Barion
 
     def total=(value)
       value = calc_item_totals if value.nil?
-      super(value)
+      super
     end
 
     def serialize_options

@@ -72,7 +72,7 @@ module Barion
 
     def item_total=(value)
       value = calculate_total if value.nil?
-      super(value)
+      super
     end
 
     private
