@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# ::Barion.config do |shop|
+# Barion.config do |shop|
+#  shop.pixel_id = 'BP-0000000000-00'
 #  shop.poskey = 'test'
 #  shop.publickey = 'test2'
 #  shop.sandbox = true
