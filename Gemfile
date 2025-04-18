@@ -11,6 +11,9 @@ group :development, :test do
   gem 'minitest'
   gem 'minitest-reporters', require: false
   gem 'rubocop'
+  gem 'rubocop-factory_bot'
+  gem 'rubocop-minitest'
+  gem 'rubocop-rake'
   gem 'simplecov', require: false
   gem 'simplecov-cobertura', require: false
   gem 'sqlite3', '~>1.7'
@@ -22,6 +25,7 @@ group :development do
   gem 'annotate'
   gem 'faker'
   gem 'overcommit'
+  gem 'puma'
   gem 'rake'
   gem 'yard'
 end
