@@ -1,4 +1,8 @@
 ---
+plugins:
+  - rubocop-factory_bot
+  - rubocop-minitest
+  - rubocop-rake
 AllCops:
   TargetRubyVersion: 3.0
   Exclude:
@@ -61,6 +65,9 @@ Metrics/MethodLength:
 Metrics/BlockLength:
   Exclude:
     - 'test/**/**/*'
+Minitest/MultipleAssertions:
+  Enabled: true
+  Max: 40
 Style/AccessorGrouping:
   Enabled: true
 Style/ArgumentsForwarding:
