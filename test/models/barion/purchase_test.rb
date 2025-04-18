@@ -46,6 +46,7 @@ module Barion
 
     test 'availability_indicator can be set' do
       @purchase.availability_indicator = :future_availability
+
       assert_equal 'future_availability', @purchase.availability_indicator
       assert_equal 10, @purchase.as_json['AvailabilityIndicator']
     end
@@ -66,6 +67,7 @@ module Barion
       assert_valid @purchase
       refute @json['DeliveryEmailAddress']
       @purchase.delivery_email_address = 'Test'
+
       assert_valid @purchase
       assert_equal 'Test', @purchase.delivery_email_address
       assert_equal 'Test', @purchase.as_json['DeliveryEmailAddress']
@@ -81,9 +83,10 @@ module Barion
       assert_valid @purchase
       refute @json['DeliveryTimeframe']
       @purchase.delivery_timeframe = :electronic_delivery
+
       assert_valid @purchase
       assert_equal 'electronic_delivery', @purchase.delivery_timeframe
-      assert @purchase.electronic_delivery?
+      assert_predicate @purchase, :electronic_delivery?
       assert_equal 0, @purchase.as_json['DeliveryTimeframe']
     end
 
@@ -103,6 +106,7 @@ module Barion
       assert_valid @purchase
       refute @json['PreOrderDate']
       @purchase.pre_order_date = @date
+
       assert_valid @purchase
       assert_equal '2019-06-27T07:15:51.327', @purchase.as_json['PreOrderDate']
     end
@@ -115,6 +119,7 @@ module Barion
     test 'purchase_date can be set' do
       assert_valid @purchase
       @purchase.purchase_date = @date
+
       assert_valid @purchase
       assert_equal '2019-06-27T07:15:51.327', @purchase.as_json['PurchaseDate']
     end
@@ -129,10 +134,11 @@ module Barion
       assert_valid @purchase
       refute @json['PurchaseType']
       @purchase.purchase_type = :goods_and_service_purchase
+
       assert_valid @purchase
       assert_equal 'goods_and_service_purchase', @purchase.purchase_type
       assert_equal 0, @purchase.as_json['PurchaseType']
-      assert @purchase.goods_and_service_purchase?
+      assert_predicate @purchase, :goods_and_service_purchase?
     end
 
     test 'purchase_type allows only valid values' do
@@ -151,10 +157,11 @@ module Barion
       assert_valid @purchase
       refute @json['ReOrderIndicator']
       @purchase.re_order_indicator = :first_time_ordered
+
       assert_valid @purchase
       assert_equal 'first_time_ordered', @purchase.re_order_indicator
       assert_equal 'FirstTimeOrdered', @purchase.as_json['ReOrderIndicator']
-      assert @purchase.first_time_ordered?
+      assert_predicate @purchase, :first_time_ordered?
     end
 
     test 're_order_indicator allows only valid values' do
@@ -172,6 +179,7 @@ module Barion
     test 'recurring_expiry can be set' do
       assert_valid @purchase
       @purchase.recurring_expiry = @date
+
       assert_valid @purchase
       assert_equal @date, @purchase.recurring_expiry
       assert_equal '2019-06-27T07:15:51.327', @purchase.as_json['RecurringExpiry']
@@ -187,6 +195,7 @@ module Barion
       assert_valid @purchase
       refute @json['RecurringFrequency']
       @purchase.recurring_frequency = 60
+
       assert_valid @purchase
       assert_equal 60, @purchase.recurring_frequency
       assert_equal 60, @purchase.as_json['RecurringFrequency']
@@ -196,31 +205,41 @@ module Barion
       assert_valid @purchase
       refute @json['RecurringFrequency']
       @purchase.recurring_frequency = 0
+
       assert_valid @purchase
       assert_equal 0, @purchase.as_json['RecurringFrequency']
       @purchase.recurring_frequency = 10_000
+
       refute_valid @purchase
       @purchase.recurring_frequency = 0
+
       assert_valid @purchase
       assert_equal 0, @purchase.as_json['RecurringFrequency']
       @purchase.recurring_frequency = -1
+
       refute_valid @purchase
       @purchase.recurring_frequency = 1
+
       assert_valid @purchase
       assert_equal 1, @purchase.as_json['RecurringFrequency']
       @purchase.recurring_frequency = 1.2
+
       refute_valid @purchase
     end
 
     test 'recurring_frequency is mandatory if payment initiat recurrence' do
       assert_valid @purchase
       @purchase.payment.initiate_recurrence = true
+
       assert_valid @purchase
       @purchase.payment.recurrence_type = :recurring
+
       refute_valid @purchase
       @purchase.recurring_frequency = 30
+
       refute_valid @purchase
       @purchase.recurring_expiry = @date
+
       assert_valid @purchase
       assert_equal 30, @purchase.as_json['RecurringFrequency']
       assert_equal '2019-06-27T07:15:51.327', @purchase.as_json['RecurringExpiry']
@@ -236,10 +255,11 @@ module Barion
       assert_valid @purchase
       refute @json['ShippingAddressIndicator']
       @purchase.shipping_address_indicator = :ship_to_cardholders_billing_address
+
       assert_valid @purchase
       assert_equal 'ship_to_cardholders_billing_address', @purchase.shipping_address_indicator
       assert_equal 0, @purchase.as_json['ShippingAddressIndicator']
-      assert @purchase.ship_to_cardholders_billing_address?
+      assert_predicate @purchase, :ship_to_cardholders_billing_address?
     end
 
     test 'shipping_address_indicator allows only valid values' do
@@ -256,6 +276,7 @@ module Barion
 
     test 'gift_card_purchase can be set' do
       @purchase.gift_card_purchase = build(:barion_gift_card_purchase, purchase: @purchase)
+
       assert_valid @purchase
       assert @purchase.as_json['GiftCardPurchase']
     end

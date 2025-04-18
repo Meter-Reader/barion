@@ -46,6 +46,7 @@ module Barion
       assert_equal 'zz', @address.country
       assert_equal 'zz', @json['Country']
       @address.country = 'HU'
+
       assert_equal 'HU', @address.country
       assert_equal 'HU', @address.as_json['Country']
     end
@@ -53,8 +54,10 @@ module Barion
     test 'country length 2chars' do
       assert_valid @address
       @address.country = Faker::String.random(length: 3)
+
       refute_valid @address
       @address.country = 'hu'
+
       assert_equal 2, @address.country.length, msg: @address.country
       assert_equal 'hu', @address.as_json['Country']
       assert_valid @address
@@ -64,6 +67,7 @@ module Barion
       assert_nil @address.city
       refute @json['City']
       @address.city = 'Test'
+
       assert_equal 'Test', @address.city
       assert_equal 'Test', @address.as_json['City']
     end
@@ -71,8 +75,10 @@ module Barion
     test 'city max length 50chars' do
       assert_valid @address
       @address.city = Faker::String.random(length: 51)
+
       refute_valid @address
       @address.city = Faker::String.random(length: 50)
+
       assert_equal 50, @address.city.length, msg: @address.city
       assert_valid @address
     end
@@ -81,6 +87,7 @@ module Barion
       assert_nil @address.zip
       refute @json['Zip']
       @address.zip = 1000
+
       assert_equal '1000', @address.zip
       assert_equal '1000', @address.as_json['Zip']
     end
@@ -88,8 +95,10 @@ module Barion
     test 'zip max length 16chars' do
       assert_valid @address
       @address.zip = Faker::String.random(length: 17)
+
       refute_valid @address
       @address.zip = Faker::String.random(length: 16)
+
       assert_equal 16, @address.zip.length, msg: @address.zip
       assert_valid @address
     end
@@ -103,6 +112,7 @@ module Barion
       assert_nil @address.region
       refute @json['Region']
       @address.region = 'ER'
+
       assert_equal 'ER', @address.region
       assert_equal 'ER', @address.as_json['Region']
     end
@@ -110,8 +120,10 @@ module Barion
     test 'region length 2chars' do
       assert_valid @address
       @address.region = Faker::String.random(length: 3)
+
       refute_valid @address
       @address.region = Faker::String.random(length: 2)
+
       assert_equal 2, @address.region.length, msg: @address.region
       assert_valid @address
     end
@@ -120,6 +132,7 @@ module Barion
       assert_nil @address.street
       refute @json['Street']
       @address.street = 'Test'
+
       assert_equal 'Test', @address.street
       assert_equal 'Test', @address.as_json['Street']
     end
@@ -127,8 +140,10 @@ module Barion
     test 'street max length 50chars' do
       assert_valid @address
       @address.street = Faker::String.random(length: 51)
+
       refute_valid @address
       @address.street = Faker::String.random(length: 50)
+
       assert_equal 50, @address.street.length, msg: @address.street
       assert_valid @address
     end
@@ -137,6 +152,7 @@ module Barion
       assert_nil @address.street2
       refute @json['Street2']
       @address.street2 = 'Test'
+
       assert_equal 'Test', @address.street2
       assert_equal 'Test', @address.as_json['Street2']
     end
@@ -144,8 +160,10 @@ module Barion
     test 'street2 max length 50chars' do
       assert_valid @address
       @address.street2 = Faker::String.random(length: 51)
+
       refute_valid @address
       @address.street2 = Faker::String.random(length: 50)
+
       assert_equal 50, @address.street2.length, msg: @address.street2
       assert_valid @address
     end
@@ -154,6 +172,7 @@ module Barion
       assert_nil @address.street3
       refute @json['Street3']
       @address.street3 = 'Test'
+
       assert_equal 'Test', @address.street3
       assert_equal 'Test', @address.as_json['Street3']
     end
@@ -161,8 +180,10 @@ module Barion
     test 'street3 max length 50chars' do
       assert_valid @address
       @address.street3 = Faker::String.random(length: 51)
+
       refute_valid @address
       @address.street3 = Faker::String.random(length: 50)
+
       assert_equal 50, @address.street3.length, msg: @address.street3
       assert_valid @address
     end
@@ -171,6 +192,7 @@ module Barion
       assert_nil @address.full_name
       refute @json['FullName']
       @address.full_name = 'Test'
+
       assert_equal 'Test', @address.full_name
       assert_equal 'Test', @address.as_json['FullName']
     end
@@ -178,8 +200,10 @@ module Barion
     test 'full_name max length 45chars' do
       assert_valid @address
       @address.full_name = Faker::String.random(length: 46)
+
       refute_valid @address
       @address.full_name = Faker::String.random(length: 45)
+
       assert_equal 45, @address.full_name.length, msg: @address.full_name
       assert_valid @address
     end

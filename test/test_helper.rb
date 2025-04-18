@@ -32,11 +32,11 @@ module ActiveSupport
     include ::FactoryBot::Syntax::Methods
 
     def assert_valid(model)
-      assert model.valid?, model.errors.objects.first.try(:full_message)
+      assert_predicate model, :valid?, model.errors.objects.first.try(:full_message)
     end
 
     def refute_valid(model)
-      refute model.valid?
+      refute_predicate model, :valid?
     end
   end
 end

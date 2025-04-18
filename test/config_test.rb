@@ -20,6 +20,7 @@ module Barion
     test '::Barion::Config is a Singleton' do
       a = ::Barion.config
       b = ::Barion::Config.instance
+
       assert_equal a, b
       assert_raises ::NoMethodError do
         ::Barion::Config.new
@@ -34,12 +35,14 @@ module Barion
 
     test 'poskey can be configured and accept string only' do
       @config.poskey = 'test'
+
       assert_equal 'test', @config.poskey
       assert_raises(::ArgumentError) { @config.poskey = [] }
     end
 
     test 'publickey can be configured and accept string only' do
       @config.publickey = 'test'
+
       assert_equal 'test', @config.publickey
     end
 
@@ -47,6 +50,7 @@ module Barion
       assert_raises(::ArgumentError) { @config.pixel_id = [] }
 
       @config.pixel_id = 'BP-abcdefgHij-00'
+
       assert_equal 'BP-abcdefgHij-00', @config.pixel_id
 
       assert_raises(::ArgumentError) { @config.pixel_id = 'pixel_id' }
@@ -55,20 +59,24 @@ module Barion
 
     test 'acronym can be configured and accept string only' do
       @config.acronym = 'test'
+
       assert_equal 'test', @config.acronym
     end
 
     test 'sandbox can be configured and convert to boolean' do
       @config.sandbox = true
+
       assert @config.sandbox
-      assert @config.sandbox?
+      assert_predicate @config, :sandbox?
       @config.sandbox = false
+
       refute @config.sandbox
-      refute @config.sandbox?
+      refute_predicate @config, :sandbox?
     end
 
     test 'default_payee can be configured and accept string only' do
       @config.default_payee = 'test'
+
       assert_equal 'test', @config.default_payee
     end
 
@@ -78,6 +86,7 @@ module Barion
         @config.user_class = []
       end
       @config.user_class = 'Object'
+
       assert_kind_of ::Object, @config.user_class
     end
 
@@ -87,16 +96,19 @@ module Barion
         @config.item_class = []
       end
       @config.item_class = 'Object'
+
       assert_kind_of ::Object, @config.item_class
     end
 
     test 'endpoint returns a configured RestClient instance' do
       @config.sandbox = true
       test_endpoint = @config.endpoint
+
       assert_kind_of ::RestClient::Resource, test_endpoint
       assert_equal ::Barion::BASE_URL[:test], test_endpoint.url
       @config.sandbox = false
       prod_endpoint = @config.endpoint
+
       assert_kind_of ::RestClient::Resource, prod_endpoint
       assert_equal ::Barion::BASE_URL[:prod], prod_endpoint.url
       refute_equal prod_endpoint.url, test_endpoint.url
@@ -109,6 +121,7 @@ module Barion
         conf.user_class = 'Object'
         conf.acronym = 'test'
       end
+
       assert_kind_of ::RestClient::Resource, @config.endpoint
       assert_equal ::Barion::BASE_URL[:prod], @config.endpoint.url
       assert_kind_of ::Object, @config.item_class

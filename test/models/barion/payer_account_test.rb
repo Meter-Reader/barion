@@ -52,6 +52,7 @@ module Barion
       refute @json['AccountId']
       assert_valid @payer
       @payer.account_id = 'Test'
+
       assert_equal 'Test', @payer.account_id
       assert_equal 'Test', @payer.as_json['AccountId']
       assert_valid @payer
@@ -61,8 +62,10 @@ module Barion
       assert_nil @payer.account_id
       assert_valid @payer
       @payer.account_id = Faker::String.random(length: 65)
+
       refute_valid @payer
       @payer.account_id = Faker::String.random(length: 64)
+
       assert_valid @payer
       assert_equal 64, @payer.account_id.length, @payer.account_id
     end
@@ -74,6 +77,7 @@ module Barion
 
     test 'account change indicator can be set' do
       @payer.account_change_indicator = :less_than_30_days
+
       assert_equal 'less_than_30_days', @payer.account_change_indicator
       assert_equal 10, @payer.as_json['AccountChangeIndicator']
     end
@@ -89,6 +93,7 @@ module Barion
       assert_valid @payer
       refute @json['AccountCreated']
       @payer.account_created = @date
+
       assert_valid @payer
       assert_equal @date, @payer.as_json['AccountCreated']
       assert_equal '2019-06-27T07:15:51.327', @payer.as_json['AccountCreated']
@@ -101,6 +106,7 @@ module Barion
 
     test 'account creation indicator can be set' do
       @payer.account_creation_indicator = :less_than_30_days
+
       assert_equal 'less_than_30_days', @payer.account_creation_indicator
       assert_equal 20, @payer.as_json['AccountCreationIndicator']
     end
@@ -116,6 +122,7 @@ module Barion
       refute @json['AccountLastChanged']
       assert_valid @payer
       @payer.account_last_changed = @date
+
       assert_equal @date, @payer.account_last_changed
       assert_equal '2019-06-27T07:15:51.327', @payer.as_json['AccountLastChanged']
       assert_valid @payer
@@ -128,6 +135,7 @@ module Barion
 
     test 'password change indicator can be set' do
       @payer.password_change_indicator = :less_than_30_days
+
       assert_equal 'less_than_30_days', @payer.password_change_indicator
       assert_equal 20, @payer.as_json['PasswordChangeIndicator']
     end
@@ -143,6 +151,7 @@ module Barion
       refute @json['PasswordLastChanged']
       assert_valid @payer
       @payer.password_last_changed = @date
+
       assert_equal @date, @payer.password_last_changed
       assert_equal '2019-06-27T07:15:51.327', @payer.as_json['PasswordLastChanged']
       assert_valid @payer
@@ -153,6 +162,7 @@ module Barion
       refute @json['PaymentMethodAdded']
       assert_valid @payer
       @payer.payment_method_added = true
+
       assert @payer.payment_method_added
       assert @payer.as_json['PaymentMethodAdded']
       assert_valid @payer
@@ -169,6 +179,7 @@ module Barion
       refute @json['ProvisionAttempts']
       assert_valid @payer
       @payer.provision_attempts = 10
+
       assert_equal 10, @payer.provision_attempts
       assert_equal 10, @payer.as_json['ProvisionAttempts']
       assert_valid @payer
@@ -178,16 +189,21 @@ module Barion
       assert_nil @payer.provision_attempts
       assert_valid @payer
       @payer.provision_attempts = 1_000
+
       refute_valid @payer
       @payer.provision_attempts = 999
+
       assert_equal 999, @payer.as_json['ProvisionAttempts']
       assert_valid @payer
       @payer.provision_attempts = -1
+
       refute_valid @payer
       @payer.provision_attempts = 0
+
       assert_equal 0, @payer.as_json['ProvisionAttempts']
       assert_valid @payer
       @payer.provision_attempts = 'Test'
+
       refute_valid @payer
     end
 
@@ -202,6 +218,7 @@ module Barion
       refute @json['PurchasesInTheLast6Months']
       assert_valid @payer
       @payer.purchases_in_the_last_6_months = 10
+
       assert_equal 10, @payer.purchases_in_the_last_6_months
       assert_equal 10, @payer.as_json['PurchasesInTheLast6Months']
       assert_valid @payer
@@ -212,16 +229,21 @@ module Barion
       assert_valid @payer
       refute @json['PurchasesInTheLast6Months']
       @payer.purchases_in_the_last_6_months = 10_000
+
       refute_valid @payer
       @payer.purchases_in_the_last_6_months = 9_999
+
       assert_valid @payer
       assert_equal 9_999, @payer.as_json['PurchasesInTheLast6Months']
       @payer.purchases_in_the_last_6_months = -1
+
       refute_valid @payer
       @payer.purchases_in_the_last_6_months = 0
+
       assert_valid @payer
       assert_equal 0, @payer.as_json['PurchasesInTheLast6Months']
       @payer.purchases_in_the_last_6_months = 'Test'
+
       refute_valid @payer
     end
 
@@ -232,6 +254,7 @@ module Barion
 
     test 'shipping_address_usage_indicator can be set' do
       @payer.shipping_address_usage_indicator = :less_than_30_days
+
       assert_equal 'less_than_30_days', @payer.shipping_address_usage_indicator
       assert_equal 10, @payer.as_json['ShippingAddressUsageIndicator']
     end
@@ -249,6 +272,7 @@ module Barion
 
     test 'suspicious_activity_indicator can be set' do
       @payer.suspicious_activity_indicator = :suspicious_activity_observed
+
       assert_equal 'suspicious_activity_observed', @payer.suspicious_activity_indicator
       assert_equal 10, @payer.as_json['SuspiciousActivityIndicator']
     end
@@ -270,6 +294,7 @@ module Barion
       refute @json['TransactionalActivityPerDay']
       assert_valid @payer
       @payer.transactional_activity_per_day = 10
+
       assert_equal 10, @payer.transactional_activity_per_day
       assert_equal 10, @payer.as_json['TransactionalActivityPerDay']
       assert_valid @payer
@@ -279,16 +304,21 @@ module Barion
       assert_nil @payer.transactional_activity_per_day
       assert_valid @payer
       @payer.transactional_activity_per_day = 1_000
+
       refute_valid @payer
       @payer.transactional_activity_per_day = 999
+
       assert_equal 999, @payer.as_json['TransactionalActivityPerDay']
       assert_valid @payer
       @payer.transactional_activity_per_day = -1
+
       refute_valid @payer
       @payer.transactional_activity_per_day = 0
+
       assert_equal 0, @payer.as_json['TransactionalActivityPerDay']
       assert_valid @payer
       @payer.transactional_activity_per_day = 'Test'
+
       refute_valid @payer
     end
 
@@ -302,6 +332,7 @@ module Barion
       assert_nil @payer.transactional_activity_per_year
       assert_valid @payer
       @payer.transactional_activity_per_year = 10
+
       assert_equal 10, @payer.transactional_activity_per_year
       assert_equal 10, @payer.as_json['TransactionalActivityPerYear']
       assert_valid @payer
@@ -311,16 +342,21 @@ module Barion
       assert_nil @payer.transactional_activity_per_year
       assert_valid @payer
       @payer.transactional_activity_per_year = 1_000
+
       refute_valid @payer
       @payer.transactional_activity_per_year = 999
+
       assert_equal 999, @payer.as_json['TransactionalActivityPerYear']
       assert_valid @payer
       @payer.transactional_activity_per_year = -1
+
       refute_valid @payer
       @payer.transactional_activity_per_year = 0
+
       assert_equal 0, @payer.as_json['TransactionalActivityPerYear']
       assert_valid @payer
       @payer.transactional_activity_per_year = 'Test'
+
       refute_valid @payer
     end
   end

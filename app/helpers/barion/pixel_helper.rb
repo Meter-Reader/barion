@@ -19,7 +19,7 @@ module Barion
       window['barion_pixel_id'] = '#{::Barion.config.pixel_id}';
       // Send init event
       bp('init', 'addBarionPixelId', window['barion_pixel_id']);'
-).gsub!(/^#{[/\A\s*/]}/, '')
+).gsub!(/^#{[/\A\s*/]}/, '') # rubocop:disable Lint/ArrayLiteralInRegexp
     end
 
     def pixel_basic_noscript

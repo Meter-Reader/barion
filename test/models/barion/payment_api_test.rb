@@ -88,6 +88,7 @@ module Barion
         rescue ::Barion::Error
           refute $ERROR_INFO, $ERROR_INFO.all_errors
         end
+
         assert_equal 'prepared', @payment.status
       end
     end
@@ -98,6 +99,7 @@ module Barion
       end
       ::VCR.use_cassette('payment_status') do
         @payment.refresh_state
+
         assert_equal 'hu-HU', @payment.locale
         assert_equal 'HUF', @payment.currency
         refute_nil @payment.pos_id

@@ -38,6 +38,7 @@ module Barion
       assert_valid @item
       assert @json['Name']
       @item.name = nil
+
       refute_valid @item
       refute @item.as_json['Name']
     end
@@ -45,8 +46,10 @@ module Barion
     test 'name max length 256 chars' do
       assert_valid @item
       @item.name = Faker::String.random(length: 257)
+
       refute_valid @item
       @item.name = Faker::String.random(length: 256)
+
       assert_valid @item
     end
 
@@ -54,6 +57,7 @@ module Barion
       assert_valid @item
       assert @json['Description']
       @item.description = nil
+
       refute_valid @item
       refute @item.as_json['Description']
     end
@@ -61,8 +65,10 @@ module Barion
     test 'description max length 500 chars' do
       assert_valid @item
       @item.description = Faker::String.random(length: 501)
+
       refute_valid @item
       @item.description = Faker::String.random(length: 500)
+
       assert_valid @item
     end
 
@@ -74,6 +80,7 @@ module Barion
 
     test 'image_url can be set' do
       @item.image_url = 'Test'
+
       assert_valid @item
       assert_equal 'Test', @item.image_url
       assert_equal 'Test', @item.as_json['ImageUrl']
@@ -82,6 +89,7 @@ module Barion
     test 'item_total can be set' do
       assert_valid @item
       @item.item_total = 42
+
       assert_equal 42, @item.item_total
       assert_equal '42.0', @item.as_json['ItemTotal']
     end
@@ -91,13 +99,16 @@ module Barion
       assert @json['ItemTotal']
       @item.quantity = 12
       @item.unit_price = 2
-      assert_equal 24.0, @item.item_total
+
+      assert_in_delta(24.0, @item.item_total)
       assert_equal '24.0', @item.as_json['ItemTotal']
       @item.quantity = 13
+
       assert_equal 26, @item.item_total
       assert_equal '26.0', @item.as_json['ItemTotal']
       @item.unit_price = 3.1
-      assert_equal 40.3, @item.item_total
+
+      assert_in_delta(40.3, @item.item_total)
       assert_equal '40.3', @item.as_json['ItemTotal']
     end
 
@@ -106,14 +117,17 @@ module Barion
       refute_nil @item.unit
       assert @json['Unit']
       @item.unit_price = nil
+
       assert_valid @item
     end
 
     test 'unit max length is 50 chars' do
       assert_valid @item
       @item.unit = Faker::String.random(length: 51)
+
       refute_valid @item
       @item.unit = Faker::String.random(length: 50)
+
       assert_valid @item
     end
 
@@ -122,6 +136,7 @@ module Barion
       refute_nil @item.unit_price
       assert @json['UnitPrice']
       @item.unit_price = nil
+
       assert_equal 0, @item.unit_price
       assert_equal '0.0', @item.as_json['UnitPrice']
       assert_valid @item
@@ -132,12 +147,14 @@ module Barion
       refute_nil @item.quantity
       assert @json['Quantity']
       @item.quantity = nil
+
       assert_equal 0, @item.quantity
       assert_equal '0.0', @item.as_json['Quantity']
       assert_valid @item
       @item.quantity = 2
+
       assert_valid @item
-      assert_equal 2.0, @item.quantity
+      assert_in_delta(2.0, @item.quantity)
       assert_equal '2.0', @item.as_json['Quantity']
     end
 
@@ -152,6 +169,7 @@ module Barion
       assert_nil @item.sku
       refute @json['SKU']
       @item.sku = 'Test'
+
       assert_valid @item
       assert_equal 'Test', @item.sku
       assert_equal 'Test', @item.as_json['SKU']
@@ -161,8 +179,10 @@ module Barion
       assert_valid @item
       assert_nil @item.sku
       @item.sku = Faker::String.random(length: 101)
+
       refute_valid @item
       @item.sku = Faker::String.random(length: 100)
+
       assert_valid @item
     end
   end

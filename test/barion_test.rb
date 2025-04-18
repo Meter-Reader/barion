@@ -17,7 +17,7 @@ module Barion
 
     test 'Barion is a Rails engine' do
       assert_includes Barion::Engine.ancestors, Rails::Engine
-      assert_equal Barion::Engine.engine_name, 'barion'
+      assert_equal 'barion', Barion::Engine.engine_name
     end
 
     test 'Barion engine has version number' do
@@ -49,12 +49,12 @@ module Barion
         ::Barion.sandbox = true
       end
       assert @config.sandbox
-      assert @config.sandbox?
+      assert_predicate @config, :sandbox?
       assert_raises ActiveSupport::DeprecationException do
         ::Barion.sandbox = false
       end
       refute @config.sandbox
-      refute @config.sandbox?
+      refute_predicate @config, :sandbox?
     end
 
     test 'publickey raises deprecated' do
@@ -135,6 +135,7 @@ module Barion
           ErrorCode: 404,
           Endpoint: 'https://example.com' }
       )
+
       assert_equal 'ErrorTitle', exception.title
       assert_equal 'Request failed, please check errors', exception.message
       assert_equal 404, exception.error_code
@@ -166,6 +167,7 @@ module Barion
           ErrorCode: 404,
           Endpoint: 'https://example.com' }
       )
+
       assert_equal 'NestedError1Title', exception.errors.first.title
       assert_equal 'NestedError2Title', exception.errors.second.title
       assert_equal "Request failed 1\nRequest failed 2", exception.all_errors

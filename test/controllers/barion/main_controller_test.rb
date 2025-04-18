@@ -23,6 +23,7 @@ module Barion
 
     def test_gateway_callback_with_wrong_id
       post barion.gateway_callback_url, params: { paymentId: 'test' }
+
       assert_response :unprocessable_entity
     end
 
@@ -31,7 +32,6 @@ module Barion
         post barion.gateway_callback_url, params: {
           paymentId: @payment.payment_id
         }
-        assert_response :ok
       end
     end
 
@@ -39,6 +39,7 @@ module Barion
       get barion.gateway_back_url, params: {
         paymentId: @payment.payment_id
       }
+
       assert_response :success
     end
 
