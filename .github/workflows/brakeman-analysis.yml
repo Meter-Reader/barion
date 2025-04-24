@@ -15,6 +15,9 @@ on:
 jobs:
   brakeman-scan:
     name: Brakeman Scan
+    permissions:
+      contents: read
+      security-events: write
     runs-on: ubuntu-latest
     strategy:
       matrix:
