@@ -9,7 +9,7 @@ require 'barion/version'
 Gem::Specification.new do |spec|
   spec.name                  = 'barion'
   spec.version               = Barion::VERSION
-  spec.required_ruby_version = '>= 3.0.0'
+  spec.required_ruby_version = '>= 3.4.0'
   spec.authors               = ['Péter Nagy']
   spec.metadata              = { 'rubygems_mfa_required' => 'true' }
   spec.email                 = ['peter@antronin.consulting']
@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.license = 'MIT'
 
   spec.files = Dir['{app,config,db,lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
+  spec.require_paths = ['lib', 'app/helpers/barion', 'app/models/barion', 'app/models/concerns/barion']
 
   spec.add_dependency 'rails', '~> 7.0'
   spec.add_dependency 'rest-client', '~> 2.1'
